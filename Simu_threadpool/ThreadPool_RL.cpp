@@ -40,18 +40,23 @@
 
 
 // Read/Write from/to Tier
-void R_n_W(int pageNum, std::string action, int tier_num){
+void R_n_W(int pageNum, std::string action, int tier_num,
+          int read_time_tier1, float asym_tier1,
+          int read_time_tier2, float asym_tier2,
+          int read_time_tier3, float asym_tier3
+          ){
     // R/W in Tier1
     if (tier_num == 1){
         if (action == "Read"){
             std::cout << "reading page " << pageNum << " from Tier 1 ...\n" << std::endl;
-            // Sleep for 0.1 seconds to simulate the read action
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            // Sleep for 0.01 seconds to simulate the read action
+            std::this_thread::sleep_for(std::chrono::milliseconds(read_time_tier1));
         }
         else if (action == "Write"){
             std::cout << "writing page " << pageNum << " to Tier 1 ...\n" << std::endl;
-            // Sleep for 0.3 seconds to simulate the write action
-            std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            // Sleep for 0.03 seconds to simulate the write action
+            // write_time_tier1 = read_time_tier1*asym_tier1
+            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(read_time_tier1*asym_tier1))); 
         }
         else {
             std::cout << "Unknown action !" << std::endl;
@@ -61,13 +66,14 @@ void R_n_W(int pageNum, std::string action, int tier_num){
     else if (tier_num == 2){
         if (action == "Read"){
             std::cout << "reading page " << pageNum << " from Tier 2 ...\n" << std::endl;
-            // Sleep for 0.5 seconds to simulate the read action
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            // Sleep for 0.05 seconds to simulate the read action
+            std::this_thread::sleep_for(std::chrono::milliseconds(read_time_tier2));
         }
         else if (action == "Write"){
             std::cout << "writing page " << pageNum << " to Tier 2 ...\n" << std::endl;
-            // Sleep for 1.0 seconds to simulate the write action
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+            // Sleep for 0.1 seconds to simulate the write action
+            // write_time_tier2 = read_time_tier2*asym_tier2
+            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(read_time_tier2*asym_tier2)));
         }
         else {
             std::cout << "Unknown action !" << std::endl;
@@ -77,13 +83,14 @@ void R_n_W(int pageNum, std::string action, int tier_num){
     else if (tier_num == 3){
         if (action == "Read"){
             std::cout << "reading page " << pageNum << " from Tier 3 ...\n" << std::endl;
-            // Sleep for 2.0 seconds to simulate the read action
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            // Sleep for 0.2 seconds to simulate the read action
+            std::this_thread::sleep_for(std::chrono::milliseconds(read_time_tier3));
         }
         else if (action == "Write"){
             std::cout << "writing page " << pageNum << " to Tier 3 ...\n" << std::endl;
-            // Sleep for 3.0 seconds to simulate the write action
-            std::this_thread::sleep_for(std::chrono::seconds(3));
+            // Sleep for 0.3 seconds to simulate the write action
+            // write_time_tier3 = read_time_tier3*asym_tier3
+            std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(read_time_tier3*asym_tier3)));
         }
         else {
             std::cout << "Unknown action ! \n" << std::endl;
@@ -140,17 +147,17 @@ std::pair<std::map<int, double>, std::map<int, double>> PageMigrate(
 */
 
 // Temperature increase
-double temp_increase(int PageKey, const std::map<int, int>& list_num_req){
+double temp_increase(int PageKey, const std::map<int, int>& list_num_req, double temp_incr_alpha){
 
     int req_time = list_num_req.find(PageKey)->second;   // get historical number of request of this page
-    double temp = 1 - 0.5 / exp(0.05 * req_time);        // calculate the new temperature
+    double temp = 1 - 0.5 / exp(temp_incr_alpha * req_time);        // calculate the new temperature  // alpha=0.05
 
     return temp;
 }
 
 
 // Calculate state variables (<s1,s2>)
-std::vector<double> state_rvs(const std::map<int, double>& map, int current_threads) {
+std::vector<double> state_rvs(const std::map<int, double>& map, int current_threads, int k_thrd) {
 
     // s1: average temperature
 
@@ -168,48 +175,60 @@ std::vector<double> state_rvs(const std::map<int, double>& map, int current_thre
 
 
     // s2: latency potential, ∝ min⁡(𝐶𝑡_𝑟𝑒𝑎𝑑 − 𝑘_𝑟𝑒𝑎𝑑, 𝐶𝑡_𝑤𝑟𝑖𝑡𝑒 − 𝑘_𝑤𝑟𝑖𝑡𝑒)
-    double s2 = std::exp(static_cast<double>(current_threads - 4));
-
+    double s2 = std::exp(static_cast<double>(current_threads - k_thrd));  //concurrency threashold for coressponding tier
     std::vector<double> State = {s1, s2}; //, s3);
 
     return State;
 }
 
 
-int main() {    
+// set environmental arguments here
+int main(
+        // read/write time of each tier
+        int read_time_tier1 = 10,  float asym_tier1 = 3.0,
+        int read_time_tier2 = 50,  float asym_tier2 = 2.0,
+        int read_time_tier3 = 200, float asym_tier3 = 1.5,
+        // capacity of each tier
+        int max_capacity_tier1 = 10,
+        int max_capacity_tier2 = 30,
+        int max_capacity_tier3 = 100,
+        // Concurrency (available number of threads)
+        int num_threads_tier1 = 3,
+        int num_threads_tier2 = 2,
+        int num_threads_tier3 = 1,
+        // concurrency threashold (k_read/write)
+        int k_thrd_tier1 = 4,
+        int k_thrd_tier2 = 3,
+        int k_thrd_tier3 = 2,
+        // total number of pages
+        int total_num_pages = 100,
+        // total number of requests
+        int total_num_reqs = 500,
+        // temperature increase/drop hyperparameters
+        double temp_incr_alpha = 0.05,
+        int temp_drop_thrd = 20,
+        double temp_drop_scale = 0.1,
+        // RL hyperparameters
+        double beta = 0.01,
+        double lam = 0.8,
+         // b_i = 10 / (avg(s_i)), a_i = exp( (max_s_i-min_s_i) x b_i )
+        std::vector<double> b_i_1 = {10/0.7, 10/1.37},
+        std::vector<double> a_i_1 = {exp(0.3*10/0.7), exp(2.7*10/1.37)},
+        std::vector<double> b_i_2 = {10/0.5, 10/0.51},
+        std::vector<double> a_i_2 = {exp(0.4*10/0.5), exp(0.98*10/0.51)},
+        std::vector<double> b_i_3 = {10/0.4, 10/0.2},
+        std::vector<double> a_i_3 = {exp(0.4*10/0.4), exp(0.35*10/0.2)}
+        ){    
     // Seed the random number generator
     //std::srand(std::time(0));
     
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    // All tunable parameters here
-     // capacity of each tier
-    int max_capacity_tier1 = 10;
-    int max_capacity_tier2 = 30;
-    int max_capacity_tier3 = 100;
-
-     // concurrency (max number of threads)
-    int max_threads_tier1 = 3;
-    int max_threads_tier2 = 2;
-    int max_threads_tier3 = 1;
-
-     // total number of pages
-    int total_num_pages = 100;
-
-     // total number of requests
-    int total_num_reqs = 500;
-
-     // temperature drop parameters
-    int temp_drop_thrd = 20;
-    double temp_drop_scale = 0.1;
-     // temperature increase parameters are inside the above function.
-
-
     // Define thread pools, with different concurrency
-    BS::thread_pool pool1(max_threads_tier1);
-    BS::thread_pool pool2(max_threads_tier2);
-    BS::thread_pool pool3(max_threads_tier3);
+    BS::thread_pool pool1(num_threads_tier1);
+    BS::thread_pool pool2(num_threads_tier2);
+    BS::thread_pool pool3(num_threads_tier3);
     
     // Create a vector for all pools
     std::vector<BS::thread_pool*> pools = {&pool1, &pool2, &pool3};
@@ -266,22 +285,11 @@ int main() {
     }
     std::cout << std::endl;
 
-    double beta = 0.01;
-
-    double lam = 0.8;
-
-    std::vector<double> b_i_1 = {10/0.7, 10/1.37};                    // b_i = 10 / (avg(s_i))
-    std::vector<double> a_i_1 = {exp(0.3*10/0.7), exp(2.7*10/1.37)};  // a_i = exp( (max_s_i-min_s_i) x b_i )
-    std::vector<double> b_i_2 = {10/0.5, 10/0.51};
-    std::vector<double> a_i_2 = {exp(0.4*10/0.5), exp(0.98*10/0.51)};
-    std::vector<double> b_i_3 = {10/0.4, 10/0.2};
-    std::vector<double> a_i_3 = {exp(0.4*10/0.4), exp(0.35*10/0.2)};
-
     TDAgent agent1(n_states, p_init, beta, lam, a_i_1, b_i_1);
     TDAgent agent2(n_states, p_init, beta, lam, a_i_2, b_i_2);
     TDAgent agent3(n_states, p_init, beta, lam, a_i_3, b_i_3);
 
-    // if decreasing learning rate, collect previous phi values:
+    // if use decreasing learning rate, collect previous phi values:
     std::vector<std::vector<double>> phi_list_t1 = {{0.0, 0.0, 0.0, 0.0}};
     std::vector<std::vector<double>> phi_list_t2 = {{0.0, 0.0, 0.0, 0.0}};
     std::vector<std::vector<double>> phi_list_t3 = {{0.0, 0.0, 0.0, 0.0}};
@@ -348,14 +356,20 @@ int main() {
             // Execute action
             int tier_num = 1;
             std::future<void> my_future = selectedPool.submit_task(
-                [n_page, action, tier_num]{
-                R_n_W(n_page, action, tier_num);
+                [n_page, action, tier_num,
+                read_time_tier1, asym_tier1,
+                read_time_tier2, asym_tier2,
+                read_time_tier3, asym_tier3]{
+                R_n_W(n_page, action, tier_num,
+                      read_time_tier1, asym_tier1,
+                      read_time_tier2, asym_tier2,
+                      read_time_tier3, asym_tier3);
                 });
-            my_future.wait_for(std::chrono::milliseconds(1));
+            // my_future.wait_for(std::chrono::milliseconds(1));
             std::cout << action << " done.\n"<< std::endl;
 
             // Update its temperature
-            Tier1[n_page] = temp_increase(n_page, list_num_req);
+            Tier1[n_page] = temp_increase(n_page, list_num_req, temp_incr_alpha);
 
             // no need for migration if page already in Tier1
 
@@ -368,28 +382,34 @@ int main() {
             // Execute action
             int tier_num = 2;
             std::future<void> my_future = selectedPool.submit_task(
-                [n_page, action, tier_num]{
-                R_n_W(n_page, action, tier_num);
+                [n_page, action, tier_num,
+                read_time_tier1, asym_tier1,
+                read_time_tier2, asym_tier2,
+                read_time_tier3, asym_tier3]{
+                R_n_W(n_page, action, tier_num,
+                      read_time_tier1, asym_tier1,
+                      read_time_tier2, asym_tier2,
+                      read_time_tier3, asym_tier3);
                 });
-            my_future.wait_for(std::chrono::milliseconds(1));
+            // my_future.wait_for(std::chrono::milliseconds(1));
             std::cout << action << " done.\n"<< std::endl;
 
             // Update its temperature
-            Tier2[n_page] = temp_increase(n_page, list_num_req);
+            Tier2[n_page] = temp_increase(n_page, list_num_req, temp_incr_alpha);
 
             // Decide migration
             
             // Calculate state variables
             // before movement
-            int current_threads = selectedPool.get_thread_count(); // !!modify to the correct one!!
-            std::vector<double> state_t2_be = state_rvs(Tier2,current_threads);
-            std::vector<double> state_t1_be = state_rvs(Tier1,current_threads);
+            int current_threads = selectedPool.get_thread_count(); // !!modify to the correct one!!  // set a counter
+            std::vector<double> state_t2_be = state_rvs(Tier2,current_threads,k_thrd_tier2);
+            std::vector<double> state_t1_be = state_rvs(Tier1,current_threads,k_thrd_tier1);
             // after movement
             std::map<int, double> Tier2_af = PageMigrate(Tier2,Tier1,n_page).first;
             std::map<int, double> Tier1_af = PageMigrate(Tier2,Tier1,n_page).second;
             int post_threads = current_threads + 1;
-            std::vector<double> state_t2_af = state_rvs(Tier2_af,post_threads);
-            std::vector<double> state_t1_af = state_rvs(Tier1_af,post_threads);
+            std::vector<double> state_t2_af = state_rvs(Tier2_af,post_threads,k_thrd_tier2);
+            std::vector<double> state_t1_af = state_rvs(Tier1_af,post_threads,k_thrd_tier1);
 
             ///* uncomment when RLagents are defined
             // c_up, c_not
@@ -431,11 +451,11 @@ int main() {
                     []{
                     // page moving time, or replace with R_n_W func
                      // sleep for 0.5s to simulate page movement from tier2 to tier1
-                    std::this_thread::sleep_for(std::chrono::milliseconds(500)); 
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));  // 500ms is a hyperparam, change it into environmental parameters!
                     std::cout << "Page migration done.\n" << std::endl;
                     });
                 // Update RL agents
-                double reward = 1/0.500;  // use the respond time as the reward, however this shouldn't be a constant value
+                double reward = 1/0.500;  // current using the respond time as the reward, need to think more about how to define the reward function.
                 std::vector<double> p_t1 = agent1.learn(state_t1_be, state_t1_af, reward, phi_list_t1, 1);
                 std::vector<double> p_t2 = agent2.learn(state_t2_be, state_t2_af, reward, phi_list_t2, 1);
             }
@@ -451,28 +471,34 @@ int main() {
             // Execute action
             int tier_num = 3;
             std::future<void> my_future = selectedPool.submit_task(
-                [n_page, action, tier_num]{
-                R_n_W(n_page, action, tier_num);
+                [n_page, action, tier_num,
+                read_time_tier1, asym_tier1,
+                read_time_tier2, asym_tier2,
+                read_time_tier3, asym_tier3]{
+                R_n_W(n_page, action, tier_num,
+                      read_time_tier1, asym_tier1,
+                      read_time_tier2, asym_tier2,
+                      read_time_tier3, asym_tier3);
                 });
             my_future.wait_for(std::chrono::milliseconds(1));
             std::cout << action << " done.\n"<< std::endl;
 
             // Update its temperature
-            Tier3[n_page] = temp_increase(n_page, list_num_req);
+            Tier3[n_page] = temp_increase(n_page, list_num_req, temp_incr_alpha);
 
             // Decide migration
             
             // Calculate state variables
             // before movement
-            int current_threads = selectedPool.get_thread_count(); // !!modify to the correct one!!
-            std::vector<double> state_t3_be = state_rvs(Tier3,current_threads);
-            std::vector<double> state_t2_be = state_rvs(Tier2,current_threads);
+            int current_threads = selectedPool.get_thread_count(); // !!modify to the correct one!!  // set a counter
+            std::vector<double> state_t3_be = state_rvs(Tier3,current_threads,k_thrd_tier3);
+            std::vector<double> state_t2_be = state_rvs(Tier2,current_threads,k_thrd_tier2);
             // after movement
             std::map<int, double> Tier3_af = PageMigrate(Tier3,Tier2,n_page).first;
             std::map<int, double> Tier2_af = PageMigrate(Tier3,Tier2,n_page).second;
             int post_threads = current_threads + 1;
-            std::vector<double> state_t3_af = state_rvs(Tier3_af,post_threads);
-            std::vector<double> state_t2_af = state_rvs(Tier2_af,post_threads);
+            std::vector<double> state_t3_af = state_rvs(Tier3_af,post_threads,k_thrd_tier3);
+            std::vector<double> state_t2_af = state_rvs(Tier2_af,post_threads,k_thrd_tier2);
 
             ///* uncomment when RLagents are defined
             // c_up, c_not
@@ -514,11 +540,11 @@ int main() {
                     []{
                     // page moving time, or replace with R_n_W func
                      // sleep for 1.5s to simulate page movement from tier2 to tier1
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1500)); // 1500ms is a hyperparam, change it into environmental parameters!
                     std::cout << "Page migration done.\n" << std::endl;
                     });
                 // Update RL agents
-                double reward = 1/1.500;  // use the respond time as the reward, however this shouldn't be a constant value
+                double reward = 1/1.500;  // current using the respond time as the reward, need to think more about how to define the reward function.
                 std::vector<double> p_t2 = agent2.learn(state_t2_be, state_t2_af, reward, phi_list_t2, 1);
                 std::vector<double> p_t3 = agent3.learn(state_t3_be, state_t3_af, reward, phi_list_t3, 1);
             }
@@ -533,14 +559,14 @@ int main() {
         // temperature decrease for long idle pages
         std::vector<int> idle_pages;
         for (const auto& keyValue : list_idle) {
-            // if a page hasn't been requested in the past 10 (parameter variable)
+            // if a page hasn't been requested in the past 20 (parameter variable)
             if (keyValue.second == temp_drop_thrd) {
                 idle_pages.push_back(keyValue.first);
                 // reset idle counter
                 list_idle[keyValue.first] = 0;
             }
         }
-        // drop temperature of these pages by 0.05 (parameter variable)
+        // drop temperature of these pages by 0.1 (parameter variable)
         for (const auto& key : idle_pages) {
             if (Tier1.find(key) != Tier1.end()) {
                 Tier1[key] -= temp_drop_scale;
