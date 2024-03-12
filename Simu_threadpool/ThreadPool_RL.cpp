@@ -182,43 +182,50 @@ std::vector<double> state_rvs(const std::map<int, double>& map, int current_thre
 }
 
 
-// set environmental arguments here
+
 int main(
-        // read/write time of each tier
-        int read_time_tier1 = 10,  float asym_tier1 = 3.0,
-        int read_time_tier2 = 50,  float asym_tier2 = 2.0,
-        int read_time_tier3 = 200, float asym_tier3 = 1.5,
-        // capacity of each tier
-        int max_capacity_tier1 = 10,
-        int max_capacity_tier2 = 30,
-        int max_capacity_tier3 = 100,
-        // Concurrency (available number of threads)
-        int num_threads_tier1 = 3,
-        int num_threads_tier2 = 2,
-        int num_threads_tier3 = 1,
-        // concurrency threashold (k_read/write)
-        int k_thrd_tier1 = 4,
-        int k_thrd_tier2 = 3,
-        int k_thrd_tier3 = 2,
-        // total number of pages
-        int total_num_pages = 100,
-        // total number of requests
-        int total_num_reqs = 500,
-        // temperature increase/drop hyperparameters
-        double temp_incr_alpha = 0.05,
-        int temp_drop_thrd = 20,
-        double temp_drop_scale = 0.1,
-        // RL hyperparameters
-        double beta = 0.01,
-        double lam = 0.8,
-         // b_i = 10 / (avg(s_i)), a_i = exp( (max_s_i-min_s_i) x b_i )
-        std::vector<double> b_i_1 = {10/0.7, 10/1.37},
-        std::vector<double> a_i_1 = {exp(0.3*10/0.7), exp(2.7*10/1.37)},
-        std::vector<double> b_i_2 = {10/0.5, 10/0.51},
-        std::vector<double> a_i_2 = {exp(0.4*10/0.5), exp(0.98*10/0.51)},
-        std::vector<double> b_i_3 = {10/0.4, 10/0.2},
-        std::vector<double> a_i_3 = {exp(0.4*10/0.4), exp(0.35*10/0.2)}
-        ){    
+        // what should be put here?
+        ){
+    // set environmental arguments here
+    // read/write time of each tier
+    int read_time_tier1 = 10;  float asym_tier1 = 3.0;
+    int read_time_tier2 = 50;  float asym_tier2 = 2.0;
+    int read_time_tier3 = 200; float asym_tier3 = 1.5;
+    // page migration time (shall be replaced by a function act read/write in real),
+    int page_migr_time_t2t1 = 100;
+    int page_migr_time_t3t2 = 300;
+    // capacity of each tier
+    int max_capacity_tier1 = 10;
+    int max_capacity_tier2 = 30;
+    int max_capacity_tier3 = 10;
+    // Concurrency (available number of threads)
+    int num_threads_tier1 = 3;
+    int num_threads_tier2 = 2;
+    int num_threads_tier3 = 1;
+    // concurrency threashold (k_read/write)
+    int k_thrd_tier1 = 4;
+    int k_thrd_tier2 = 3;
+    int k_thrd_tier3 = 2;
+    // total number of pages
+    int total_num_pages = 100;
+    // total number of requests
+    int total_num_reqs = 500;
+    // temperature increase/drop hyperparameters
+    double temp_incr_alpha = 0.05;
+    int temp_drop_thrd = 20;
+    double temp_drop_scale = 0.1;
+    // RL hyperparameters
+    double beta = 0.01;
+    double lam = 0.8;
+        // b_i = 10 / (avg(s_i)), a_i = exp( (max_s_i-min_s_i) x b_i )
+    std::vector<double> b_i_1 = {10/0.7, 10/1.37};
+    std::vector<double> a_i_1 = {exp(0.3*10/0.7), exp(2.7*10/1.37)};
+    std::vector<double> b_i_2 = {10/0.5, 10/0.51};
+    std::vector<double> a_i_2 = {exp(0.4*10/0.5), exp(0.98*10/0.51)};
+    std::vector<double> b_i_3 = {10/0.4, 10/0.2};
+    std::vector<double> a_i_3 = {exp(0.4*10/0.4), exp(0.35*10/0.2)};
+
+
     // Seed the random number generator
     //std::srand(std::time(0));
     
@@ -448,10 +455,10 @@ int main(
                     Tier1 = tier_pair.second;
                 }
                 const std::future<void> my_future = selectedPool.submit_task(
-                    []{
+                    [page_migr_time_t2t1]{
                     // page moving time, or replace with R_n_W func
                      // sleep for 0.5s to simulate page movement from tier2 to tier1
-                    std::this_thread::sleep_for(std::chrono::milliseconds(500));  // 500ms is a hyperparam, change it into environmental parameters!
+                    std::this_thread::sleep_for(std::chrono::milliseconds(page_migr_time_t2t1));  // 500ms is a hyperparameter
                     std::cout << "Page migration done.\n" << std::endl;
                     });
                 // Update RL agents
@@ -537,10 +544,10 @@ int main(
                     Tier2 = tier_pair.second;
                 }
                 const std::future<void> my_future = selectedPool.submit_task(
-                    []{
+                    [page_migr_time_t3t2]{
                     // page moving time, or replace with R_n_W func
                      // sleep for 1.5s to simulate page movement from tier2 to tier1
-                    std::this_thread::sleep_for(std::chrono::milliseconds(1500)); // 1500ms is a hyperparam, change it into environmental parameters!
+                    std::this_thread::sleep_for(std::chrono::milliseconds(page_migr_time_t3t2)); // 1500ms is a hyperparameter
                     std::cout << "Page migration done.\n" << std::endl;
                     });
                 // Update RL agents
