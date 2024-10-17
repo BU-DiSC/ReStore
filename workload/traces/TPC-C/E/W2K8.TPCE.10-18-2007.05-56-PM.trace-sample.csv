@@ -1,0 +1,1000 @@
+BeginHeader
+   UnknownEvent/Classic,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,                              EventGuid, Type, Level, Version, MofLength
+   InvalidEvent/Classic,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,                              EventGuid, Type, Level, Version, MofLength
+   UnknownEvent/Crimson,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,                             ProviderId,     Id,   Task, Opcode, Version, Channel, Level,            Keyword, UserDataLength
+   InvalidEvent/Crimson,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,                             ProviderId,     Id,   Task, Opcode, Version, Channel, Level,            Keyword, UserDataLength
+  KernelDebuggerEnabled,  TimeStamp
+FirstReliableEventTimeStamp, TimeStamp
+FirstReliableCSwitchEventTimeStamp, TimeStamp
+                P-Start,  TimeStamp,     Process Name ( PID),  ParentPID,  SessionID,          UniqueKey, UserSid, Command Line
+                  P-End,  TimeStamp,     Process Name ( PID),  ParentPID,  SessionID,          UniqueKey,     Status, UserSid, Command Line
+              P-DCStart,  TimeStamp,     Process Name ( PID),  ParentPID,  SessionID,          UniqueKey, UserSid, Command Line
+                P-DCEnd,  TimeStamp,     Process Name ( PID),  ParentPID,  SessionID,          UniqueKey, UserSid, Command Line
+               P-Zombie,  TimeStamp,     Process Name ( PID),  ParentPID,  SessionID,          UniqueKey, UserSid, Command Line
+                T-Start,  TimeStamp,     Process Name ( PID),   ThreadID,          StackBase,         StackLimit,         UsrStkBase,          UsrStkLmt,            TebBase, SubProcessTag,            Image!Function
+                  T-End,  TimeStamp,     Process Name ( PID),   ThreadID,          StackBase,         StackLimit,         UsrStkBase,          UsrStkLmt,            TebBase, SubProcessTag,            Image!Function
+              T-DCStart,  TimeStamp,     Process Name ( PID),   ThreadID,          StackBase,         StackLimit,         UsrStkBase,          UsrStkLmt,            TebBase, SubProcessTag,            Image!Function
+                T-DCEnd,  TimeStamp,     Process Name ( PID),   ThreadID,          StackBase,         StackLimit,         UsrStkBase,          UsrStkLmt,            TebBase, SubProcessTag,            Image!Function
+                I-Start,  TimeStamp,     Process Name ( PID),           BaseAddr,            EndAddr,   Checksum, TimeDateStamp,        DefaultBase, FileName
+                  I-End,  TimeStamp,     Process Name ( PID),           BaseAddr,            EndAddr,   Checksum, TimeDateStamp,        DefaultBase, FileName
+              I-DCStart,  TimeStamp,     Process Name ( PID),           BaseAddr,            EndAddr,   Checksum, TimeDateStamp,        DefaultBase, FileName
+                I-DCEnd,  TimeStamp,     Process Name ( PID),           BaseAddr,            EndAddr,   Checksum, TimeDateStamp,        DefaultBase, FileName
+           VirtualAlloc,  TimeStamp,     Process Name ( PID),           BaseAddr,            EndAddr, Flags
+            VirtualFree,  TimeStamp,     Process Name ( PID),           BaseAddr,            EndAddr, Flags
+          SessionCreate,  TimeStamp,  SessionID,          UniqueKey
+        GrowKernelStack,  TimeStamp,     Process Name ( PID),   ThreadID,          StackBase,         StackLimit
+                  T-GUI,  TimeStamp,     Process Name ( PID),   ThreadID,          StackBase,         StackLimit
+       HeapRangeRundown,  TimeStamp,     Process Name ( PID),         HeapHandle,      Flags
+        HeapCreateRange,  TimeStamp,     Process Name ( PID),   ThreadID,         HeapHandle,       Size,      Flags
+       HeapRangeReserve,  TimeStamp,     Process Name ( PID),   ThreadID,         HeapHandle,        VirtualAddr,       Size
+       HeapRangeRelease,  TimeStamp,     Process Name ( PID),   ThreadID,         HeapHandle,        VirtualAddr,       Size
+       HeapRangeDestroy,  TimeStamp,     Process Name ( PID),   ThreadID,         HeapHandle
+      HeapCreateRundown,  TimeStamp,     Process Name ( PID),         HeapHandle,           BaseAddr,       Size
+         ProcessPerfCtr,  TimeStamp,     Process Name ( PID),    Peak WS,    Peak VM,    Peak PF,    Peak PP,   Peak NPP
+  ProcessPerfCtrRundown,  TimeStamp,     Process Name ( PID),    Peak WS,    Peak VM,    Peak PF,    Peak PP,   Peak NPP,     End WS,     End VM,     End PF,     End PP,    End NPP,  # Handles, #PageFault
+                CSwitch,  TimeStamp, New Process Name ( PID),    New TID, NPri, NQnt, TmSinceLast, WaitTime, Old Process Name ( PID),    Old TID, OPri, OQnt,        OldState,      Wait Reason, Swapable, InSwitchTime, CPU, IdealProc,  OldRemQnt, NewPriDecr, PrevCState
+     PageRemovedByColor,  TimeStamp,        Pfn, Pri,          List, UseDescription,        Detailed Usage,  VA/Offset, Process/File Name
+            PageRemoved,  TimeStamp,        Pfn, Pri,          List, UseDescription,        Detailed Usage,  VA/Offset, Process/File Name
+               InMemory,  TimeStamp,        Pfn, Pri,          List, UseDescription,        Detailed Usage,  VA/Offset, Process/File Name
+           InsertInFree,  TimeStamp,        Pfn, Pri,          List, UseDescription,        Detailed Usage,  VA/Offset, Process/File Name
+       InsertInModified,  TimeStamp,        Pfn, Pri,          List, UseDescription,        Detailed Usage,  VA/Offset, Process/File Name
+           ZeroShareCnt,  TimeStamp,        Pfn
+            MemSnapLite,  TimeStamp,        Pfn
+  PageFileMappedSection,  TimeStamp,     Process Name ( PID), Range Base,  Range End, Rundown
+                MemInfo,  TimeStamp, FreePages, Standby7, Standby6, Standby5, Standby4, Standby3, Standby2, Standby1, Standby0, TotalStandby, ModifiedPages, InUsePages, RepurposedPages
+         PagefileBacked,  TimeStamp, DeviceChars, FileChars,  Flags, ActiveDataRef, DeviceEjectable,         FileObject, FileName
+              PageFault,  TimeStamp,     Process Name ( PID),   ThreadID,        VirtualAddr,           PrgrmCtr,        Type,            Image!Function
+              HardFault,  TimeStamp,     Process Name ( PID),   ThreadID,        VirtualAddr,   ByteOffset,     IOSize, ElapsedTime,         FileObject, FileName, Hardfaulted Address Information
+             DriverCall,  TimeStamp,             IrpPtr,   UniqueId,            MajorFunction,  MinorFunc,         FileObject, FileName,            Image!Function
+           DriverReturn,  TimeStamp,             IrpPtr,   UniqueId
+         DriverComplete,  TimeStamp,             IrpPtr,   UniqueId,            Image!Function
+   DriverCompleteReturn,  TimeStamp,             IrpPtr,   UniqueId
+DriverCompletionRoutine,  TimeStamp,             IrpPtr,   UniqueId,            Image!Function
+               DiskRead,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr,   ByteOffset,     IOSize, ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri,  VolSnap,         FileObject, FileName
+              DiskWrite,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr,   ByteOffset,     IOSize, ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri,  VolSnap,         FileObject, FileName
+           DiskReadInit,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr
+          DiskWriteInit,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr
+              DiskFlush,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr,                           ElapsedTime,  DiskNum, IrpFlags, DiskSvcTime, I/O Pri
+          DiskFlushInit,  TimeStamp,     Process Name ( PID),   ThreadID,             IrpPtr
+           FileIoCreate,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,    Options, Attributes,ShareAccess, FileName, ParsedOptions, ParsedAttributes, ParsedShareAccess
+          FileIoCleanup,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject, FileName
+            FileIoClose,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject, FileName
+            FileIoFlush,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject, FileName
+             FileIoRead,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,   ByteOffset,       Size,      Flags, Priority, FileName, ParsedFlags
+            FileIoWrite,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,   ByteOffset,       Size,      Flags, Priority, FileName, ParsedFlags
+          FileIoSetInfo,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,          ExtraInfo,  InfoClass, FileName
+        FileIoQueryInfo,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,          ExtraInfo,  InfoClass, FileName
+            FileIoFSCTL,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,          ExtraInfo,  InfoClass, FileName
+           FileIoDelete,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,          ExtraInfo,  InfoClass, FileName
+           FileIoRename,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,          ExtraInfo,  InfoClass, FileName
+          FileIoDirEnum,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,  FileIndex,       Size,  InfoClass, FileName, FileName
+        FileIoDirNotify,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject,  FileIndex,       Size,  InfoClass, FileName, FileName
+            FileIoOpEnd,  TimeStamp,     Process Name ( PID),   ThreadID, CPU,             IrpPtr,         FileObject, ElapsedTime,     Status,          ExtraInfo, Type, FileName
+         FileNameCreate,  TimeStamp,         FileObject, FileName
+         FileNameDelete,  TimeStamp,         FileObject, FileName
+        FileNameRundown,  TimeStamp,         FileObject, FileName
+                   Mark,  TimeStamp, Mark
+              AsyncMark,  TimeStamp, Mark
+              MarkEvent,  TimeStamp,     Type, Level,     TranId,    AppId,     OpId, Text
+              Interrupt,  TimeStamp, ElapsedTime, CPU,     Status,        ServiceAddr,            Image!Function
+                    DPC,  TimeStamp, ElapsedTime, CPU,        ServiceAddr,            Image!Function
+                 DPCTmr,  TimeStamp, ElapsedTime, CPU,        ServiceAddr,            Image!Function
+           SysCallEnter,  TimeStamp,     Process Name ( PID),   ThreadID,        ServiceAddr,            Image!Function
+            SysCallExit,  TimeStamp,     Process Name ( PID),   ThreadID,     Status
+      SampledProfileNmi,  TimeStamp,     Process Name ( PID),   ThreadID,           PrgrmCtr, CPU, ThreadStartImage!Function,            Image!Function, Interrupts Masked
+         SampledProfile,  TimeStamp,     Process Name ( PID),   ThreadID,           PrgrmCtr, CPU, ThreadStartImage!Function,            Image!Function, Count, SampledProfile type
+ProfileFreq-SetInterval,  TimeStamp,     Process Name ( PID),   ThreadID, Source, New Interval, Old Interval
+    ProfileFreq-DCStart,  TimeStamp,     Process Name ( PID),   ThreadID, Source, New Interval, Old Interval
+      ProfileFreq-DCEnd,  TimeStamp,     Process Name ( PID),   ThreadID, Source, New Interval, Old Interval
+EndHeader
+OS Version: 6.0.6001, Trace Size: 993280KB, Events Lost: 0, Buffers lost: 0, Trace Start: 128372289960300918, Trace Length: 14 min, PointerSize: 8, Trace Name: G2.W2K8.tpce.ENTDL585G2.Administrator.10-18-2007.05-56-PM.trace.etl
+FirstReliableEventTimeStamp, 0
+FirstReliableCSwitchEventTimeStamp, 5663799
+             GroupMasks,          0,   0, 0x00000000
+             GroupMasks,          0,   1, 0x00000000
+             GroupMasks,          0,   2, 0x00000000
+             GroupMasks,          0,   3, 0x00000000
+             GroupMasks,          0,   4, 0x00000000
+             GroupMasks,          0,   5, 0x00000000
+             GroupMasks,          0,   6, 0x00000000
+             GroupMasks,          0,   7, 0x00000000
+     EtwInternalVersion,          0,       14
+             GroupMasks,    5504709,   0, 0x06002707
+             GroupMasks,    5504709,   1, 0x00000004
+             GroupMasks,    5504709,   2, 0x00000000
+             GroupMasks,    5504709,   3, 0x00000000
+             GroupMasks,    5504709,   4, 0x00000000
+             GroupMasks,    5504709,   5, 0x00000000
+             GroupMasks,    5504709,   6, 0x00000000
+             GroupMasks,    5504709,   7, 0x00000000
+     EtwInternalVersion,    5504709,       14
+  KernelDebuggerEnabled,    5504711
+              P-DCStart,    5528960,             Idle (   0),          0,          0, 0x0000f800017cbcc0, S-1-5-18,  
+              T-DCStart,    5528964,             Idle (   0),          0, 0xfffff800030ba000, 0xfffff800030b4000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528966,             Idle (   0),          0, 0xfffffa6001928000, 0xfffffa6001922000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528967,             Idle (   0),          0, 0xfffffa600199a000, 0xfffffa6001994000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528969,             Idle (   0),          0, 0xfffffa60005b6000, 0xfffffa60005b0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528970,             Idle (   0),          0, 0xfffffa6001a68000, 0xfffffa6001a62000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528972,             Idle (   0),          0, 0xfffffa6001ada000, 0xfffffa6001ad4000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528974,             Idle (   0),          0, 0xfffffa6001b4c000, 0xfffffa6001b46000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528975,             Idle (   0),          0, 0xfffffa6001bbe000, 0xfffffa6001bb8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528977,             Idle (   0),          0, 0xfffffa6001bf0000, 0xfffffa6001bea000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528978,             Idle (   0),          0, 0xfffffa6001cab000, 0xfffffa6001ca5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528980,             Idle (   0),          0, 0xfffffa6001d1d000, 0xfffffa6001d17000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+             FileIoRead,    5528980,     sqlservr.exe (2504),       2700,  14, 0xfffffa811fef5ee0, 0xfffffa8119c59800, 0x00b1614000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5528981,             Idle (   0),          0, 0xfffffa6001d8f000, 0xfffffa6001d89000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+                CSwitch,    5528982,     sqlservr.exe (2504),       2868,   15,   -1,           0,        0,     sqlservr.exe (2504),       2576,   15,   -1,         Waiting,          WrQueue, Swapable,      0,   0,   3,  338388992,    0,    0
+              T-DCStart,    5528983,             Idle (   0),          0, 0xfffffa6001bfe000, 0xfffffa6001bf8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528984,             Idle (   0),          0, 0xfffffa6001e72000, 0xfffffa6001e6c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528986,             Idle (   0),          0, 0xfffffa6001ee4000, 0xfffffa6001ede000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              T-DCStart,    5528987,             Idle (   0),          0, 0xfffffa6001f56000, 0xfffffa6001f50000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016afff0
+              P-DCStart,    5529008,           System (   4),          0,          0, 0x0000fa8061f79110, S-1-5-18,  
+              T-DCStart,    5529011,           System (   4),          8, 0xfffffa60005c2000, 0xfffffa60005bc000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff80001a94610
+              T-DCStart,    5529013,           System (   4),         16, 0xfffffa60005f0000, 0xfffffa60005ea000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff80001771b90
+              T-DCStart,    5529014,           System (   4),         20, 0xfffffa60005f7000, 0xfffffa60005f1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff80001771500
+           DiskReadInit,    5529015,     sqlservr.exe (2504),       2700, 0xfffffa8120052820
+              T-DCStart,    5529017,           System (   4),         24, 0xfffffa60005fe000, 0xfffffa60005f8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff80001771500
+              T-DCStart,    5529018,           System (   4),         28, 0xfffffa6001fed000, 0xfffffa6001fe7000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+             FileIoRead,    5529019,     sqlservr.exe (2504),       2864,   9, 0xfffffa80dc5e5b30, 0xfffffa8119d1ff20, 0x1fe4f5c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529020,           System (   4),         32, 0xfffffa6001ff4000, 0xfffffa6001fee000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529022,           System (   4),         36, 0xfffffa6001ffb000, 0xfffffa6001ff5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529023,           System (   4),         40, 0xfffffa6002109000, 0xfffffa6002103000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529025,           System (   4),         44, 0xfffffa6002110000, 0xfffffa600210a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529026,           System (   4),         48, 0xfffffa6002117000, 0xfffffa6002111000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529028,           System (   4),         52, 0xfffffa600211e000, 0xfffffa6002118000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+           DiskReadInit,    5529029,     sqlservr.exe (2504),       2864, 0xfffffa811ff7c8b0
+              T-DCStart,    5529030,           System (   4),         56, 0xfffffa6002125000, 0xfffffa600211f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529032,           System (   4),         60, 0xfffffa600212c000, 0xfffffa6002126000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529034,           System (   4),         64, 0xfffffa6002133000, 0xfffffa600212d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529035,           System (   4),         68, 0xfffffa600213a000, 0xfffffa6002134000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529036,           System (   4),         72, 0xfffffa6002141000, 0xfffffa600213b000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529038,           System (   4),         76, 0xfffffa6002148000, 0xfffffa6002142000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529040,           System (   4),         80, 0xfffffa600214f000, 0xfffffa6002149000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529042,           System (   4),         84, 0xfffffa6002156000, 0xfffffa6002150000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529044,           System (   4),         88, 0xfffffa600215d000, 0xfffffa6002157000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529045,           System (   4),         92, 0xfffffa6002164000, 0xfffffa600215e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529047,           System (   4),         96, 0xfffffa600216b000, 0xfffffa6002165000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529049,           System (   4),        100, 0xfffffa6002172000, 0xfffffa600216c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193abe0
+              T-DCStart,    5529051,           System (   4),        104, 0xfffffa6002179000, 0xfffffa6002173000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529052,           System (   4),        108, 0xfffffa6002180000, 0xfffffa600217a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529054,           System (   4),        112, 0xfffffa6002187000, 0xfffffa6002181000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529055,           System (   4),        116, 0xfffffa600218e000, 0xfffffa6002188000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529057,           System (   4),        120, 0xfffffa6002195000, 0xfffffa600218f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529059,           System (   4),        124, 0xfffffa600219c000, 0xfffffa6002196000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529060,           System (   4),        128, 0xfffffa60021a3000, 0xfffffa600219d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529062,           System (   4),        132, 0xfffffa60021aa000, 0xfffffa60021a4000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529064,           System (   4),        136, 0xfffffa60021b1000, 0xfffffa60021ab000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529065,           System (   4),        140, 0xfffffa60021b8000, 0xfffffa60021b2000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529067,           System (   4),        144, 0xfffffa60021bf000, 0xfffffa60021b9000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529069,           System (   4),        148, 0xfffffa60021c6000, 0xfffffa60021c0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529071,           System (   4),        152, 0xfffffa60021cd000, 0xfffffa60021c7000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529073,           System (   4),        156, 0xfffffa60021d4000, 0xfffffa60021ce000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529075,           System (   4),        160, 0xfffffa60021db000, 0xfffffa60021d5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529076,           System (   4),        164, 0xfffffa60021e2000, 0xfffffa60021dc000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016884bc
+              T-DCStart,    5529078,           System (   4),        168, 0xfffffa60021e9000, 0xfffffa60021e3000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000177ab80
+              T-DCStart,    5529080,           System (   4),        172, 0xfffffa60021f0000, 0xfffffa60021ea000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000177a840
+              T-DCStart,    5529081,           System (   4),        176, 0xfffffa60021f7000, 0xfffffa60021f1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff80001676634
+              T-DCStart,    5529083,           System (   4),        180, 0xfffffa60021fe000, 0xfffffa60021f8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016c2168
+              T-DCStart,    5529085,           System (   4),        184, 0xfffffa6002309000, 0xfffffa6002303000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016aa708
+              T-DCStart,    5529087,           System (   4),        196, 0xfffffa60023a7000, 0xfffffa60023a1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016c3b50
+              T-DCStart,    5529089,           System (   4),        200, 0xfffffa6003e67000, 0xfffffa6003e61000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000174d690
+              T-DCStart,    5529090,           System (   4),        204, 0xfffffa6002330000, 0xfffffa600232a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000174d690
+              T-DCStart,    5529092,           System (   4),        212, 0xfffffa6003f2e000, 0xfffffa6003f28000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529094,           System (   4),        216, 0xfffffa6003e9e000, 0xfffffa6003e98000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529096,           System (   4),        220, 0xfffffa60025c1000, 0xfffffa60025bb000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529097,           System (   4),        224, 0xfffffa60029f7000, 0xfffffa60029f1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529099,           System (   4),        228, 0xfffffa60023ae000, 0xfffffa60023a8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529101,           System (   4),        232, 0xfffffa6002888000, 0xfffffa6002882000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529102,           System (   4),        260, 0xfffffa6002808000, 0xfffffa6002802000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800018ee09c
+              T-DCStart,    5529104,           System (   4),        264, 0xfffffa6002600000, 0xfffffa60025fa000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         acpi.sys!0xfffffa6000b0301c
+              T-DCStart,    5529106,           System (   4),        268, 0xfffffa6002f78000, 0xfffffa6002f72000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         acpi.sys!0xfffffa6000afbfc8
+              T-DCStart,    5529107,           System (   4),        272, 0xfffffa600236f000, 0xfffffa6002369000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         acpi.sys!0xfffffa6000afbfc8
+              T-DCStart,    5529109,           System (   4),        276, 0xfffffa6002fa7000, 0xfffffa6002fa1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529110,           System (   4),        280, 0xfffffa6002741000, 0xfffffa600273b000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529112,           System (   4),        288, 0xfffffa6003179000, 0xfffffa6003173000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800016bf200
+              T-DCStart,    5529114,           System (   4),        292, 0xfffffa6007e47000, 0xfffffa6007e41000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         NDIS.SYS!0xfffffa600098d600
+              T-DCStart,    5529116,           System (   4),        296, 0xfffffa6007e4e000, 0xfffffa6007e48000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         NDIS.SYS!0xfffffa6000803800
+              T-DCStart,    5529117,           System (   4),        316, 0xfffffa6007f8d000, 0xfffffa6007f87000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         Ntfs.sys!0xfffffa600121c870
+              T-DCStart,    5529119,           System (   4),        320, 0xfffffa6007fac000, 0xfffffa6007fa6000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,      IPMIDrv.sys!0xfffffa600072edc8
+              T-DCStart,    5529121,           System (   4),        332, 0xfffffa6007fb3000, 0xfffffa6007fad000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529122,           System (   4),        336, 0xfffffa6007299000, 0xfffffa6007293000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529124,           System (   4),        340, 0xfffffa60073b9000, 0xfffffa60073b3000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529126,           System (   4),        344, 0xfffffa6007407000, 0xfffffa6007401000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529127,           System (   4),        348, 0xfffffa6007412000, 0xfffffa600740c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529129,           System (   4),        352, 0xfffffa600741c000, 0xfffffa6007416000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529131,           System (   4),        356, 0xfffffa600745a000, 0xfffffa6007454000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600828ec68
+              T-DCStart,    5529132,           System (   4),        360, 0xfffffa6007464000, 0xfffffa600745e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdpdr.sys!0xfffffa600821e654
+              T-DCStart,    5529134,           System (   4),        384, 0xfffffa600875a000, 0xfffffa6008754000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,      raspptp.sys!0xfffffa60081c9280
+              T-DCStart,    5529136,           System (   4),        404, 0xfffffa6007f55000, 0xfffffa6007f4f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,       rasacd.sys!0xfffffa60083b23e4
+              T-DCStart,    5529138,           System (   4),        416, 0xfffffa60074f4000, 0xfffffa60074ee000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529139,           System (   4),        420, 0xfffffa6007532000, 0xfffffa600752c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529141,           System (   4),        424, 0xfffffa600753c000, 0xfffffa6007536000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529143,           System (   4),        428, 0xfffffa6007ef9000, 0xfffffa6007ef3000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529145,           System (   4),        432, 0xfffffa6007f24000, 0xfffffa6007f1e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529146,           System (   4),        436, 0xfffffa6007f2b000, 0xfffffa6007f25000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529148,           System (   4),        440, 0xfffffa6007f32000, 0xfffffa6007f2c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+             FileIoRead,    5529150,     sqlservr.exe (2504),       2840,  12, 0xfffffa80685c0710, 0xfffffa80683cd2d0, 0x0aba368000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529151,           System (   4),        444, 0xfffffa6007f39000, 0xfffffa6007f33000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529153,           System (   4),        448, 0xfffffa6007f40000, 0xfffffa6007f3a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529154,           System (   4),        452, 0xfffffa6007f47000, 0xfffffa6007f41000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529156,           System (   4),        456, 0xfffffa6007f4e000, 0xfffffa6007f48000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+             FileIoRead,    5529156,     sqlservr.exe (2504),       2700,  14, 0xfffffa8119c50c80, 0xfffffa8119ca9800, 0x002a42c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529158,           System (   4),        460, 0xfffffa6007f5c000, 0xfffffa6007f56000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529160,           System (   4),        464, 0xfffffa6007f63000, 0xfffffa6007f5d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529162,           System (   4),        468, 0xfffffa6007f7d000, 0xfffffa6007f77000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008938b94
+              T-DCStart,    5529163,           System (   4),        472, 0xfffffa6007f94000, 0xfffffa6007f8e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        rdbss.sys!0xfffffa6008902604
+           DiskReadInit,    5529165,     sqlservr.exe (2504),       2840, 0xfffffa809f04e8b0
+              T-DCStart,    5529166,           System (   4),        480, 0xfffffa60087d7000, 0xfffffa60087d1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff800018d2714
+              T-DCStart,    5529168,           System (   4),        564, 0xfffffa600879d000, 0xfffffa6008797000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     watchdog.sys!0xfffffa60080e2588
+              T-DCStart,    5529170,           System (   4),        632, 0xfffffa60005e9000, 0xfffffa60005e3000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        msrpc.sys!0xfffffa6000761a2c
+              T-DCStart,    5529172,           System (   4),        912, 0xfffffa6007fa3000, 0xfffffa6007f9d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        luafv.sys!0xfffffa6009017c48
+              T-DCStart,    5529174,           System (   4),       1264, 0xfffffa6008f2f000, 0xfffffa6008f29000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,        spsys.sys!0xfffffa600914dd29
+           DiskReadInit,    5529176,     sqlservr.exe (2504),       2700, 0xfffffa8119bcb8b0
+              T-DCStart,    5529176,           System (   4),       1288, 0xfffffa6008a5e000, 0xfffffa6008a58000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529178,           System (   4),       1292, 0xfffffa6008a65000, 0xfffffa6008a5f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529179,           System (   4),       1296, 0xfffffa6008b04000, 0xfffffa6008afe000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529181,           System (   4),       1300, 0xfffffa6008b0b000, 0xfffffa6008b05000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529183,           System (   4),       1304, 0xfffffa6008f0e000, 0xfffffa6008f08000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529185,           System (   4),       1308, 0xfffffa60092af000, 0xfffffa60092a9000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529187,           System (   4),       1312, 0xfffffa60092b6000, 0xfffffa60092b0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+             FileIoRead,    5529188,     sqlservr.exe (2504),       2868,   0, 0xfffffa8062380830, 0xfffffa80622aa920, 0x0f7b474000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529188,           System (   4),       1316, 0xfffffa6009326000, 0xfffffa6009320000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529190,           System (   4),       1320, 0xfffffa600932d000, 0xfffffa6009327000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529192,           System (   4),       1324, 0xfffffa60093b6000, 0xfffffa60093b0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529193,           System (   4),       1328, 0xfffffa60093bd000, 0xfffffa60093b7000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529195,           System (   4),       1332, 0xfffffa600942c000, 0xfffffa6009426000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+           DiskReadInit,    5529196,     sqlservr.exe (2504),       2868, 0xfffffa811fe07c60
+              T-DCStart,    5529197,           System (   4),       1336, 0xfffffa6009446000, 0xfffffa6009440000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529199,           System (   4),       1340, 0xfffffa600944d000, 0xfffffa6009447000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529201,           System (   4),       1344, 0xfffffa6009454000, 0xfffffa600944e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529203,           System (   4),       1348, 0xfffffa600945b000, 0xfffffa6009455000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+             FileIoRead,    5529204,     sqlservr.exe (2504),       2744,   7, 0xfffffa80685c0a70, 0xfffffa8063938050, 0x18ce734000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529205,           System (   4),       1352, 0xfffffa6009462000, 0xfffffa600945c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529207,           System (   4),       1356, 0xfffffa6009469000, 0xfffffa6009463000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529209,           System (   4),       1360, 0xfffffa6009470000, 0xfffffa600946a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529210,           System (   4),       1364, 0xfffffa6009477000, 0xfffffa6009471000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529212,           System (   4),       1368, 0xfffffa600947e000, 0xfffffa6009478000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529214,           System (   4),       1372, 0xfffffa6009485000, 0xfffffa600947f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529216,           System (   4),       1376, 0xfffffa600948c000, 0xfffffa6009486000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+           DiskReadInit,    5529216,     sqlservr.exe (2504),       2744, 0xfffffa8062021830
+              T-DCStart,    5529218,           System (   4),       1380, 0xfffffa6009493000, 0xfffffa600948d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529219,           System (   4),       1384, 0xfffffa600949a000, 0xfffffa6009494000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529221,           System (   4),       1388, 0xfffffa60094b7000, 0xfffffa60094b1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529223,           System (   4),       1392, 0xfffffa60094be000, 0xfffffa60094b8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+             FileIoRead,    5529224,     sqlservr.exe (2504),       1932,   3, 0xfffffa8062379ee0, 0xfffffa8119c38160, 0x1d97154000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529226,           System (   4),       1396, 0xfffffa60094d8000, 0xfffffa60094d2000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529227,           System (   4),       1400, 0xfffffa60094df000, 0xfffffa60094d9000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529229,           System (   4),       1404, 0xfffffa60094e6000, 0xfffffa60094e0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529231,           System (   4),       1408, 0xfffffa60094ed000, 0xfffffa60094e7000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529233,           System (   4),       1412, 0xfffffa6009522000, 0xfffffa600951c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+           DiskReadInit,    5529234,     sqlservr.exe (2504),       1932, 0xfffffa811fecb010
+              T-DCStart,    5529235,           System (   4),       1416, 0xfffffa600956d000, 0xfffffa6009567000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529237,           System (   4),       1420, 0xfffffa6009591000, 0xfffffa600958b000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529238,           System (   4),       1424, 0xfffffa6009598000, 0xfffffa6009592000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529240,           System (   4),       1428, 0xfffffa60095ae000, 0xfffffa60095a8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529242,           System (   4),       1432, 0xfffffa60095b5000, 0xfffffa60095af000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529244,           System (   4),       1436, 0xfffffa60095bc000, 0xfffffa60095b6000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529245,           System (   4),       1440, 0xfffffa60095c3000, 0xfffffa60095bd000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529247,           System (   4),       1444, 0xfffffa60095ca000, 0xfffffa60095c4000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529249,           System (   4),       1448, 0xfffffa60095d1000, 0xfffffa60095cb000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529250,           System (   4),       1452, 0xfffffa60095d8000, 0xfffffa60095d2000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529252,           System (   4),       1456, 0xfffffa60095df000, 0xfffffa60095d9000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529253,           System (   4),       1460, 0xfffffa60095e6000, 0xfffffa60095e0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529255,           System (   4),       1464, 0xfffffa60095f0000, 0xfffffa60095ea000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529257,           System (   4),       1468, 0xfffffa60095f7000, 0xfffffa60095f1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529259,           System (   4),       1472, 0xfffffa60095fe000, 0xfffffa60095f8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529260,           System (   4),       1476, 0xfffffa6009605000, 0xfffffa60095ff000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529262,           System (   4),       1480, 0xfffffa600960c000, 0xfffffa6009606000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529264,           System (   4),       1484, 0xfffffa6009613000, 0xfffffa600960d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa6009846010
+              T-DCStart,    5529265,           System (   4),       1488, 0xfffffa600961a000, 0xfffffa6009614000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         HTTP.sys!0xfffffa60098561e0
+              T-DCStart,    5529267,           System (   4),       1940, 0xfffffa6009b1d000, 0xfffffa6009b17000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+             FileIoRead,    5529283,     sqlservr.exe (2504),       1640,   6, 0xfffffa809f092ee0, 0xfffffa8119d648f0, 0x0b31758000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529288,           System (   4),       1944, 0xfffffa6009ea0000, 0xfffffa6009e9a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+             FileIoRead,    5529289,     sqlservr.exe (2504),       2840,  12, 0xfffffa8119c76d20, 0xfffffa8119d20050, 0x1fb1ff4000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529290,           System (   4),       1948, 0xfffffa6009eba000, 0xfffffa6009eb4000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+             FileIoRead,    5529291,     sqlservr.exe (2504),       2700,  14, 0xfffffa8120077b30, 0xfffffa8119d20050, 0x215eee4000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529292,           System (   4),       1952, 0xfffffa6009ec1000, 0xfffffa6009ebb000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529294,           System (   4),       1956, 0xfffffa6009ee5000, 0xfffffa6009edf000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529295,           System (   4),       1960, 0xfffffa6009f25000, 0xfffffa6009f1f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529297,           System (   4),       1964, 0xfffffa6009f4a000, 0xfffffa6009f44000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+           DiskReadInit,    5529298,     sqlservr.exe (2504),       2840, 0xfffffa811fee7c60
+              T-DCStart,    5529300,           System (   4),       1976, 0xfffffa6009f92000, 0xfffffa6009f8c000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+           DiskReadInit,    5529300,     sqlservr.exe (2504),       2700, 0xfffffa8119be1010
+              T-DCStart,    5529302,           System (   4),       1984, 0xfffffa6009fd8000, 0xfffffa6009fd2000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529304,           System (   4),       1992, 0xfffffa6009fdf000, 0xfffffa6009fd9000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529305,           System (   4),       1996, 0xfffffa6009b02000, 0xfffffa6009afc000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529307,           System (   4),       2000, 0xfffffa6009b65000, 0xfffffa6009b5f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529309,           System (   4),       2004, 0xfffffa6009b6c000, 0xfffffa6009b66000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529311,           System (   4),       2008, 0xfffffa6009bdd000, 0xfffffa6009bd7000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+           DiskReadInit,    5529312,     sqlservr.exe (2504),       1640, 0xfffffa8120045010
+              T-DCStart,    5529313,           System (   4),       2012, 0xfffffa6009e61000, 0xfffffa6009e5b000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529315,           System (   4),       2024, 0xfffffa6009ed7000, 0xfffffa6009ed1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+             FileIoRead,    5529316,     sqlservr.exe (2504),       1932,   3, 0xfffffa81200c7ee0, 0xfffffa8063938050, 0x2c6173a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5529317,           System (   4),       2028, 0xfffffa600966e000, 0xfffffa6009668000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529318,           System (   4),       2032, 0xfffffa6009715000, 0xfffffa600970f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529320,           System (   4),       2036, 0xfffffa6009aa3000, 0xfffffa6009a9d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+           DiskReadInit,    5529322,     sqlservr.exe (2504),       1932, 0xfffffa809f1f8620
+              T-DCStart,    5529322,           System (   4),       2044, 0xfffffa6009b8e000, 0xfffffa6009b88000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529324,           System (   4),       1032, 0xfffffa6009bd2000, 0xfffffa6009bcc000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529326,           System (   4),       1084, 0xfffffa6009ec9000, 0xfffffa6009ec3000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529328,           System (   4),       1192, 0xfffffa6009fb6000, 0xfffffa6009fb0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529329,           System (   4),        508, 0xfffffa6009fc2000, 0xfffffa6009fbc000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529331,           System (   4),        856, 0xfffffa6009ff4000, 0xfffffa6009fee000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529333,           System (   4),        512, 0xfffffa6009788000, 0xfffffa6009782000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529335,           System (   4),        492, 0xfffffa60097b2000, 0xfffffa60097ac000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529337,           System (   4),       1232, 0xfffffa60097de000, 0xfffffa60097d8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529338,           System (   4),       1236, 0xfffffa6009bc7000, 0xfffffa6009bc1000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529340,           System (   4),       1240, 0xfffffa6009e34000, 0xfffffa6009e2e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529342,           System (   4),       1272, 0xfffffa6009e6e000, 0xfffffa6009e68000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529344,           System (   4),        764, 0xfffffa6009e3b000, 0xfffffa6009e35000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529346,           System (   4),        924, 0xfffffa6009f7f000, 0xfffffa6009f79000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,         srv2.sys!0xfffffa60099cc400
+              T-DCStart,    5529348,           System (   4),        768, 0xfffffa6009ffb000, 0xfffffa6009ff5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529349,           System (   4),       1276, 0xfffffa600967e000, 0xfffffa6009678000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529351,           System (   4),       1228, 0xfffffa600971c000, 0xfffffa6009716000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529352,           System (   4),       1284, 0xfffffa6009e95000, 0xfffffa6009e8f000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529354,           System (   4),        324, 0xfffffa6009eec000, 0xfffffa6009ee6000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529356,           System (   4),       1524, 0xfffffa6009f2f000, 0xfffffa6009f29000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529357,           System (   4),       1568, 0xfffffa6009f3e000, 0xfffffa6009f38000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529359,           System (   4),       1612, 0xfffffa6009f74000, 0xfffffa6009f6e000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529361,           System (   4),       1600, 0xfffffa6009f86000, 0xfffffa6009f80000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529362,           System (   4),       1692, 0xfffffa6009fac000, 0xfffffa6009fa6000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529364,           System (   4),       1528, 0xfffffa6009fe6000, 0xfffffa6009fe0000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529365,           System (   4),       1732, 0xfffffa6009781000, 0xfffffa600977b000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529367,           System (   4),       1716, 0xfffffa6009bbb000, 0xfffffa6009bb5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529369,           System (   4),       1540, 0xfffffa6009beb000, 0xfffffa6009be5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529370,           System (   4),       1812, 0xfffffa6009e2d000, 0xfffffa6009e27000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529372,           System (   4),       1840, 0xfffffa6009ed0000, 0xfffffa6009eca000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529374,           System (   4),       1784, 0xfffffa6009ef3000, 0xfffffa6009eed000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529376,           System (   4),       1868, 0xfffffa6009efe000, 0xfffffa6009ef8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529377,           System (   4),        780, 0xfffffa6009f36000, 0xfffffa6009f30000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529379,           System (   4),        868, 0xfffffa6009f53000, 0xfffffa6009f4d000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529381,           System (   4),       1900, 0xfffffa6009f99000, 0xfffffa6009f93000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529383,           System (   4),       1076, 0xfffffa6009759000, 0xfffffa6009753000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529384,           System (   4),       1696, 0xfffffa6009ab2000, 0xfffffa6009aac000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529386,           System (   4),       2052, 0xfffffa6009fc9000, 0xfffffa6009fc3000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529388,           System (   4),       2068, 0xfffffa6009760000, 0xfffffa600975a000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529389,           System (   4),       2072, 0xfffffa6009bb1000, 0xfffffa6009bab000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529391,           System (   4),       2084, 0xfffffa6009ede000, 0xfffffa6009ed8000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529392,           System (   4),       2088, 0xfffffa600a01a000, 0xfffffa600a014000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529394,           System (   4),       2092, 0xfffffa600a027000, 0xfffffa600a021000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529395,           System (   4),       2096, 0xfffffa600a039000, 0xfffffa600a033000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529397,           System (   4),       2100, 0xfffffa600a046000, 0xfffffa600a040000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529399,           System (   4),       2104, 0xfffffa600a04d000, 0xfffffa600a047000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529400,           System (   4),       2108, 0xfffffa600a05a000, 0xfffffa600a054000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,          srv.sys!0xfffffa6009c46610
+              T-DCStart,    5529402,           System (   4),       2804, 0xfffffa600a9fb000, 0xfffffa600a9f5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              T-DCStart,    5529404,           System (   4),       2788, 0xfffffa60087ab000, 0xfffffa60087a5000, 0x0000000000000000, 0x0000000000000000, 0x0000000000000000,    0x00000000,     ntoskrnl.exe!0xfffff8000193450c
+              I-DCStart,    5529407,             Idle (   0), 0xfffff80001651000, 0xfffff80001b6b000, 0x0047f998,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\ntoskrnl.exe"
+              I-DCStart,    5529409,             Idle (   0), 0xfffff8000160b000, 0xfffff80001651000, 0x00046a51,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\hal.dll"
+              I-DCStart,    5529410,             Idle (   0), 0xfffffa6000600000, 0xfffffa600060a000, 0x0000b1b1,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\kdcom.dll"
+              I-DCStart,    5529412,             Idle (   0), 0xfffffa600060a000, 0xfffffa600061e000, 0x00012352,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\PSHED.dll"
+             FileIoRead,    5529413,     sqlservr.exe (2504),       2700,  14, 0xfffffa811fe9d0c0, 0xfffffa8062522320, 0x1fe90d6000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5529413,             Idle (   0), 0xfffffa600061e000, 0xfffffa600067b000, 0x00064571,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\CLFS.SYS"
+              I-DCStart,    5529414,             Idle (   0), 0xfffffa600067b000, 0xfffffa600072c000, 0x000639e0,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\CI.dll"
+              I-DCStart,    5529416,             Idle (   0), 0xfffffa6000800000, 0xfffffa60009c5000, 0x000c0177,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\NDIS.SYS"
+              I-DCStart,    5529417,             Idle (   0), 0xfffffa6000748000, 0xfffffa6000798000, 0x0004ddbe,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\msrpc.sys"
+              I-DCStart,    5529419,             Idle (   0), 0xfffffa6000798000, 0xfffffa60007f1000, 0x0005ea72,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\NETIO.SYS"
+              I-DCStart,    5529420,             Idle (   0), 0xfffffa6000a00000, 0xfffffa6000ada000, 0x000df9c0,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\Wdf01000.sys"
+           DiskReadInit,    5529420,     sqlservr.exe (2504),       2700, 0xfffffa80623dfc60
+              I-DCStart,    5529421,             Idle (   0), 0xfffffa6000ada000, 0xfffffa6000ae8000, 0x00016b9e,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\WDFLDR.SYS"
+              I-DCStart,    5529423,             Idle (   0), 0xfffffa6000ae8000, 0xfffffa6000b3e000, 0x00058ec3,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\acpi.sys"
+              I-DCStart,    5529424,             Idle (   0), 0xfffffa6000b3e000, 0xfffffa6000b47000, 0x0000a15c,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\WMILIB.SYS"
+              I-DCStart,    5529425,             Idle (   0), 0xfffffa6000b47000, 0xfffffa6000b51000, 0x0000fd74,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\msisadrv.sys"
+              I-DCStart,    5529427,             Idle (   0), 0xfffffa6000b51000, 0xfffffa6000b81000, 0x0002c7d8,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\pci.sys"
+              I-DCStart,    5529428,             Idle (   0), 0xfffffa6000b81000, 0xfffffa6000b95000, 0x000161be,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\volmgr.sys"
+             FileIoRead,    5529429,     sqlservr.exe (2504),       1640,   6, 0xfffffa812000cb30, 0xfffffa80683cd2d0, 0x1d83f1a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5529430,             Idle (   0), 0xfffffa6000b95000, 0xfffffa6000b9c000, 0x000075ad,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\pciide.sys"
+              I-DCStart,    5529431,             Idle (   0), 0xfffffa6000b9c000, 0xfffffa6000bac000, 0x0001bb9e,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\PCIIDEX.SYS"
+              I-DCStart,    5529433,             Idle (   0), 0xfffffa6000bac000, 0xfffffa6000bbf000, 0x0001b71c,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\mountmgr.sys"
+              I-DCStart,    5529434,             Idle (   0), 0xfffffa6000c00000, 0xfffffa6000c66000, 0x0006f022,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\volmgrx.sys"
+           DiskReadInit,    5529436,     sqlservr.exe (2504),       1640, 0xfffffa811ffae500
+              I-DCStart,    5529436,             Idle (   0), 0xfffffa6000c66000, 0xfffffa6000c6e000, 0x000134b9,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\atapi.sys"
+              I-DCStart,    5529438,             Idle (   0), 0xfffffa6000c6e000, 0xfffffa6000c92000, 0x0002586e,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\ataport.SYS"
+               DiskRead,    5529439,     sqlservr.exe (2504),       2700, 0xfffffa8119bcb8b0, 0x4968ee8c00, 0x00002000,         262,       11, 0x060901,         262,       3, Original, 0xfffffa8119c90190, "\FI_UNKNOWN"
+              I-DCStart,    5529439,             Idle (   0), 0xfffffa6000c92000, 0xfffffa6000ca0000, 0x0001154e,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\hpcisss.sys"
+              I-DCStart,    5529441,             Idle (   0), 0xfffffa6000ca0000, 0xfffffa6000cfd000, 0x00031e3d,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\storport.sys"
+              I-DCStart,    5529442,             Idle (   0), 0xfffffa6000e00000, 0xfffffa6000f52000, 0x001363e3,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\ql2300.sys"
+              I-DCStart,    5529443,             Idle (   0), 0xfffffa6000f52000, 0xfffffa6000ff5000, 0x00069532,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\elxstor.sys"
+              I-DCStart,    5529444,             Idle (   0), 0xfffffa6000cfd000, 0xfffffa6000d43000, 0x000489f0,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\fltmgr.sys"
+            FileIoOpEnd,    5529445,     sqlservr.exe (2504),       2700,  14, 0xfffffa8119c50c80, 0xfffffa8119ca9800,         288, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+              I-DCStart,    5529446,             Idle (   0), 0xfffffa6000d43000, 0xfffffa6000db6000, 0x0006d539,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\bxvbda.sys"
+              I-DCStart,    5529447,             Idle (   0), 0xfffffa6001000000, 0xfffffa6001085000, 0x0008cc57,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\ksecdd.sys"
+              I-DCStart,    5529448,             Idle (   0), 0xfffffa6001085000, 0xfffffa60011fa000, 0x0016a697,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\tcpip.sys"
+              I-DCStart,    5529450,             Idle (   0), 0xfffffa6000db6000, 0xfffffa6000de2000, 0x00032209,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\fwpkclnt.sys"
+              I-DCStart,    5529451,             Idle (   0), 0xfffffa6001200000, 0xfffffa6001384000, 0x0017f6ef,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\Ntfs.sys"
+              I-DCStart,    5529453,             Idle (   0), 0xfffffa6001384000, 0xfffffa60013c8000, 0x0004f415,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\volsnap.sys"
+              I-DCStart,    5529454,             Idle (   0), 0xfffffa60013c8000, 0xfffffa60013d0000, 0x0001158c,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\spldr.sys"
+              I-DCStart,    5529455,             Idle (   0), 0xfffffa60013d0000, 0xfffffa60013e5000, 0x00017576,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\partmgr.sys"
+              I-DCStart,    5529457,             Idle (   0), 0xfffffa60013e5000, 0xfffffa60013f7000, 0x0001dd16,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\mup.sys"
+              I-DCStart,    5529458,             Idle (   0), 0xfffffa6000de2000, 0xfffffa6000df6000, 0x0001fbd3,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\disk.sys"
+              I-DCStart,    5529459,             Idle (   0), 0xfffffa6000bbf000, 0xfffffa6000beb000, 0x00037fed,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\CLASSPNP.SYS"
+              I-DCStart,    5529461,             Idle (   0), 0xfffffa6000ff5000, 0xfffffa6000fff000, 0x00012639,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\crcdisk.sys"
+              I-DCStart,    5529462,             Idle (   0), 0xfffffa60009d3000, 0xfffffa60009df000, 0x0000a83e,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\tunnel.sys"
+              I-DCStart,    5529464,             Idle (   0), 0xfffffa60009df000, 0xfffffa60009f2000, 0x00011105,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\processr.sys"
+              I-DCStart,    5529466,             Idle (   0), 0xfffffa600072c000, 0xfffffa6000744000, 0x0001fb92,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\IPMIDrv.sys"
+              I-DCStart,    5529467,             Idle (   0), 0xfffffa6008000000, 0xfffffa6008016000, 0x000158d4,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\i8042prt.sys"
+              I-DCStart,    5529469,             Idle (   0), 0xfffffa6008016000, 0xfffffa6008024000, 0x00014ad5,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\kbdclass.sys"
+              I-DCStart,    5529470,             Idle (   0), 0xfffffa6008024000, 0xfffffa6008030000, 0x0000bd13,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\mouclass.sys"
+              I-DCStart,    5529471,             Idle (   0), 0xfffffa6008030000, 0xfffffa600803b000, 0x0000c69e,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\usbohci.sys"
+              I-DCStart,    5529472,             Idle (   0), 0xfffffa600803b000, 0xfffffa6008081000, 0x0004c05b,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\USBPORT.SYS"
+              I-DCStart,    5529474,             Idle (   0), 0xfffffa6008081000, 0xfffffa6008092000, 0x0001b019,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\usbehci.sys"
+              I-DCStart,    5529476,             Idle (   0), 0xfffffa6008092000, 0xfffffa60080ae000, 0x00015fc2,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\cdrom.sys"
+              I-DCStart,    5529477,             Idle (   0), 0xfffffa60080ae000, 0xfffffa60080bc000, 0x0000b722,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\vgapnp.sys"
+              I-DCStart,    5529479,             Idle (   0), 0xfffffa60080bc000, 0xfffffa60080e1000, 0x00029af4,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\VIDEOPRT.SYS"
+              I-DCStart,    5529480,             Idle (   0), 0xfffffa60080e1000, 0xfffffa60080f0000, 0x00009a83,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\watchdog.sys"
+              I-DCStart,    5529481,             Idle (   0), 0xfffffa60080f0000, 0xfffffa60080fc000, 0x00011166,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\usbuhci.sys"
+              I-DCStart,    5529483,             Idle (   0), 0xfffffa60080fc000, 0xfffffa600810f000, 0x0001b8c7,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\bxnd60a.sys"
+              I-DCStart,    5529484,             Idle (   0), 0xfffffa600810f000, 0xfffffa6008147000, 0x0004304d,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\msiscsi.sys"
+              I-DCStart,    5529486,             Idle (   0), 0xfffffa6008147000, 0xfffffa6008154000, 0x000120d5,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\TDI.SYS"
+              I-DCStart,    5529487,             Idle (   0), 0xfffffa6008154000, 0xfffffa6008178000, 0x000224ed,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\rasl2tp.sys"
+              I-DCStart,    5529489,             Idle (   0), 0xfffffa6008178000, 0xfffffa6008184000, 0x0000f98a,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\ndistapi.sys"
+              I-DCStart,    5529490,             Idle (   0), 0xfffffa6008184000, 0xfffffa60081b5000, 0x0002cee2,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\ndiswan.sys"
+              I-DCStart,    5529492,             Idle (   0), 0xfffffa60081b5000, 0xfffffa60081c5000, 0x00017c9d,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\raspppoe.sys"
+              I-DCStart,    5529493,             Idle (   0), 0xfffffa60081c5000, 0xfffffa60081e2000, 0x0002204c,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\raspptp.sys"
+              I-DCStart,    5529494,             Idle (   0), 0xfffffa60081e2000, 0xfffffa60081fa000, 0x00020108,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\rassstp.sys"
+              I-DCStart,    5529496,             Idle (   0), 0xfffffa6008200000, 0xfffffa600829a000, 0x00055635,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\rdpdr.sys"
+              I-DCStart,    5529497,             Idle (   0), 0xfffffa600829a000, 0xfffffa60082ac000, 0x0001cf86,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\termdd.sys"
+              I-DCStart,    5529499,             Idle (   0), 0xfffffa60082ac000, 0xfffffa60082ae000, 0x000057e5,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\swenum.sys"
+             FileIoRead,    5529499,     sqlservr.exe (2504),       2868,   0, 0xfffffa80626c90c0, 0xfffffa8062522320, 0x1892a8a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5529500,             Idle (   0), 0xfffffa60082ae000, 0xfffffa60082e2000, 0x000388ef,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\ks.sys"
+             FileIoRead,    5529502,     sqlservr.exe (2504),       2700,  14, 0xfffffa8119d632d0, 0xfffffa8063938050, 0x2cb5018000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5529502,             Idle (   0), 0xfffffa60082e2000, 0xfffffa60082ed000, 0x0000ffe2,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\mssmbios.sys"
+              I-DCStart,    5529504,             Idle (   0), 0xfffffa60082ed000, 0xfffffa60082fd000, 0x0000a9c5,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\umbus.sys"
+              I-DCStart,    5529506,             Idle (   0), 0xfffffa60082fd000, 0xfffffa6008344000, 0x000488b5,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\usbhub.sys"
+           DiskReadInit,    5529506,     sqlservr.exe (2504),       2868, 0xfffffa80dc8fa010
+              I-DCStart,    5529507,             Idle (   0), 0xfffffa6008344000, 0xfffffa6008358000, 0x000156a1,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\NDProxy.SYS"
+              I-DCStart,    5529509,             Idle (   0), 0xfffffa6008358000, 0xfffffa6008362000, 0x00005076,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\Fs_Rec.SYS"
+           DiskReadInit,    5529509,     sqlservr.exe (2504),       2700, 0xfffffa8119bcb8b0
+              I-DCStart,    5529510,             Idle (   0), 0xfffffa6008362000, 0xfffffa600836b000, 0x0000a7ef,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\Null.SYS"
+              I-DCStart,    5529512,             Idle (   0), 0xfffffa6008375000, 0xfffffa600837d000, 0x00015353,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\HIDPARSE.SYS"
+              I-DCStart,    5529513,             Idle (   0), 0xfffffa600837d000, 0xfffffa600838b000, 0x0001258a,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\vga.sys"
+              I-DCStart,    5529515,             Idle (   0), 0xfffffa600836b000, 0xfffffa6008374000, 0x0000b093,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\RDPCDD.sys"
+              I-DCStart,    5529517,             Idle (   0), 0xfffffa600838b000, 0xfffffa6008394000, 0x000038bb,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\rdpencdd.sys"
+              I-DCStart,    5529519,             Idle (   0), 0xfffffa6008394000, 0xfffffa600839f000, 0x0000c832,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\Msfs.SYS"
+              I-DCStart,    5529520,             Idle (   0), 0xfffffa600839f000, 0xfffffa60083b0000, 0x0000f1c3,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\Npfs.SYS"
+              I-DCStart,    5529521,             Idle (   0), 0xfffffa60083b0000, 0xfffffa60083b9000, 0x0000c84b,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\rasacd.sys"
+              I-DCStart,    5529523,             Idle (   0), 0xfffffa60083b9000, 0xfffffa60083d5000, 0x0001fac3,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\tdx.sys"
+              I-DCStart,    5529524,             Idle (   0), 0xfffffa60083d5000, 0xfffffa60083f0000, 0x0001d456,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\smb.sys"
+                CSwitch,    5529529,     sqlservr.exe (2504),       2836,   15,   -1,           0,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,      0,  10,  15,  240636928,    0,    0
+             FileIoRead,    5529558,     sqlservr.exe (2504),        820,   2, 0xfffffa80626f00c0, 0xfffffa8119c58800, 0x00d8894000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529589,     sqlservr.exe (2504),        820, 0xfffffa809f0af420
+             FileIoRead,    5529601,     sqlservr.exe (2504),       2868,   0, 0xfffffa80622e9ee0, 0xfffffa8062522320, 0x0200d0c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529605,     sqlservr.exe (2504),       2868, 0xfffffa80dc5d6500
+             FileIoRead,    5529611,     sqlservr.exe (2504),       2840,  12, 0xfffffa8120026b30, 0xfffffa80622bf7d0, 0x2708d0c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529618,     sqlservr.exe (2504),       2840, 0xfffffa806270ec60
+             FileIoRead,    5529631,     sqlservr.exe (2504),        848,  11, 0xfffffa8119d640c0, 0xfffffa80622aa920, 0x18102dc000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529643,     sqlservr.exe (2504),        848, 0xfffffa812009dc60
+             FileIoRead,    5529671,     sqlservr.exe (2504),       2700,  14, 0xfffffa811feaeb30, 0xfffffa80622aa920, 0x16a7acc000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5529672,     sqlservr.exe (2504),       1804,   1, 0xfffffa806230aee0, 0xfffffa8062522320, 0x18c049e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529678,     sqlservr.exe (2504),       2700, 0xfffffa811feb9500
+           DiskReadInit,    5529681,     sqlservr.exe (2504),       1804, 0xfffffa80626e8c60
+             FileIoRead,    5529686,     sqlservr.exe (2504),        820,   2, 0xfffffa8061f414e0, 0xfffffa8063938050, 0x059986a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529692,     sqlservr.exe (2504),        820, 0xfffffa80626fec60
+             FileIoRead,    5529697,     sqlservr.exe (2504),       1640,   6, 0xfffffa8119de0ee0, 0xfffffa8119cf2280, 0x1631a74000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5529701,     sqlservr.exe (2504),       2836,  10, 0xfffffa80624dab30, 0xfffffa8119d6b260, 0x2029f58000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529705,     sqlservr.exe (2504),       1640, 0xfffffa806230b4a0
+           DiskReadInit,    5529712,     sqlservr.exe (2504),       2836, 0xfffffa8120103c60
+             FileIoRead,    5529759,     sqlservr.exe (2504),       2700,  14, 0xfffffa811fe66b30, 0xfffffa8119c38160, 0x2a8833a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529766,     sqlservr.exe (2504),       2700, 0xfffffa811fef3c60
+             FileIoRead,    5529775,     sqlservr.exe (2504),        848,  11, 0xfffffa809f0565d0, 0xfffffa8119c38160, 0x048c796000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529781,     sqlservr.exe (2504),        848, 0xfffffa8119d6f010
+             FileIoRead,    5529819,     sqlservr.exe (2504),       2836,  10, 0xfffffa806251bb30, 0xfffffa8119cf2280, 0x1ef15d0000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529826,     sqlservr.exe (2504),       2836, 0xfffffa8120061010
+             FileIoRead,    5529832,     sqlservr.exe (2504),       1804,   1, 0xfffffa80624a4550, 0xfffffa8119cf2280, 0x21292ac000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529837,     sqlservr.exe (2504),       1804, 0xfffffa80dc5ee640
+             FileIoRead,    5529843,     sqlservr.exe (2504),       2700,  14, 0xfffffa811ff11ee0, 0xfffffa8063938050, 0x0966d0c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529848,     sqlservr.exe (2504),       2700, 0xfffffa8120101c60
+             FileIoRead,    5529865,     sqlservr.exe (2504),       1804,   1, 0xfffffa8062001ee0, 0xfffffa8119d6b260, 0x0932812000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529871,     sqlservr.exe (2504),       1804, 0xfffffa8119dfa420
+             FileIoRead,    5529932,     sqlservr.exe (2504),       2572,   8, 0xfffffa8119baeb30, 0xfffffa80683cd2d0, 0x0f986c2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5529936,     sqlservr.exe (2504),        820,   2, 0xfffffa811ff61b30, 0xfffffa8119c3c7f0, 0x03cc270000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529944,     sqlservr.exe (2504),        820, 0xfffffa80622adc60
+           DiskReadInit,    5529945,     sqlservr.exe (2504),       2572, 0xfffffa80624de010
+             FileIoRead,    5529946,     sqlservr.exe (2504),       2840,  12, 0xfffffa8119d9f0c0, 0xfffffa80683cd2d0, 0x2aa4638000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5529948,     sqlservr.exe (2504),       2700,  14, 0xfffffa811ff386e0, 0xfffffa80622bf7d0, 0x09ee934000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529953,     sqlservr.exe (2504),       2840, 0xfffffa811fee5c60
+            FileIoWrite,    5529953,     sqlservr.exe (2504),       2836,  10, 0xfffffa8120000ee0, 0xfffffa8119c5d050, 0x051f4dc000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+           DiskReadInit,    5529955,     sqlservr.exe (2504),       2700, 0xfffffa80626da8b0
+          DiskWriteInit,    5529967,     sqlservr.exe (2504),       2836, 0xfffffa811ffce010
+             FileIoRead,    5529976,     sqlservr.exe (2504),       1640,   6, 0xfffffa811ff4da60, 0xfffffa8119d6b260, 0x19889f2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5529984,     sqlservr.exe (2504),       1640, 0xfffffa81200d3010
+             FileIoRead,    5529997,     sqlservr.exe (2504),       2836,  10, 0xfffffa809f30fee0, 0xfffffa8062522320, 0x1e7ae0a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530004,     sqlservr.exe (2504),       2836, 0xfffffa811ffbf8b0
+             FileIoRead,    5530017,     sqlservr.exe (2504),       2868,   0, 0xfffffa80624b6550, 0xfffffa80622aa920, 0x21a3586000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530023,     sqlservr.exe (2504),       2868, 0xfffffa811ff16c60
+                CSwitch,    5530026,    xperfinfo.exe (2464),        836,    8,   -1,         497,        0,     sqlservr.exe (2504),       2836,   15,   -1,         Waiting,      UserRequest, Swapable,    497,  10,  10,  337559552,    0,    0
+              I-DCStart,    5530028,             Idle (   0), 0xfffffa6008800000, 0xfffffa600886d000, 0x00072172,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\afd.sys"
+              I-DCStart,    5530030,             Idle (   0), 0xfffffa600886d000, 0xfffffa60088b1000, 0x00040e33,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\netbt.sys"
+              I-DCStart,    5530031,             Idle (   0), 0xfffffa60088b1000, 0xfffffa60088cf000, 0x00022bd5,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\pacer.sys"
+              I-DCStart,    5530033,             Idle (   0), 0xfffffa60088cf000, 0xfffffa60088de000, 0x00013790,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\netbios.sys"
+              I-DCStart,    5530034,             Idle (   0), 0xfffffa60088de000, 0xfffffa60088f9000, 0x00024fe4,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\wanarp.sys"
+              I-DCStart,    5530035,             Idle (   0), 0xfffffa60088f9000, 0xfffffa6008946000, 0x00050702,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\rdbss.sys"
+              I-DCStart,    5530037,             Idle (   0), 0xfffffa6008946000, 0xfffffa6008952000, 0x0000d436,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\nsiproxy.sys"
+              I-DCStart,    5530038,             Idle (   0), 0xfffffa6008952000, 0xfffffa600896f000, 0x0001bfdc,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\dfsc.sys"
+              I-DCStart,    5530040,             Idle (   0), 0xfffffa600896f000, 0xfffffa600898b000, 0x00019c41,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\usbccgp.sys"
+              I-DCStart,    5530042,             Idle (   0), 0xfffffa600898b000, 0xfffffa600898d000, 0x00009add,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\USBD.SYS"
+              I-DCStart,    5530043,             Idle (   0), 0xfffffa600898d000, 0xfffffa6008996000, 0x0000ed30,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\hidusb.sys"
+              I-DCStart,    5530045,             Idle (   0), 0xfffffa6008996000, 0xfffffa60089a8000, 0x0000f667,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\HIDCLASS.SYS"
+              I-DCStart,    5530046,             Idle (   0), 0xfffffa60089a8000, 0xfffffa60089b2000, 0x00005339,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\kbdhid.sys"
+              I-DCStart,    5530048,             Idle (   0), 0xfffffa60089b2000, 0xfffffa60089bd000, 0x00012abb,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\mouhid.sys"
+              I-DCStart,    5530049,             Idle (   0), 0xfffffa60089bd000, 0xfffffa60089cb000, 0x0000b0dc,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\crashdmp.sys"
+              I-DCStart,    5530051,             Idle (   0), 0xfffffa60089cb000, 0xfffffa60089d5000, 0x00005241,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\dump_diskdump.sys"
+             FileIoRead,    5530052,     sqlservr.exe (2504),       2572,   8, 0xfffffa80dc9122a0, 0xfffffa8119d20050, 0x0010b24000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5530053,             Idle (   0), 0xfffffa60089d5000, 0xfffffa60089e3000, 0x0001154e,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\dump_HpCISSs.sys"
+              I-DCStart,    5530054,             Idle (   0), 0xfffff96000000000, 0xfffff960002b0000, 0x002a02a0,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\win32k.sys"
+              I-DCStart,    5530055,             Idle (   0), 0xfffffa60089e3000, 0xfffffa60089ef000, 0x0000fe5a,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\Dxapi.sys"
+              I-DCStart,    5530057,             Idle (   0), 0xfffff96000400000, 0xfffff9600041e000, 0x00022072,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\dxg.sys"
+           DiskReadInit,    5530058,     sqlservr.exe (2504),       2572, 0xfffffa8119ba68c0
+              I-DCStart,    5530059,             Idle (   0), 0xfffffa6000beb000, 0xfffffa6000bfe000, 0x00014100,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\monitor.sys"
+              I-DCStart,    5530061,             Idle (   0), 0xfffff96000600000, 0xfffff9600060a000, 0x00011d03,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\TSDDD.dll"
+              I-DCStart,    5530062,             Idle (   0), 0xfffffa6009000000, 0xfffffa6009022000, 0x00022d5a,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\luafv.sys"
+              I-DCStart,    5530064,             Idle (   0), 0xfffffa6009022000, 0xfffffa6009036000, 0x0001e33b,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\lltdio.sys"
+              I-DCStart,    5530066,             Idle (   0), 0xfffffa6009036000, 0xfffffa600904e000, 0x0001deb8,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\rspndr.sys"
+              I-DCStart,    5530067,             Idle (   0), 0xfffffa600904e000, 0xfffffa600906c000, 0x0001b059,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\bowser.sys"
+             FileIoRead,    5530069,     sqlservr.exe (2504),       1640,   6, 0xfffffa80622ecee0, 0xfffffa8062522320, 0x1e35ca2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5530069,             Idle (   0), 0xfffffa600906c000, 0xfffffa6009094000, 0x0002402b,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\mrxsmb.sys"
+              I-DCStart,    5530071,             Idle (   0), 0xfffffa6009094000, 0xfffffa60090dd000, 0x0004431a,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\mrxsmb10.sys"
+              I-DCStart,    5530072,             Idle (   0), 0xfffffa60090dd000, 0xfffffa60090fc000, 0x000208d7,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\mrxsmb20.sys"
+              I-DCStart,    5530074,             Idle (   0), 0xfffffa60090fc000, 0xfffffa6009196000, 0x00090abb,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\spsys.sys"
+           DiskReadInit,    5530075,     sqlservr.exe (2504),       1640, 0xfffffa806246f960
+              I-DCStart,    5530076,             Idle (   0), 0xfffffa6009800000, 0xfffffa600989e000, 0x000985cf,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\HTTP.sys"
+              I-DCStart,    5530077,             Idle (   0), 0xfffffa600989e000, 0xfffffa6009954000, 0x000ae0b2,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\peauth.sys"
+              I-DCStart,    5530079,             Idle (   0), 0xfffffa6009954000, 0xfffffa600995f000, 0x00010b40,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\secdrv.SYS"
+              I-DCStart,    5530080,             Idle (   0), 0xfffffa600995f000, 0xfffffa6009987000, 0x000296b2,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\srvnet.sys"
+              I-DCStart,    5530082,             Idle (   0), 0xfffffa6009987000, 0xfffffa6009996000, 0x00012cec,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\drivers\tcpipreg.sys"
+              I-DCStart,    5530084,             Idle (   0), 0xfffffa6009996000, 0xfffffa60099d6000, 0x0004240f,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\srv2.sys"
+              I-DCStart,    5530085,             Idle (   0), 0xfffffa6009c00000, 0xfffffa6009c96000, 0x00072c71,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\srv.sys"
+              I-DCStart,    5530087,             Idle (   0), 0xfffffa6009c96000, 0xfffffa6009ca3000, 0x000109f8,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\tdtcp.sys"
+              I-DCStart,    5530089,             Idle (   0), 0xfffffa6009ca3000, 0xfffffa6009cb1000, 0x0000a698,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\DRIVERS\tssecsrv.sys"
+                CSwitch,    5530111,     sqlservr.exe (2504),       2748,   15,   -1,           0,        0,     sqlservr.exe (2504),       1640,   15,   -1,           Ready,      UserRequest, Swapable,      0,   6,   6,  338459648,    0,    0
+              I-DCStart,    5530114,             Idle (   0), 0xfffffa6009cb1000, 0xfffffa6009ced000, 0x0003cd31,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\Drivers\RDPWD.SYS"
+              I-DCStart,    5530116,             Idle (   0), 0xfffffa6009ced000, 0xfffffa6009d09000, 0x0002129a,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\DRIVERS\cdfs.sys"
+              I-DCStart,    5530118,             Idle (   0), 0xfffff96000a00000, 0xfffff96000a30000, 0x000395f9,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\RDPDD.dll"
+              I-DCStart,    5530119,             Idle (   0), 0xfffff96000800000, 0xfffff96000809000, 0x0000f7e2,    0x00000000, 0x0000000000000000, "\SystemRoot\System32\framebuf.dll"
+              I-DCStart,    5530121,             Idle (   0), 0xfffffa6009d09000, 0xfffffa6009d1d000, 0x00020ba4,    0x00000000, 0x0000000000000000, "\SystemRoot\system32\drivers\fileinfo.sys"
+            FileIoWrite,    5530122,     sqlservr.exe (2504),       1932,   3, 0xfffffa81200062a0, 0xfffffa8119ca37f0, 0x0a042a8000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+             FileIoRead,    5530123,     sqlservr.exe (2504),        848,  11, 0xfffffa8119d698f0, 0xfffffa80683cd2d0, 0x15df494000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5530131,     sqlservr.exe (2504),        964,   15,   -1,           0,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,    104,  10,  15,  240489472,    0,    0
+          DiskWriteInit,    5530139,     sqlservr.exe (2504),       1932, 0xfffffa8062460010
+           DiskReadInit,    5530143,     sqlservr.exe (2504),        848, 0xfffffa811ff768b0
+                CSwitch,    5530158,           System (   4),        184,   23,   -1,           0,       27,     sqlservr.exe (2504),       2868,   15,   -1,           Ready,    WrDispatchInt, Swapable,   1176,   0,   0,  336536576,    0,    0
+                CSwitch,    5530173,     sqlservr.exe (2504),       2868,   15,   -1,          14,        0,           System (   4),        184,   23,   -1,         Waiting,        Executive,  NonSwap,     14,   0,   0,  338430976,    0,    0
+                CSwitch,    5530175,     sqlservr.exe (2504),       1640,   15,   -1,          63,        0,     sqlservr.exe (2504),       2748,   15,   -1,         Waiting,          WrQueue, Swapable,     63,   6,   7,  338342912,    0,    0
+            FileIoWrite,    5530178,     sqlservr.exe (2504),       1932,   3, 0xfffffa81200a13d0, 0xfffffa8119d1ff20, 0x0748464000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+                CSwitch,    5530185,     sqlservr.exe (2504),       2836,   15,   -1,         158,        0,     sqlservr.exe (2504),        964,   15,   -1,         Waiting,          WrQueue, Swapable,     54,  10,  11,  338400256,    0,    0
+          DiskWriteInit,    5530187,     sqlservr.exe (2504),       1932, 0xfffffa8120021010
+            FileIoWrite,    5530216,     sqlservr.exe (2504),       1932,   3, 0xfffffa80626b76b0, 0xfffffa8119c917f0, 0x0a04526000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5530254,     sqlservr.exe (2504),       1932, 0xfffffa80626cac60
+             FileIoRead,    5530255,     sqlservr.exe (2504),       1640,   6, 0xfffffa811fe85ee0, 0xfffffa8119d6b260, 0x21304f4000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530258,     sqlservr.exe (2504),       1640, 0xfffffa812008bc60
+            FileIoWrite,    5530280,     sqlservr.exe (2504),       1932,   3, 0xfffffa809f072ee0, 0xfffffa8119cf2280, 0x2c980ae000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5530287,     sqlservr.exe (2504),       1932, 0xfffffa80624e8320
+             FileIoRead,    5530303,     sqlservr.exe (2504),       1932,   3, 0xfffffa80623edee0, 0xfffffa8119c5d050, 0x04b5628000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530307,     sqlservr.exe (2504),       1932, 0xfffffa80622cdc60
+             FileIoRead,    5530312,     sqlservr.exe (2504),        848,  11, 0xfffffa811ff13b40, 0xfffffa8062522320, 0x0e1a344000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530318,     sqlservr.exe (2504),        848, 0xfffffa80625168b0
+              DiskWrite,    5530359,     sqlservr.exe (2504),       2836, 0xfffffa811ffce010, 0x051f4e3e00, 0x00002000,         391,       17, 0x060a01,         391,       3, Original, 0xfffffa8119d68770, "\FI_UNKNOWN"
+             FileIoRead,    5530362,     sqlservr.exe (2504),       1804,   1, 0xfffffa80623f02b0, 0xfffffa80683cd2d0, 0x28742c6000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+            FileIoOpEnd,    5530366,     sqlservr.exe (2504),       2836,  10, 0xfffffa8120000ee0, 0xfffffa8119c5d050,         413, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+           DiskReadInit,    5530369,     sqlservr.exe (2504),       1804, 0xfffffa811feb4010
+             FileIoRead,    5530374,     sqlservr.exe (2504),       2868,   0, 0xfffffa806234ab30, 0xfffffa8119d20050, 0x193411e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530382,     sqlservr.exe (2504),       2868, 0xfffffa8119bbf010
+             FileIoRead,    5530443,     sqlservr.exe (2504),        844,  15, 0xfffffa811fe2eee0, 0xfffffa8119d6b260, 0x2074520000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530456,     sqlservr.exe (2504),        844, 0xfffffa811ffc16d0
+             FileIoRead,    5530482,     sqlservr.exe (2504),       1640,   6, 0xfffffa8119bee0c0, 0xfffffa8119d20050, 0x19e7938000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530490,     sqlservr.exe (2504),       1640, 0xfffffa81200108b0
+              DiskWrite,    5530491,     sqlservr.exe (2504),       1932, 0xfffffa8120021010, 0x074846be00, 0x00002000,         303,       12, 0x060a01,         303,       3, Original, 0xfffffa8062401700, "\FI_UNKNOWN"
+            FileIoOpEnd,    5530499,     sqlservr.exe (2504),       1932,   3, 0xfffffa81200a13d0, 0xfffffa8119d1ff20,         320, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+             FileIoRead,    5530513,     sqlservr.exe (2504),       2700,  14, 0xfffffa811fe9b330, 0xfffffa8119c38160, 0x29f47ae000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530519,     sqlservr.exe (2504),       2700, 0xfffffa8119baac60
+             FileIoRead,    5530533,     sqlservr.exe (2504),        848,  11, 0xfffffa8062358ee0, 0xfffffa8119c38160, 0x0b4c47c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530538,     sqlservr.exe (2504),        848, 0xfffffa80626d0c60
+             FileIoRead,    5530542,     sqlservr.exe (2504),       1804,   1, 0xfffffa8062492ee0, 0xfffffa8062522320, 0x2974a94000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530546,     sqlservr.exe (2504),       1804, 0xfffffa806242dc60
+              DiskWrite,    5530553,     sqlservr.exe (2504),       1932, 0xfffffa80626cac60, 0x3867849c00, 0x00002000,         298,       12, 0x060a01,          61,       3, Original, 0xfffffa8119d62c00, "\FI_UNKNOWN"
+            FileIoOpEnd,    5530557,     sqlservr.exe (2504),       1932,   3, 0xfffffa80626b76b0, 0xfffffa8119c917f0,         341, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+             FileIoRead,    5530570,     sqlservr.exe (2504),       2868,   0, 0xfffffa80624c2ee0, 0xfffffa8119c983e0, 0x03c896a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5530579,     sqlservr.exe (2504),       2836,  10, 0xfffffa80626b76b0, 0xfffffa8119c5d050, 0x193918e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530585,     sqlservr.exe (2504),       2836, 0xfffffa81200ab8b0
+           DiskReadInit,    5530589,     sqlservr.exe (2504),       2868, 0xfffffa811fe5d8b0
+             FileIoRead,    5530594,     sqlservr.exe (2504),        844,  15, 0xfffffa80626bd4d0, 0xfffffa8063938050, 0x05fb6da000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530600,     sqlservr.exe (2504),        844, 0xfffffa80624b43d0
+             FileIoRead,    5530603,     sqlservr.exe (2504),       1932,   3, 0xfffffa806242b0c0, 0xfffffa80622aa920, 0x1629806000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530609,     sqlservr.exe (2504),       1932, 0xfffffa80626cac60
+             FileIoRead,    5530625,     sqlservr.exe (2504),       2700,  14, 0xfffffa8119d956c0, 0xfffffa8119c38160, 0x180442e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530630,     sqlservr.exe (2504),       2700, 0xfffffa80626c2010
+             FileIoRead,    5530643,     sqlservr.exe (2504),       1804,   1, 0xfffffa80624a9800, 0xfffffa8063938050, 0x1fdf4e8000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530649,     sqlservr.exe (2504),       1804, 0xfffffa81200836e0
+             FileIoRead,    5530673,     sqlservr.exe (2504),        848,  11, 0xfffffa811ffd2b30, 0xfffffa8119c38160, 0x214434c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              DiskWrite,    5530674,     sqlservr.exe (2504),       1932, 0xfffffa8062460010, 0x38675cbc00, 0x00002000,         534,       16, 0x060a01,         534,       3, Original, 0xfffffa8119ca6a60, "\FI_UNKNOWN"
+           DiskReadInit,    5530678,     sqlservr.exe (2504),        848, 0xfffffa80dc5dcc60
+            FileIoOpEnd,    5530681,     sqlservr.exe (2504),       1932,   3, 0xfffffa81200062a0, 0xfffffa8119ca37f0,         559, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+             FileIoRead,    5530711,     sqlservr.exe (2504),       1932,   3, 0xfffffa80626ceee0, 0xfffffa8062522320, 0x11ede1a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530716,     sqlservr.exe (2504),       1932, 0xfffffa8062460010
+             FileIoRead,    5530719,     sqlservr.exe (2504),       2836,  10, 0xfffffa81200a13d0, 0xfffffa8119d6b260, 0x20434a0000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530725,     sqlservr.exe (2504),       2836, 0xfffffa8062473420
+             FileIoRead,    5530738,     sqlservr.exe (2504),       1640,   6, 0xfffffa80dc733ee0, 0xfffffa8119c38160, 0x15a524c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5530746,     sqlservr.exe (2504),        820,   2, 0xfffffa811fe71780, 0xfffffa8119d20050, 0x2ada93a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530747,     sqlservr.exe (2504),       1640, 0xfffffa811ff1fc60
+           DiskReadInit,    5530753,     sqlservr.exe (2504),        820, 0xfffffa8119ba0010
+             FileIoRead,    5530777,     sqlservr.exe (2504),       1804,   1, 0xfffffa806247bee0, 0xfffffa8119cbf050, 0x0067592000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530805,     sqlservr.exe (2504),       1804, 0xfffffa80dca34c60
+             FileIoRead,    5530814,     sqlservr.exe (2504),       2836,  10, 0xfffffa811fe4cb30, 0xfffffa8119d6b260, 0x0e13d0a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530817,     sqlservr.exe (2504),       2836, 0xfffffa812007ba80
+             FileIoRead,    5530845,     sqlservr.exe (2504),       2568,  13, 0xfffffa811fe97ee0, 0xfffffa8119d20050, 0x014a39a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5530850,     sqlservr.exe (2504),       2700,  14, 0xfffffa811ff8f7b0, 0xfffffa8119cf2280, 0x2107cf8000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530856,     sqlservr.exe (2504),       2568, 0xfffffa80dc5f4650
+           DiskReadInit,    5530857,     sqlservr.exe (2504),       2700, 0xfffffa811fe89c60
+             FileIoRead,    5530867,     sqlservr.exe (2504),       2704,   5, 0xfffffa811ffbcee0, 0xfffffa8063938050, 0x09b38aa000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5530867,     sqlservr.exe (2504),       2868,   0, 0xfffffa8068a841b0, 0xfffffa80622bf7d0, 0x171fe90000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5530874,     sqlservr.exe (2504),        560,   15,   -1,           0,        0,     sqlservr.exe (2504),       2700,   15,   -1,         Waiting,      UserRequest, Swapable,      0,  14,  14,  321809408,    0,    0
+           DiskReadInit,    5530876,     sqlservr.exe (2504),       2868, 0xfffffa80622e3c60
+           DiskReadInit,    5530878,     sqlservr.exe (2504),       2704, 0xfffffa811ffedc60
+             FileIoRead,    5530962,     sqlservr.exe (2504),       2568,  13, 0xfffffa8119c480c0, 0xfffffa80622bf7d0, 0x28ca038000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5530969,     sqlservr.exe (2504),       2868,   0, 0xfffffa8062429ee0, 0xfffffa80683cd2d0, 0x2c8565a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5530970,     sqlservr.exe (2504),       2568, 0xfffffa809f372010
+           DiskReadInit,    5530974,     sqlservr.exe (2504),       2868, 0xfffffa81200efc60
+                CSwitch,    5530986,     sqlservr.exe (2504),       2700,   15,   -1,         112,        0,     sqlservr.exe (2504),        560,   15,   -1,         Waiting,          WrQueue, Swapable,    112,  14,  15,  338252800,    0,    0
+                CSwitch,    5530997,           System (   4),        280,   14,   -1,           0,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,    824,   0,   0,  335140864,    0,    0
+             FileIoRead,    5531070,     sqlservr.exe (2504),       2700,  14, 0xfffffa8119d4dee0, 0xfffffa8119c5d050, 0x04fd65c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531077,     sqlservr.exe (2504),       1932,   3, 0xfffffa806248bee0, 0xfffffa8119d20050, 0x073e822000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531078,     sqlservr.exe (2504),       2700, 0xfffffa812007f8b0
+           DiskReadInit,    5531084,     sqlservr.exe (2504),       1932, 0xfffffa8120021010
+             FileIoRead,    5531101,     sqlservr.exe (2504),        820,   2, 0xfffffa809f0b8690, 0xfffffa8119cf2280, 0x0bb4774000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531108,     sqlservr.exe (2504),        820, 0xfffffa80624a6ac0
+                CSwitch,    5531123,           System (   4),         40,   14,   -1,           0,        0,           System (   4),        280,   14,   -1,         Waiting,          WrQueue,  NonSwap,    125,   0,   0,  337669120,    0,    0
+             FileIoRead,    5531149,     sqlservr.exe (2504),       1640,   6, 0xfffffa809f048d00, 0xfffffa8062522320, 0x1fb5936000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531155,     sqlservr.exe (2504),       1640, 0xfffffa812006dc60
+             FileIoRead,    5531159,     sqlservr.exe (2504),        844,  15, 0xfffffa81200062a0, 0xfffffa8119d6b260, 0x194b6e4000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5531160,           System (   4),        280,   14,   -1,          37,        0,           System (   4),         40,   14,   -1,         Waiting,          WrQueue,  NonSwap,     37,   0,   0,  338067456,    0,    0
+           DiskReadInit,    5531165,     sqlservr.exe (2504),        844, 0xfffffa811ff3f010
+             FileIoRead,    5531174,     sqlservr.exe (2504),       2700,  14, 0xfffffa812001e300, 0xfffffa8119ca9800, 0x002a42e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531175,     sqlservr.exe (2504),       1804,   1, 0xfffffa80623655a0, 0xfffffa8119d5bb40, 0x00af0a8000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531182,     sqlservr.exe (2504),       2700, 0xfffffa8119df4710
+             FileIoRead,    5531185,     sqlservr.exe (2504),        820,   2, 0xfffffa811ffcc0c0, 0xfffffa8119d6b260, 0x06383be000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531189,     sqlservr.exe (2504),       1804, 0xfffffa8119be6c60
+                CSwitch,    5531189,           System (   4),         40,   14,   -1,          29,        0,           System (   4),        280,   14,   -1,         Waiting,          WrQueue,  NonSwap,     29,   0,   0,  337616896,    0,    0
+           DiskReadInit,    5531192,     sqlservr.exe (2504),        820, 0xfffffa809f34b010
+             FileIoRead,    5531204,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f074ee0, 0xfffffa8062522320, 0x0337d64000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531211,     sqlservr.exe (2504),       2704, 0xfffffa8119de3c60
+                CSwitch,    5531219,           System (   4),        280,   14,   -1,          29,        0,           System (   4),         40,   14,   -1,         Waiting,          WrQueue,  NonSwap,     29,   0,   0,  338014208,    0,    0
+             FileIoRead,    5531236,     sqlservr.exe (2504),       1640,   6, 0xfffffa81200c5680, 0xfffffa8062522320, 0x0d0bb56000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531241,     sqlservr.exe (2504),       1640, 0xfffffa8119bf4010
+             FileIoRead,    5531246,     sqlservr.exe (2504),        844,  15, 0xfffffa811ff43ee0, 0xfffffa8062522320, 0x2797f62000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5531251,     sqlservr.exe (2504),       2576,   15,   -1,        2269,        0,           System (   4),        280,   14,   -1,         Waiting,          WrQueue,  NonSwap,     31,   0,   0,  337563648,    0,    0
+             FileIoRead,    5531251,     sqlservr.exe (2504),       2836,  10, 0xfffffa809f0270c0, 0xfffffa8062522320, 0x1522ab6000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531253,     sqlservr.exe (2504),        844, 0xfffffa811fe87010
+           DiskReadInit,    5531258,     sqlservr.exe (2504),       2836, 0xfffffa8119dd4c60
+                CSwitch,    5531275,     sqlservr.exe (2504),        964,   15,   -1,        1089,        0,     sqlservr.exe (2504),       2836,   15,   -1,         Waiting,      UserRequest, Swapable,   1089,  10,  10,  336625664,    0,    0
+                CSwitch,    5531294,     sqlservr.exe (2504),       2868,   15,   -1,         296,        0,     sqlservr.exe (2504),       2576,   15,   -1,         Waiting,          WrQueue, Swapable,     43,   0,   3,  338379776,    0,    0
+                CSwitch,    5531302,           System (   4),         48,   14,   -1,           0,        0,     sqlservr.exe (2504),        964,   15,   -1,         Waiting,          WrQueue, Swapable,     27,  10,  11,  338414592,    0,    0
+             FileIoRead,    5531312,     sqlservr.exe (2504),       2568,  13, 0xfffffa8061ff34e0, 0xfffffa8119d6b260, 0x0d3c722000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531320,     sqlservr.exe (2504),        844,  15, 0xfffffa80627180c0, 0xfffffa80622aa920, 0x03f0a32000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531320,     sqlservr.exe (2504),       2568, 0xfffffa80622dd010
+           DiskReadInit,    5531326,     sqlservr.exe (2504),        844, 0xfffffa811ff82010
+             FileIoRead,    5531350,     sqlservr.exe (2504),       2568,  13, 0xfffffa81200e19e0, 0xfffffa8061f61ab0, 0x0a20f02000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531381,     sqlservr.exe (2504),       2568, 0xfffffa80dc5be500
+                CSwitch,    5531421,           System (   4),         32,   14,   -1,           0,        0,           System (   4),         48,   14,   -1,         Waiting,          WrQueue,  NonSwap,    118,  10,   2,  338068480,    0,    0
+            FileIoWrite,    5531435,     sqlservr.exe (2504),        820,   2, 0xfffffa80622d7b30, 0xfffffa8119d6b260, 0x0b5c8e2000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+             FileIoRead,    5531444,     sqlservr.exe (2504),        844,  15, 0xfffffa811fe46a70, 0xfffffa8063938050, 0x00305fc000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531448,     sqlservr.exe (2504),        844, 0xfffffa811ff018b0
+                CSwitch,    5531459,           System (   4),         28,   13,   -1,           0,        0,           System (   4),         32,   14,   -1,         Waiting,          WrQueue,  NonSwap,     38,  10,   2,  338316288,    0,    0
+          DiskWriteInit,    5531460,     sqlservr.exe (2504),        820, 0xfffffa81200218b0
+               DiskRead,    5531464,     sqlservr.exe (2504),       2700, 0xfffffa8119df4710, 0x4968eeac00, 0x00002000,         281,       11, 0x060901,         281,       3, Original, 0xfffffa8119c90190, "\FI_UNKNOWN"
+            FileIoOpEnd,    5531468,     sqlservr.exe (2504),       2700,  14, 0xfffffa812001e300, 0xfffffa8119ca9800,         294, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+            FileIoWrite,    5531480,     sqlservr.exe (2504),        820,   2, 0xfffffa8068744780, 0xfffffa8119cb2260, 0x07bc206000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+                CSwitch,    5531498,           System (   4),         32,   14,   -1,          38,        0,           System (   4),         28,   13,   -1,         Waiting,          WrQueue,  NonSwap,     38,  10,   1,  338313216,    0,    0
+             FileIoRead,    5531498,     sqlservr.exe (2504),        848,  11, 0xfffffa8119bb99e0, 0xfffffa8119d6b260, 0x292dc2c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+          DiskWriteInit,    5531505,     sqlservr.exe (2504),        820, 0xfffffa8066f6d7b0
+                CSwitch,    5531521,     sqlservr.exe (2504),       2836,   15,   -1,         246,        0,           System (   4),         32,   14,   -1,           Ready,    WrDispatchInt,  NonSwap,     23,  10,   2,  338275328,    0,    0
+           DiskReadInit,    5531523,     sqlservr.exe (2504),        848, 0xfffffa8062013010
+            FileIoWrite,    5531531,     sqlservr.exe (2504),        820,   2, 0xfffffa8062451ee0, 0xfffffa8119cf2280, 0x039d7d4000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5531535,     sqlservr.exe (2504),        820, 0xfffffa80dc8ed010
+            FileIoWrite,    5531555,     sqlservr.exe (2504),        820,   2, 0xfffffa80626cd0c0, 0xfffffa8061f61be0, 0x0b42d68000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5531571,     sqlservr.exe (2504),        820, 0xfffffa809f059010
+             FileIoRead,    5531601,     sqlservr.exe (2504),       2836,  10, 0xfffffa80dc5a6650, 0xfffffa8119c38160, 0x2a89abe000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531606,     sqlservr.exe (2504),       2836, 0xfffffa8119d652e0
+             FileIoRead,    5531608,     sqlservr.exe (2504),        820,   2, 0xfffffa8068a13ee0, 0xfffffa8119c38160, 0x1993d50000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531615,     sqlservr.exe (2504),        820, 0xfffffa8062407c60
+             FileIoRead,    5531616,     sqlservr.exe (2504),       1804,   1, 0xfffffa80623f9a50, 0xfffffa8119ca67f0, 0x000237c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531624,     sqlservr.exe (2504),       1804, 0xfffffa809f307c60
+                CSwitch,    5531630,           System (   4),         32,   14,   -1,         109,        0,     sqlservr.exe (2504),       2836,   15,   -1,         Waiting,      UserRequest, Swapable,    109,  10,  10,  338263040,    0,    0
+             FileIoRead,    5531633,     sqlservr.exe (2504),        848,  11, 0xfffffa80dc9120c0, 0xfffffa8119cf2280, 0x0b6e7d4000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531639,     sqlservr.exe (2504),        848, 0xfffffa81200b7c60
+                CSwitch,    5531650,           System (   4),         28,   13,   -1,         152,        0,           System (   4),         32,   14,   -1,         Waiting,          WrQueue,  NonSwap,     20,  10,   2,  338242560,    0,    0
+             FileIoRead,    5531676,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f059b60, 0xfffffa8061f61ab0, 0x0a99c4e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531680,     sqlservr.exe (2504),       2568,  13, 0xfffffa811fe183e0, 0xfffffa8062522320, 0x2ae34b0000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531684,     sqlservr.exe (2504),       2704, 0xfffffa80dc8ff010
+           DiskReadInit,    5531689,     sqlservr.exe (2504),       2568, 0xfffffa812009fc60
+             FileIoRead,    5531692,     sqlservr.exe (2504),       1640,   6, 0xfffffa80dc5a1b60, 0xfffffa8119cb2260, 0x0b48bc2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531701,     sqlservr.exe (2504),       1640, 0xfffffa811ff958b0
+                CSwitch,    5531706,           System (   4),        280,   14,   -1,         455,        0,           System (   4),         28,   13,   -1,         Waiting,          WrQueue,  NonSwap,     55,  10,   1,  338217984,    0,    0
+             FileIoRead,    5531710,     sqlservr.exe (2504),       2868,   0, 0xfffffa80687400c0, 0xfffffa8119c917f0, 0x0011b62000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531714,     sqlservr.exe (2504),        820,   2, 0xfffffa806245a940, 0xfffffa8119c5d050, 0x2d06d42000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531719,     sqlservr.exe (2504),       2868, 0xfffffa8119de7c60
+           DiskReadInit,    5531720,     sqlservr.exe (2504),        820, 0xfffffa8119bf2530
+             FileIoRead,    5531726,     sqlservr.exe (2504),        848,  11, 0xfffffa809f058990, 0xfffffa8062522320, 0x298e11c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531730,     sqlservr.exe (2504),       1804,   1, 0xfffffa80623e2b30, 0xfffffa8119cf2280, 0x21720a4000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531731,     sqlservr.exe (2504),        848, 0xfffffa806251e710
+           DiskReadInit,    5531735,     sqlservr.exe (2504),       1804, 0xfffffa811ff31c60
+                CSwitch,    5531746,    xperfinfo.exe (2464),        836,    8,   -1,        1615,        0,           System (   4),        280,   14,   -1,         Waiting,          WrQueue,  NonSwap,     40,  10,   0,  337494016,    0,    0
+             FileIoRead,    5531754,     sqlservr.exe (2504),        844,  15, 0xfffffa811fec50c0, 0xfffffa8119d20050, 0x0f2b416000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531760,     sqlservr.exe (2504),        820,   2, 0xfffffa8066f724f0, 0xfffffa8119c3c7f0, 0x03d9e52000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              DiskWrite,    5531763,     sqlservr.exe (2504),        820, 0xfffffa8066f6d7b0, 0x361f529c00, 0x00002000,         256,       19, 0x060a01,         256,       3, Original, 0xfffffa8119c98190, "\FI_UNKNOWN"
+              P-DCStart,    5531765,         smss.exe ( 484),          4,          0, 0x0000fa8068394c10, S-1-5-18,  \SystemRoot\System32\smss.exe
+           DiskReadInit,    5531766,     sqlservr.exe (2504),        820, 0xfffffa8119dac010
+            FileIoOpEnd,    5531769,     sqlservr.exe (2504),        820,   2, 0xfffffa8068744780, 0xfffffa8119cb2260,         288, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+              T-DCStart,    5531771,         smss.exe ( 484),        488, 0xfffffa60074a2000, 0xfffffa600749c000, 0x00000000002bd000, 0x00000000002c0000, 0x000007fffffdd000,    0x00000000,         smss.exe!0x00000000476afc3c
+              T-DCStart,    5531773,         smss.exe ( 484),        536, 0xfffffa600757a000, 0xfffffa6007574000, 0x00000000005bd000, 0x00000000005c0000, 0x000007fffffdb000,    0x00000000,         smss.exe!0x00000000476adb44
+             FileIoRead,    5531774,     sqlservr.exe (2504),       2568,  13, 0xfffffa811ff69a00, 0xfffffa8119cf2280, 0x0d81432000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5531775,         smss.exe ( 484),        548, 0xfffffa6008bb6000, 0xfffffa6008bb0000, 0x00000000001bd000, 0x00000000001c0000, 0x000007fffffd9000,    0x00000000,         smss.exe!0x00000000476ab748
+             FileIoRead,    5531776,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f2c54f0, 0xfffffa80683cd2d0, 0x0279ec8000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5531777,         smss.exe ( 484),        584, 0xfffffa60075cc000, 0xfffffa60075c6000, 0x000000000038d000, 0x0000000000390000, 0x000007fffffd7000,    0x00000000,         smss.exe!0x00000000476adb44
+           DiskReadInit,    5531779,     sqlservr.exe (2504),        844, 0xfffffa8120071500
+           DiskReadInit,    5531781,     sqlservr.exe (2504),       2568, 0xfffffa80dca688b0
+           DiskReadInit,    5531783,     sqlservr.exe (2504),       2704, 0xfffffa811fe91500
+               DiskRead,    5531790,     sqlservr.exe (2504),       2868, 0xfffffa81200efc60, 0x2c85661e00, 0x00002000,         815,        8, 0x060901,         815,       3, Original, 0xfffffa8119ca3a60, "\FI_UNKNOWN"
+            FileIoOpEnd,    5531794,     sqlservr.exe (2504),       2868,   0, 0xfffffa8062429ee0, 0xfffffa80683cd2d0,         824, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+        FileIoQueryInfo,    5531832,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119b7ee60, 0xfffffa80683d8d20, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff880000f7c80)"
+            FileIoOpEnd,    5531852,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119b7ee60, 0xfffffa80683d8d20,          20, 0x00000000, 0x0000000000000038, FileIoQueryInfo, "Unknown (0xfffff880000f7c80)"
+             FileIoRead,    5531853,     sqlservr.exe (2504),       2568,  13, 0xfffffa811fe8d720, 0xfffffa8119c38160, 0x2b18cfe000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531860,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f24aee0, 0xfffffa8119cb2260, 0x0005332000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531860,     sqlservr.exe (2504),       2568, 0xfffffa80624f6010
+             FileIoRead,    5531865,     sqlservr.exe (2504),       2868,   0, 0xfffffa80622e6ee0, 0xfffffa80683cd2d0, 0x2cf7fb2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531868,     sqlservr.exe (2504),       2704, 0xfffffa80626dac60
+           DiskReadInit,    5531870,     sqlservr.exe (2504),       2868, 0xfffffa81200efc60
+              I-DCStart,    5531871,         smss.exe ( 484), 0x00000000476a0000, 0x00000000476b7000, 0x00021982,    0x00000000, 0x00000000476a0000, "\Device\HarddiskVolume6\Windows\System32\smss.exe"
+        FileIoQueryInfo,    5531893,    xperfinfo.exe (2464),        836,  10, 0xfffffa80dc9208f0, 0xfffffa8066f38930, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800090b7c0)"
+            FileIoOpEnd,    5531898,    xperfinfo.exe (2464),        836,  10, 0xfffffa80dc9208f0, 0xfffffa8066f38930,           4, 0x00000000, 0x000000000000003a, FileIoQueryInfo, "Unknown (0xfffff8800090b7c0)"
+              I-DCStart,    5531903,         smss.exe ( 484), 0x0000000077bd0000, 0x0000000077d4c000, 0x0018379a,    0x00000000, 0x0000000077bd0000, "\Device\HarddiskVolume6\Windows\System32\ntdll.dll"
+                CSwitch,    5531915,           System (   4),        184,   23,   -1,        1742,        0,     sqlservr.exe (2504),       2868,   15,   -1,           Ready,    WrDispatchInt, Swapable,    621,   0,   0,  337422336,    0,    0
+             FileIoRead,    5531915,     sqlservr.exe (2504),       2700,  14, 0xfffffa811ff69740, 0xfffffa8119d6b260, 0x1567d4c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5531922,     sqlservr.exe (2504),       2868,   15,   -1,           7,        0,           System (   4),        184,   23,   -1,         Waiting,        Executive,  NonSwap,      7,   0,   0,  338445312,    0,    0
+           DiskReadInit,    5531924,     sqlservr.exe (2504),       2700, 0xfffffa811fe898b0
+              P-DCStart,    5531926,        csrss.exe ( 552),        540,          0, 0x0000fa8066abec10, S-1-5-18,  H:\Windows\system32\csrss.exe ObjectDirectory=\Windows SharedSection=1024,20480,768 Windows=On SubSystemType=Windows ServerDll=basesrv,1 ServerDll=winsrv:UserServerDllInitialization,3 ServerDll=winsrv:ConServerDllInitialization,2 ProfileControl=Off MaxRequestThreads=16
+             FileIoRead,    5531933,     sqlservr.exe (2504),       2840,  12, 0xfffffa811fe87ee0, 0xfffffa8119d20050, 0x176c394000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531942,     sqlservr.exe (2504),       2840, 0xfffffa806251bc60
+                CSwitch,    5531946,     sqlservr.exe (2504),        560,   15,   -1,         959,        0,     sqlservr.exe (2504),       2700,   15,   -1,         Waiting,      UserRequest, Swapable,    959,  14,  14,  336827392,    0,    0
+              T-DCStart,    5531953,        csrss.exe ( 552),        568, 0xfffffa600a2ef000, 0xfffffa600a2e9000, 0x0000000000ea8000, 0x0000000000eb0000, 0x000007fffffdb000,    0x00000000,       winsrv.dll!0x000007fefe1d96b0
+              T-DCStart,    5531955,        csrss.exe ( 552),        572, 0xfffffa60087ea000, 0xfffffa60087e4000, 0x0000000000428000, 0x0000000000430000, 0x000007fffffd9000,    0x00000000,       winsrv.dll!0x000007fefe1da874
+              T-DCStart,    5531958,        csrss.exe ( 552),        576, 0xfffffa6008bf3000, 0xfffffa6008beb000, 0x0000000000a58000, 0x0000000000a60000, 0x000007fffffd7000,    0x00000000,       csrsrv.dll!0x000007fefe275f20
+                CSwitch,    5531977,     sqlservr.exe (2504),       2700,   15,   -1,          31,        0,     sqlservr.exe (2504),        560,   15,   -1,         Waiting,          WrQueue, Swapable,     31,  14,  15,  338402304,    0,    0
+              DiskWrite,    5531978,     sqlservr.exe (2504),        820, 0xfffffa809f059010, 0x39a608bc00, 0x00002000,         406,       18, 0x060a01,         406,       3, Original, 0xfffffa8119d64b60, "\FI_UNKNOWN"
+             FileIoRead,    5531978,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f099890, 0xfffffa80622bf7d0, 0x27a60ec000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+            FileIoOpEnd,    5531983,     sqlservr.exe (2504),        820,   2, 0xfffffa80626cd0c0, 0xfffffa8061f61be0,         427, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+             FileIoRead,    5531985,     sqlservr.exe (2504),        820,   2, 0xfffffa806234b2d0, 0xfffffa8119d6b260, 0x08eb7ac000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531987,     sqlservr.exe (2504),       2704, 0xfffffa8062030c60
+             FileIoRead,    5531989,     sqlservr.exe (2504),       2868,   0, 0xfffffa80623b9d10, 0xfffffa8063938050, 0x1f54eb0000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5531991,     sqlservr.exe (2504),       2568,  13, 0xfffffa811fe0e0c0, 0xfffffa8119d20050, 0x16e2a8c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5531995,     sqlservr.exe (2504),        820, 0xfffffa80dc58e010
+           DiskReadInit,    5531995,     sqlservr.exe (2504),       2868, 0xfffffa811ff73330
+                CSwitch,    5531996,     sqlservr.exe (2504),       2836,   15,   -1,         365,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,    249,  10,  15,  240098304,    0,    0
+           DiskReadInit,    5532003,     sqlservr.exe (2504),       2568, 0xfffffa811ffd2c60
+                CSwitch,    5532019,     sqlservr.exe (2504),       2576,   15,   -1,         725,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,     96,   0,   0,  337249280,    0,    0
+             FileIoRead,    5532022,     sqlservr.exe (2504),       2864,   9, 0xfffffa81200376f0, 0xfffffa8119d1ff20, 0x0704418000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532028,     sqlservr.exe (2504),       2864, 0xfffffa80624518e0
+             FileIoRead,    5532033,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f034ee0, 0xfffffa8119ca9800, 0x004c4e0000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5532037,    xperfinfo.exe (2464),        836,    8,   -1,          41,        0,     sqlservr.exe (2504),       2576,   15,   -1,         Waiting,          WrQueue, Swapable,     18,   0,   3,  338435072,    0,    0
+           DiskReadInit,    5532040,     sqlservr.exe (2504),       2704, 0xfffffa811fe72c60
+             FileIoRead,    5532041,     sqlservr.exe (2504),       1804,   1, 0xfffffa80622c1d20, 0xfffffa8062522320, 0x0ea85be000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5532042,        csrss.exe ( 552),        580, 0xfffffa6008be0000, 0xfffffa6008bda000, 0x0000000000e68000, 0x0000000000e70000, 0x000007fffffd5000,    0x00000000,       csrsrv.dll!0x000007fefe2751f0
+             FileIoRead,    5532044,     sqlservr.exe (2504),       2840,  12, 0xfffffa811fe56550, 0xfffffa8119d20050, 0x21b6626000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532046,     sqlservr.exe (2504),       1804, 0xfffffa8120085c60
+              T-DCStart,    5532048,        csrss.exe ( 552),        604, 0xfffffa6008bcf000, 0xfffffa6008bc7000, 0x0000000000f78000, 0x0000000000f80000, 0x000007fffffde000,    0x00000000,       csrsrv.dll!0x000007fefe275f20
+           DiskReadInit,    5532049,     sqlservr.exe (2504),       2840, 0xfffffa80dc5ba470
+              T-DCStart,    5532051,        csrss.exe ( 552),        636, 0xfffffa6007ee4000, 0xfffffa6007ede000, 0x0000000000358000, 0x0000000000360000, 0x000007fffffd3000,    0x00000000,       winsrv.dll!0x000007fefe1db2d0
+             FileIoRead,    5532052,     sqlservr.exe (2504),        848,  11, 0xfffffa8062429ee0, 0xfffffa8119d1ff20, 0x0e75d80000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              T-DCStart,    5532053,        csrss.exe ( 552),        640, 0xfffffa6007f76000, 0xfffffa6007f70000, 0x0000000001868000, 0x0000000001870000, 0x000007fffffae000,    0x00000000,       winsrv.dll!0x000007fefe1db2d0
+             FileIoRead,    5532055,     sqlservr.exe (2504),       1932,   3, 0xfffffa80623d3560, 0xfffffa8062522320, 0x00633b2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+               DiskRead,    5532056,     sqlservr.exe (2504),        820, 0xfffffa80626fec60, 0x0599871e00, 0x00002000,        2362,       16, 0x060901,        1382,       3, Original, 0xfffffa8119d53e50, "\FI_UNKNOWN"
+              T-DCStart,    5532056,        csrss.exe ( 552),        676, 0xfffffa6008b8b000, 0xfffffa6008b83000, 0x0000000001828000, 0x0000000001830000, 0x000007fffffac000,    0x00000000,       csrsrv.dll!0x000007fefe275f20
+              T-DCStart,    5532059,        csrss.exe ( 552),        680, 0xfffffa6008bab000, 0xfffffa6008ba5000, 0x0000000000fb8000, 0x0000000000fc0000, 0x000007fffffaa000,    0x00000000,       winsrv.dll!0x000007fefe1db2d0
+              T-DCStart,    5532061,        csrss.exe ( 552),        684, 0xfffffa6008727000, 0xfffffa600871f000, 0x0000000006c4b000, 0x0000000006c50000, 0x000007fffffa8000,    0x00000000,       winsrv.dll!0x000007fefe1d2748
+               DiskRead,    5532063,     sqlservr.exe (2504),       2864, 0xfffffa811ff7c8b0, 0x1fe4f63e00, 0x00002000,        3034,       12, 0x060901,        1510,       3, Original, 0xfffffa8062401700, "\FI_UNKNOWN"
+              T-DCStart,    5532064,        csrss.exe ( 552),       2528, 0xfffffa6009aee000, 0xfffffa6009ae6000, 0x0000000006f0b000, 0x0000000006f10000, 0x000007fffffa6000,    0x00000000,       winsrv.dll!0x000007fefe1d2748
+            FileIoOpEnd,    5532064,     sqlservr.exe (2504),        820,   2, 0xfffffa8061f414e0, 0xfffffa8063938050,        2378, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+           DiskReadInit,    5532065,     sqlservr.exe (2504),       1932, 0xfffffa811fedfc60
+            FileIoOpEnd,    5532067,     sqlservr.exe (2504),       2864,   9, 0xfffffa80dc5e5b30, 0xfffffa8119d1ff20,        3047, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+           DiskReadInit,    5532077,     sqlservr.exe (2504),        848, 0xfffffa81200338b0
+                CSwitch,    5532092,     sqlservr.exe (2504),       2868,   15,   -1,          72,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,     54,   0,  15,  239998976,    0,    0
+             FileIoRead,    5532103,     sqlservr.exe (2504),       2836,  10, 0xfffffa80626cd0c0, 0xfffffa8119c5d050, 0x2157b6c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532109,     sqlservr.exe (2504),       2836, 0xfffffa80dc5c6010
+             FileIoRead,    5532129,     sqlservr.exe (2504),       2840,  12, 0xfffffa812001e300, 0xfffffa8119d6b260, 0x0b53cb2000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5532133,     sqlservr.exe (2504),        964,   15,   -1,         830,        0,     sqlservr.exe (2504),       2836,   15,   -1,         Waiting,      UserRequest, Swapable,    136,  10,  10,  338214912,    0,    0
+           DiskReadInit,    5532135,     sqlservr.exe (2504),       2840, 0xfffffa80626de6c0
+                CSwitch,    5532144,     sqlservr.exe (2504),       2836,   15,   -1,          11,        0,     sqlservr.exe (2504),        964,   15,   -1,         Waiting,          WrQueue, Swapable,     11,  10,  11,  338438144,    0,    0
+             FileIoRead,    5532150,     sqlservr.exe (2504),       1932,   3, 0xfffffa806249c9f0, 0xfffffa80622aa920, 0x2a36280000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532155,     sqlservr.exe (2504),       1932, 0xfffffa81200ef8b0
+             FileIoRead,    5532186,     sqlservr.exe (2504),       2868,   0, 0xfffffa806248b740, 0xfffffa8119c5d050, 0x0627ec8000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532191,     sqlservr.exe (2504),       2868, 0xfffffa80dc5ec010
+             FileIoRead,    5532193,     sqlservr.exe (2504),       2704,   5, 0xfffffa80dc5e9ee0, 0xfffffa8119d1ff20, 0x1fdb958000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532201,     sqlservr.exe (2504),       2704, 0xfffffa80dc90a8e0
+                CSwitch,    5532223,     sqlservr.exe (2504),       2748,   15,   -1,        2047,        0,     sqlservr.exe (2504),       1640,   15,   -1,         Waiting,      UserRequest, Swapable,   2047,   6,   6,  334768128,    0,    0
+            FileIoWrite,    5532241,     sqlservr.exe (2504),       2868,   0, 0xfffffa80627080c0, 0xfffffa8119c93390, 0x04b42cb400, 0x00003600, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+                CSwitch,    5532246,    xperfinfo.exe (2464),        836,    8,   -1,         154,        0,     sqlservr.exe (2504),       2748,   15,   -1,         Waiting,          WrQueue, Swapable,     23,   6,   7,  338421760,    0,    0
+             FileIoRead,    5532251,     sqlservr.exe (2504),       2568,  13, 0xfffffa811ff93780, 0xfffffa8119c5d050, 0x167e864000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+          DiskWriteInit,    5532253,     sqlservr.exe (2504),       2868, 0xfffffa811ffa0c60
+           DiskReadInit,    5532259,     sqlservr.exe (2504),       2568, 0xfffffa8062460a60
+                CSwitch,    5532280,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,    188,   0,   0,  338125824,    0,    0
+             FileIoRead,    5532299,     sqlservr.exe (2504),        844,  15, 0xfffffa8061f414e0, 0xfffffa8119cf2280, 0x07fda8c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+                CSwitch,    5532304,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2700,   15,   -1,         Waiting,      UserRequest, Swapable,    326,  14,  14,  337882112,    0,    0
+           DiskReadInit,    5532305,     sqlservr.exe (2504),        844, 0xfffffa81200738b0
+             FileIoRead,    5532333,     sqlservr.exe (2504),       2864,   9, 0xfffffa80dc8b7880, 0xfffffa8063938050, 0x17936cc000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+        FileIoQueryInfo,    5532335,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200c1530, 0xfffffa8066f817e0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff880048937a0)"
+           DiskReadInit,    5532341,     sqlservr.exe (2504),       2864, 0xfffffa811ff7c8b0
+            FileIoOpEnd,    5532358,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200c1530, 0xfffffa8066f817e0,          23, 0x00000000, 0x000000000000003a, FileIoQueryInfo, "Unknown (0xfffff880048937a0)"
+             FileIoRead,    5532368,     sqlservr.exe (2504),       2568,  13, 0xfffffa8119d8cee0, 0xfffffa8119d20050, 0x0d7d4cc000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532373,     sqlservr.exe (2504),       2568, 0xfffffa811ff4dc60
+              I-DCStart,    5532379,        csrss.exe ( 552), 0x0000000049d90000, 0x0000000049d96000, 0x00002385,    0x00000000, 0x0000000049d90000, "\Device\HarddiskVolume6\Windows\System32\csrss.exe"
+        FileIoQueryInfo,    5532394,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200a9560, 0xfffffa80dc63daf0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004790710)"
+            FileIoOpEnd,    5532399,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200a9560, 0xfffffa80dc63daf0,           4, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff88004790710)"
+             FileIoRead,    5532402,     sqlservr.exe (2504),       2836,  10, 0xfffffa811fff6b30, 0xfffffa8119d6b260, 0x00a215e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+              I-DCStart,    5532403,        csrss.exe ( 552), 0x00000000779d0000, 0x0000000077a9d000, 0x000cf4b5,    0x00000000, 0x00000000779d0000, "\Device\HarddiskVolume6\Windows\System32\user32.dll"
+           DiskReadInit,    5532408,     sqlservr.exe (2504),       2836, 0xfffffa809f303010
+        FileIoQueryInfo,    5532418,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f041600, 0xfffffa80dc63bf20, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800476b710)"
+            FileIoOpEnd,    5532423,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f041600, 0xfffffa80dc63bf20,           4, 0x00000000, 0x0000000000000040, FileIoQueryInfo, "Unknown (0xfffff8800476b710)"
+              I-DCStart,    5532426,        csrss.exe ( 552), 0x0000000077aa0000, 0x0000000077bc9000, 0x001283fb,    0x00000000, 0x0000000077aa0000, "\Device\HarddiskVolume6\Windows\System32\kernel32.dll"
+        FileIoQueryInfo,    5532441,    xperfinfo.exe (2464),        836,   6, 0xfffffa811ffb4ab0, 0xfffffa8066f38930, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800090b7c0)"
+            FileIoOpEnd,    5532446,    xperfinfo.exe (2464),        836,   6, 0xfffffa811ffb4ab0, 0xfffffa8066f38930,           5, 0x00000000, 0x000000000000003a, FileIoQueryInfo, "Unknown (0xfffff8800090b7c0)"
+              I-DCStart,    5532450,        csrss.exe ( 552), 0x0000000077bd0000, 0x0000000077d4c000, 0x0018379a,    0x00000000, 0x0000000077bd0000, "\Device\HarddiskVolume6\Windows\System32\ntdll.dll"
+        FileIoQueryInfo,    5532465,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200320c0, 0xfffffa809f019e50, 0x0000000000000000, FileNameInformation, "\Device\HarddiskVolume6\Windows\System32\sxs.dll"
+            FileIoOpEnd,    5532469,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200320c0, 0xfffffa809f019e50,           3, 0x00000000, 0x0000000000000036, FileIoQueryInfo, "\Device\HarddiskVolume6\Windows\System32\sxs.dll"
+              I-DCStart,    5532472,        csrss.exe ( 552), 0x000007fefdfe0000, 0x000007fefe06f000, 0x0008ea4f,    0x00000000, 0x000007fefdfe0000, "\Device\HarddiskVolume6\Windows\System32\sxs.dll"
+             FileIoRead,    5532482,     sqlservr.exe (2504),       2568,  13, 0xfffffa81200cb0c0, 0xfffffa8119c38160, 0x1ddee0e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532487,     sqlservr.exe (2504),       2568, 0xfffffa8062706200
+        FileIoQueryInfo,    5532487,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f373620, 0xfffffa809f007970, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800069a140)"
+             FileIoRead,    5532489,     sqlservr.exe (2504),       2704,   5, 0xfffffa809f333c10, 0xfffffa80622bf7d0, 0x079c012000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+            FileIoOpEnd,    5532492,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f373620, 0xfffffa809f007970,           4, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff8800069a140)"
+           DiskReadInit,    5532494,     sqlservr.exe (2504),       2704, 0xfffffa8120081530
+              I-DCStart,    5532496,        csrss.exe ( 552), 0x000007fefe1d0000, 0x000007fefe243000, 0x0007a256,    0x00000000, 0x000007fefe1d0000, "\Device\HarddiskVolume6\Windows\System32\winsrv.dll"
+        FileIoQueryInfo,    5532511,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f333590, 0xfffffa809f007ce0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff880006fa2b0)"
+            FileIoOpEnd,    5532514,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f333590, 0xfffffa809f007ce0,           3, 0x00000000, 0x000000000000003e, FileIoQueryInfo, "Unknown (0xfffff880006fa2b0)"
+                CSwitch,    5532520,     sqlservr.exe (2504),       1640,   15,   -1,         296,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,    273,   6,  15,  239504384,    0,    0
+             FileIoRead,    5532531,     sqlservr.exe (2504),       2836,  10, 0xfffffa80dc5f3ee0, 0xfffffa8062522320, 0x1fb75ca000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532536,     sqlservr.exe (2504),       2836, 0xfffffa80623e3c60
+              DiskWrite,    5532546,     sqlservr.exe (2504),       2868, 0xfffffa811ffa0c60, 0x04b42d3200, 0x00003600,         293,        9, 0x060a01,         293,       3, Original, 0xfffffa8119c9eaa0, "\FI_UNKNOWN"
+                CSwitch,    5532548,    xperfinfo.exe (2464),        836,    8,   -1,          28,        0,     sqlservr.exe (2504),       2836,   15,   -1,         Waiting,      UserRequest, Swapable,    403,  10,  10,  337795072,    0,    0
+            FileIoOpEnd,    5532552,     sqlservr.exe (2504),       2868,   0, 0xfffffa80627080c0, 0xfffffa8119c93390,         311, 0x00000000, 0x0000000000003600, FileIoWrite, "\FI_UNKNOWN"
+                CSwitch,    5532564,     sqlservr.exe (2504),       2868,   15,   -1,         283,        0,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,    283,   0,   0,          0,    0,    0
+              I-DCStart,    5532571,        csrss.exe ( 552), 0x000007fefe250000, 0x000007fefe269000, 0x00016ed3,    0x00000000, 0x000007fefe250000, "\Device\HarddiskVolume6\Windows\System32\basesrv.dll"
+                CSwitch,    5532581,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,     17,   0,   0,  338434048,    0,    0
+             FileIoRead,    5532590,     sqlservr.exe (2504),       2864,   9, 0xfffffa80dc91a740, 0xfffffa8063938050, 0x19c5e88000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532595,     sqlservr.exe (2504),       2864, 0xfffffa811ffa8010
+        FileIoQueryInfo,    5532597,    xperfinfo.exe (2464),        836,  10, 0xfffffa811fed1ac0, 0xfffffa806832bf20, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88000700a00)"
+            FileIoOpEnd,    5532605,    xperfinfo.exe (2464),        836,  10, 0xfffffa811fed1ac0, 0xfffffa806832bf20,           8, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff88000700a00)"
+              I-DCStart,    5532610,        csrss.exe ( 552), 0x000007fefe270000, 0x000007fefe28d000, 0x00024555,    0x00000000, 0x000007fefe270000, "\Device\HarddiskVolume6\Windows\System32\csrsrv.dll"
+                CSwitch,    5532624,     sqlservr.exe (2504),       2868,   15,   -1,          42,        0,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,     42,   0,   0,          0,    0,    0
+        FileIoQueryInfo,    5532624,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119bb20c0, 0xfffffa80dc63b2b0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004771710)"
+            FileIoOpEnd,    5532628,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119bb20c0, 0xfffffa80dc63b2b0,           3, 0x00000000, 0x000000000000003a, FileIoQueryInfo, "Unknown (0xfffff88004771710)"
+              I-DCStart,    5532632,        csrss.exe ( 552), 0x000007fefe950000, 0x000007fefe9ea000, 0x000a4344,    0x00000000, 0x000007fefe950000, "\Device\HarddiskVolume6\Windows\System32\usp10.dll"
+            FileIoWrite,    5532640,     sqlservr.exe (2504),       2868,   0, 0xfffffa80625193d0, 0xfffffa8119c93390, 0x04b42cea00, 0x00000600, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5532644,     sqlservr.exe (2504),       2868, 0xfffffa811ffa0c60
+        FileIoQueryInfo,    5532646,    xperfinfo.exe (2464),        836,  10, 0xfffffa812006dab0, 0xfffffa80dc63b830, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800476f710)"
+            FileIoOpEnd,    5532650,    xperfinfo.exe (2464),        836,  10, 0xfffffa812006dab0, 0xfffffa80dc63b830,           3, 0x00000000, 0x000000000000003a, FileIoQueryInfo, "Unknown (0xfffff8800476f710)"
+              I-DCStart,    5532654,        csrss.exe ( 552), 0x000007fefe9f0000, 0x000007fefea53000, 0x0006bab8,    0x00000000, 0x000007fefe9f0000, "\Device\HarddiskVolume6\Windows\System32\gdi32.dll"
+                CSwitch,    5532663,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,     39,   0,   0,  338397184,    0,    0
+        FileIoQueryInfo,    5532668,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119bfe700, 0xfffffa80dc639730, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004757710)"
+            FileIoOpEnd,    5532671,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119bfe700, 0xfffffa80dc639730,           3, 0x00000000, 0x0000000000000040, FileIoQueryInfo, "Unknown (0xfffff88004757710)"
+              I-DCStart,    5532677,        csrss.exe ( 552), 0x000007fefec40000, 0x000007fefed48000, 0x00108337,    0x00000000, 0x000007fefec40000, "\Device\HarddiskVolume6\Windows\System32\advapi32.dll"
+                CSwitch,    5532680,     sqlservr.exe (2504),       2700,   15,   -1,         376,        0,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,    376,  14,   0,          0,    0,    0
+        FileIoQueryInfo,    5532692,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119bf7500, 0xfffffa80dc639eb0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004755710)"
+            FileIoOpEnd,    5532696,    xperfinfo.exe (2464),        836,  10, 0xfffffa8119bf7500, 0xfffffa80dc639eb0,           3, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff88004755710)"
+              I-DCStart,    5532700,        csrss.exe ( 552), 0x000007fefed50000, 0x000007fefee88000, 0x0013b360,    0x00000000, 0x000007fefed50000, "\Device\HarddiskVolume6\Windows\System32\rpcrt4.dll"
+        FileIoQueryInfo,    5532714,    xperfinfo.exe (2464),        836,  10, 0xfffffa811fefbe60, 0xfffffa80dc633050, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004744710)"
+            FileIoOpEnd,    5532719,    xperfinfo.exe (2464),        836,  10, 0xfffffa811fefbe60, 0xfffffa80dc633050,           4, 0x00000000, 0x0000000000000036, FileIoQueryInfo, "Unknown (0xfffff88004744710)"
+              I-DCStart,    5532722,        csrss.exe ( 552), 0x000007feffc20000, 0x000007feffc2d000, 0x00013d53,    0x00000000, 0x000007feffc20000, "\Device\HarddiskVolume6\Windows\System32\lpk.dll"
+        FileIoQueryInfo,    5532736,    xperfinfo.exe (2464),        836,  10, 0xfffffa811fedbab0, 0xfffffa80dc637510, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800471f710)"
+             FileIoRead,    5532738,     sqlservr.exe (2504),       2864,   9, 0xfffffa81200cdee0, 0xfffffa8119d20050, 0x0bf088e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+            FileIoOpEnd,    5532741,    xperfinfo.exe (2464),        836,  10, 0xfffffa811fedbab0, 0xfffffa80dc637510,           4, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff8800471f710)"
+              I-DCStart,    5532744,        csrss.exe ( 552), 0x000007feffe20000, 0x000007feffebc000, 0x0009d682,    0x00000000, 0x000007feffe20000, "\Device\HarddiskVolume6\Windows\System32\msvcrt.dll"
+           DiskReadInit,    5532745,     sqlservr.exe (2504),       2864, 0xfffffa80626d66c0
+              DiskWrite,    5532747,     sqlservr.exe (2504),       1932, 0xfffffa80624e8320, 0x2c980b5e00, 0x00002000,        2458,       15, 0x060a01,        2458,       3, Original, 0xfffffa8063729190, "\FI_UNKNOWN"
+            FileIoOpEnd,    5532754,     sqlservr.exe (2504),       1932,   3, 0xfffffa809f072ee0, 0xfffffa8119cf2280,        2473, 0x00000000, 0x0000000000002000, FileIoWrite, "\FI_UNKNOWN"
+              P-DCStart,    5532763,      wininit.exe ( 596),        540,          0, 0x0000fa8066f7a5e0, S-1-5-18,  wininit.exe
+              T-DCStart,    5532767,      wininit.exe ( 596),        600, 0xfffffa6008b5d000, 0xfffffa6008b53000, 0x00000000000b1000, 0x00000000000c0000, 0x000007fffffde000,    0x00000000,      wininit.exe!0x00000000ffc97bec
+              T-DCStart,    5532769,      wininit.exe ( 596),        624, 0xfffffa6007ed1000, 0xfffffa6007ecb000, 0x0000000000202000, 0x0000000000210000, 0x000007fffffda000,    0x00000000,        ntdll.dll!0x0000000077be7620
+              T-DCStart,    5532771,      wininit.exe ( 596),        628, 0xfffffa6007f03000, 0xfffffa6007efd000, 0x00000000017e2000, 0x00000000017f0000, 0x000007fffffd8000,    0x00000000,       rpcrt4.dll!0x000007fefed98940
+                CSwitch,    5532779,     sqlservr.exe (2504),       2836,   15,   -1,         230,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,    230,  10,  15,  239087616,    0,    0
+              DiskWrite,    5532809,     sqlservr.exe (2504),       2868, 0xfffffa811ffa0c60, 0x04b42d6800, 0x00000600,         163,        9, 0x060a01,         163,       3, Original, 0xfffffa8119c9eaa0, "\FI_UNKNOWN"
+            FileIoOpEnd,    5532813,     sqlservr.exe (2504),       2868,   0, 0xfffffa80625193d0, 0xfffffa8119c93390,         172, 0x00000000, 0x0000000000000600, FileIoWrite, "\FI_UNKNOWN"
+                CSwitch,    5532820,     sqlservr.exe (2504),       2868,   15,   -1,         157,        0,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,    157,   0,   0,          0,    0,    0
+             FileIoRead,    5532827,     sqlservr.exe (2504),       2864,   9, 0xfffffa8119bac2a0, 0xfffffa8062522320, 0x0d4322a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5532827,     sqlservr.exe (2504),       1640,   6, 0xfffffa809f06f9e0, 0xfffffa80683cd2d0, 0x1836da0000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532832,     sqlservr.exe (2504),       2864, 0xfffffa811ff09360
+                CSwitch,    5532834,    xperfinfo.exe (2464),        836,    8,   -1,          55,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,     14,   0,   0,  338437120,    0,    0
+           DiskReadInit,    5532836,     sqlservr.exe (2504),       1640, 0xfffffa8120071c60
+             FileIoRead,    5532872,     sqlservr.exe (2504),       2836,  10, 0xfffffa80623ea590, 0xfffffa8119d6b260, 0x1edf0ba000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5532876,     sqlservr.exe (2504),       2836, 0xfffffa80626f8400
+                CSwitch,    5532890,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2836,   15,   -1,         Waiting,      UserRequest, Swapable,    111,  10,  10,  338264064,    0,    0
+             FileIoRead,    5532906,     sqlservr.exe (2504),       2704,   5, 0xfffffa811ff65ee0, 0xfffffa8061f61ab0, 0x08551ce000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+               DiskRead,    5532908,     sqlservr.exe (2504),        820, 0xfffffa80622adc60, 0x322f593c00, 0x00002000,        2963,       10, 0x060901,        2963,       3, Original, 0xfffffa8119c24800, "\FI_UNKNOWN"
+           DiskReadInit,    5532912,     sqlservr.exe (2504),       2704, 0xfffffa811ff95500
+            FileIoOpEnd,    5532915,     sqlservr.exe (2504),        820,   2, 0xfffffa811ff61b30, 0xfffffa8119c3c7f0,        2978, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+             FileIoRead,    5532925,     sqlservr.exe (2504),       2864,   9, 0xfffffa8120018ee0, 0xfffffa8119cf2280, 0x1ec3a0e000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+        FileIoQueryInfo,    5532926,    xperfinfo.exe (2464),        836,   0, 0xfffffa80624150c0, 0xfffffa80dc63daf0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004790710)"
+           DiskReadInit,    5532931,     sqlservr.exe (2504),       2864, 0xfffffa80dc5b2010
+            FileIoOpEnd,    5532947,    xperfinfo.exe (2464),        836,   0, 0xfffffa80624150c0, 0xfffffa80dc63daf0,          20, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff88004790710)"
+               DiskRead,    5532951,     sqlservr.exe (2504),       2744, 0xfffffa8062021830, 0x18ce73be00, 0x00002000,        3735,       16, 0x060901,         895,       3, Original, 0xfffffa8119d53e50, "\FI_UNKNOWN"
+            FileIoOpEnd,    5532955,     sqlservr.exe (2504),       2744,   7, 0xfffffa80685c0a70, 0xfffffa8063938050,        3750, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+              I-DCStart,    5532963,      wininit.exe ( 596), 0x00000000779d0000, 0x0000000077a9d000, 0x000cf4b5,    0x00000000, 0x00000000779d0000, "\Device\HarddiskVolume6\Windows\System32\user32.dll"
+                CSwitch,    5532981,     sqlservr.exe (2504),       2868,   15,   -1,         146,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,    146,   0,  15,  238824448,    0,    0
+             FileIoRead,    5532993,     sqlservr.exe (2504),       1640,   6, 0xfffffa809f33fee0, 0xfffffa8119cb2260, 0x03d8bce000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+            FileIoWrite,    5532997,     sqlservr.exe (2504),       2868,   0, 0xfffffa80684a10c0, 0xfffffa8119c93390, 0x04b42cf000, 0x00000800, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+           DiskReadInit,    5532998,     sqlservr.exe (2504),       1640, 0xfffffa8119bbb8b0
+          DiskWriteInit,    5533002,     sqlservr.exe (2504),       2868, 0xfffffa811ffa0c60
+               DiskRead,    5533004,     sqlservr.exe (2504),       1804, 0xfffffa81200836e0, 0x1fdf4efe00, 0x00002000,        2354,       16, 0x060901,          52,       3, Original, 0xfffffa8119d53e50, "\FI_UNKNOWN"
+            FileIoOpEnd,    5533007,     sqlservr.exe (2504),       1804,   1, 0xfffffa80624a9800, 0xfffffa8063938050,        2363, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+                CSwitch,    5533018,    xperfinfo.exe (2464),        836,    8,   -1,          36,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,     36,   0,   0,  338393088,    0,    0
+                CSwitch,    5533022,     sqlservr.exe (2504),       2868,   15,   -1,           4,        0,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,    WrDispatchInt,  NonSwap,      4,   0,  15,  238815232,    0,    0
+                CSwitch,    5533026,    xperfinfo.exe (2464),        836,    8,   -1,           3,        0,     sqlservr.exe (2504),       1640,   15,   -1,         Waiting,      UserRequest, Swapable,    506,   6,   6,  337580032,    0,    0
+        FileIoQueryInfo,    5533034,    xperfinfo.exe (2464),        836,   6, 0xfffffa80620180c0, 0xfffffa80dc63bf20, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800476b710)"
+                CSwitch,    5533036,     sqlservr.exe (2504),       2836,   15,   -1,         146,        0,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,    146,  10,   0,          0,    0,    0
+            FileIoOpEnd,    5533042,    xperfinfo.exe (2464),        836,   6, 0xfffffa80620180c0, 0xfffffa80dc63bf20,           8, 0x00000000, 0x0000000000000040, FileIoQueryInfo, "Unknown (0xfffff8800476b710)"
+              I-DCStart,    5533056,      wininit.exe ( 596), 0x0000000077aa0000, 0x0000000077bc9000, 0x001283fb,    0x00000000, 0x0000000077aa0000, "\Device\HarddiskVolume6\Windows\System32\kernel32.dll"
+        FileIoQueryInfo,    5533076,    xperfinfo.exe (2464),        836,   6, 0xfffffa80622ce620, 0xfffffa8066f38930, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800090b7c0)"
+            FileIoOpEnd,    5533079,    xperfinfo.exe (2464),        836,   6, 0xfffffa80622ce620, 0xfffffa8066f38930,           2, 0x00000000, 0x000000000000003a, FileIoQueryInfo, "Unknown (0xfffff8800090b7c0)"
+              I-DCStart,    5533083,      wininit.exe ( 596), 0x0000000077bd0000, 0x0000000077d4c000, 0x0018379a,    0x00000000, 0x0000000077bd0000, "\Device\HarddiskVolume6\Windows\System32\ntdll.dll"
+        FileIoQueryInfo,    5533098,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f79c0c0, 0xfffffa80683c4a60, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800473f140)"
+            FileIoOpEnd,    5533102,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f79c0c0, 0xfffffa80683c4a60,           4, 0x00000000, 0x000000000000003e, FileIoQueryInfo, "Unknown (0xfffff8800473f140)"
+              I-DCStart,    5533107,      wininit.exe ( 596), 0x00000000ffc80000, 0x00000000ffca2000, 0x00024b2a,    0x00000000, 0x00000000ffc80000, "\Device\HarddiskVolume6\Windows\System32\wininit.exe"
+             FileIoRead,    5533107,     sqlservr.exe (2504),       2868,   0, 0xfffffa8062499590, 0xfffffa8119c38160, 0x074ca5c000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5533116,     sqlservr.exe (2504),       2868, 0xfffffa80624454d0
+        FileIoQueryInfo,    5533123,    xperfinfo.exe (2464),        836,   6, 0xfffffa80622d2680, 0xfffffa80dc6ba780, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff880047b6710)"
+            FileIoOpEnd,    5533127,    xperfinfo.exe (2464),        836,   6, 0xfffffa80622d2680, 0xfffffa80dc6ba780,           4, 0x00000000, 0x0000000000000040, FileIoQueryInfo, "Unknown (0xfffff880047b6710)"
+              I-DCStart,    5533131,      wininit.exe ( 596), 0x000007fefd3c0000, 0x000007fefd3c7000, 0x0000faff,    0x00000000, 0x000007fefd3c0000, "\Device\HarddiskVolume6\Windows\System32\WSHTCPIP.DLL"
+                CSwitch,    5533141,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,    118,   0,   0,  338258944,    0,    0
+        FileIoQueryInfo,    5533145,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200d9720, 0xfffffa80dc6bb430, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff880006fe140)"
+            FileIoOpEnd,    5533149,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200d9720, 0xfffffa80dc6bb430,           4, 0x00000000, 0x000000000000003e, FileIoQueryInfo, "Unknown (0xfffff880006fe140)"
+              I-DCStart,    5533153,      wininit.exe ( 596), 0x000007fefd570000, 0x000007fefd5c2000, 0x0004f651,    0x00000000, 0x000007fefd570000, "\Device\HarddiskVolume6\Windows\System32\mswsock.dll"
+               DiskRead,    5533156,     sqlservr.exe (2504),       1804, 0xfffffa80626e8c60, 0x18c04a5e00, 0x00002000,        3475,       14, 0x060901,        3475,       3, Original, 0xfffffa8119cc22f0, "\FI_UNKNOWN"
+            FileIoOpEnd,    5533161,     sqlservr.exe (2504),       1804,   1, 0xfffffa806230aee0, 0xfffffa8062522320,        3489, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+        FileIoQueryInfo,    5533169,    xperfinfo.exe (2464),        836,   6, 0xfffffa811fef7ca0, 0xfffffa80dc6c0e50, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff880049a57c0)"
+               DiskRead,    5533170,     sqlservr.exe (2504),       1932, 0xfffffa811fecb010, 0x1d9715be00, 0x00002000,        3935,       11, 0x060901,        1706,       3, Original, 0xfffffa8119d58540, "\FI_UNKNOWN"
+            FileIoOpEnd,    5533174,     sqlservr.exe (2504),       1932,   3, 0xfffffa8062379ee0, 0xfffffa8119c38160,        3950, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+            FileIoOpEnd,    5533174,    xperfinfo.exe (2464),        836,   6, 0xfffffa811fef7ca0, 0xfffffa80dc6c0e50,           5, 0x00000000, 0x0000000000000040, FileIoQueryInfo, "Unknown (0xfffff880049a57c0)"
+              DiskWrite,    5533177,     sqlservr.exe (2504),       2868, 0xfffffa811ffa0c60, 0x04b42d6e00, 0x00000800,         174,        9, 0x060a01,         174,       3, Original, 0xfffffa8119c9eaa0, "\FI_UNKNOWN"
+              I-DCStart,    5533178,      wininit.exe ( 596), 0x000007fefd5d0000, 0x000007fefd624000, 0x00060c7a,    0x00000000, 0x000007fefd5d0000, "\Device\HarddiskVolume6\Windows\System32\schannel.dll"
+            FileIoOpEnd,    5533188,     sqlservr.exe (2504),       2868,   0, 0xfffffa80684a10c0, 0xfffffa8119c93390,         190, 0x00000000, 0x0000000000000800, FileIoWrite, "\FI_UNKNOWN"
+        FileIoQueryInfo,    5533193,    xperfinfo.exe (2464),        836,   6, 0xfffffa811ffd4e60, 0xfffffa80dc6ba3d0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800498e140)"
+            FileIoOpEnd,    5533198,    xperfinfo.exe (2464),        836,   6, 0xfffffa811ffd4e60, 0xfffffa80dc6ba3d0,           4, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff8800498e140)"
+                CSwitch,    5533201,     sqlservr.exe (2504),       2868,   15,   -1,          60,        0,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,     60,   0,   0,          0,    0,    0
+              I-DCStart,    5533202,      wininit.exe ( 596), 0x000007fefd840000, 0x000007fefd847000, 0x0000575f,    0x00000000, 0x000007fefd840000, "\Device\HarddiskVolume6\Windows\System32\wship6.dll"
+               DiskRead,    5533210,     sqlservr.exe (2504),       1804, 0xfffffa811feb4010, 0x28742cde00, 0x00002000,        2837,        8, 0x060901,        1420,       3, Original, 0xfffffa8119ca3a60, "\FI_UNKNOWN"
+            FileIoOpEnd,    5533214,     sqlservr.exe (2504),       1804,   1, 0xfffffa80623f02b0, 0xfffffa80683cd2d0,        2851, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+        FileIoQueryInfo,    5533216,    xperfinfo.exe (2464),        836,   6, 0xfffffa811ff5b560, 0xfffffa80dc6b4eb0, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800498fc80)"
+                CSwitch,    5533217,             Idle (   0),          0,   16,   -1,           0,        0,     sqlservr.exe (2504),       2868,   15,   -1,         Waiting,      UserRequest, Swapable,     15,   0,   0,  338435072,    0,    0
+            FileIoOpEnd,    5533219,    xperfinfo.exe (2464),        836,   6, 0xfffffa811ff5b560, 0xfffffa80dc6b4eb0,           3, 0x00000000, 0x000000000000003e, FileIoQueryInfo, "Unknown (0xfffff8800498fc80)"
+              I-DCStart,    5533223,      wininit.exe ( 596), 0x000007fefd9f0000, 0x000007fefd9f9000, 0x0000ddfb,    0x00000000, 0x000007fefd9f0000, "\Device\HarddiskVolume6\Windows\System32\credssp.dll"
+               DiskRead,    5533227,     sqlservr.exe (2504),       2700, 0xfffffa80626c2010, 0x1804435e00, 0x00002000,        2596,       11, 0x060901,          56,       3, Original, 0xfffffa8119d58540, "\FI_UNKNOWN"
+            FileIoOpEnd,    5533232,     sqlservr.exe (2504),       2700,  14, 0xfffffa8119d956c0, 0xfffffa8119c38160,        2607, 0x00000000, 0x0000000000002000, FileIoRead, "\FI_UNKNOWN"
+        FileIoQueryInfo,    5533238,    xperfinfo.exe (2464),        836,   6, 0xfffffa80622d06a0, 0xfffffa80dc65b2b0, 0x0000000000000000, FileNameInformation, "\Device\HarddiskVolume6\Windows\System32\crypt32.dll"
+            FileIoOpEnd,    5533243,    xperfinfo.exe (2464),        836,   6, 0xfffffa80622d06a0, 0xfffffa80dc65b2b0,           4, 0x00000000, 0x000000000000003e, FileIoQueryInfo, "\Device\HarddiskVolume6\Windows\System32\crypt32.dll"
+              I-DCStart,    5533247,      wininit.exe ( 596), 0x000007fefda10000, 0x000007fefdb46000, 0x0013521c,    0x00000000, 0x000007fefda10000, "\Device\HarddiskVolume6\Windows\System32\crypt32.dll"
+        FileIoQueryInfo,    5533260,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f04e0c0, 0xfffffa80dc65ae50, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff8800492c140)"
+            FileIoOpEnd,    5533271,    xperfinfo.exe (2464),        836,   6, 0xfffffa809f04e0c0, 0xfffffa80dc65ae50,          10, 0x00000000, 0x000000000000003c, FileIoQueryInfo, "Unknown (0xfffff8800492c140)"
+              I-DCStart,    5533279,      wininit.exe ( 596), 0x000007fefdbe0000, 0x000007fefdbf9000, 0x0001e3fa,    0x00000000, 0x000007fefdbe0000, "\Device\HarddiskVolume6\Windows\System32\msasn1.dll"
+            FileIoWrite,    5533287,     sqlservr.exe (2504),       2864,   9, 0xfffffa8119bc5ee0, 0xfffffa8119ceead0, 0x0016296000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+        FileIoQueryInfo,    5533293,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200270c0, 0xfffffa809f025980, 0x0000000000000000, FileNameInformation, "\Device\HarddiskVolume6\Windows\System32\netapi32.dll"
+            FileIoOpEnd,    5533297,    xperfinfo.exe (2464),        836,   6, 0xfffffa81200270c0, 0xfffffa809f025980,           3, 0x00000000, 0x0000000000000040, FileIoQueryInfo, "\Device\HarddiskVolume6\Windows\System32\netapi32.dll"
+          DiskWriteInit,    5533298,     sqlservr.exe (2504),       2864, 0xfffffa806201c010
+              I-DCStart,    5533301,      wininit.exe ( 596), 0x000007fefdcd0000, 0x000007fefdd73000, 0x000acf85,    0x00000000, 0x000007fefdcd0000, "\Device\HarddiskVolume6\Windows\System32\netapi32.dll"
+        FileIoQueryInfo,    5533314,    xperfinfo.exe (2464),        836,   6, 0xfffffa80dc5ce0c0, 0xfffffa8119c68660, 0x0000000000000000, FileNameInformation, "Unknown (0xfffff88004924c80)"
+            FileIoOpEnd,    5533318,    xperfinfo.exe (2464),        836,   6, 0xfffffa80dc5ce0c0, 0xfffffa8119c68660,           4, 0x00000000, 0x000000000000003e, FileIoQueryInfo, "Unknown (0xfffff88004924c80)"
+                CSwitch,    5533322,     sqlservr.exe (2504),       1640,   15,   -1,         295,        1,    xperfinfo.exe (2464),        836,    8,   -1,           Ready,      WrPreempted,  NonSwap,    295,   6,  15,  238282752,    0,    0
+            FileIoWrite,    5533336,     sqlservr.exe (2504),       2864,   9, 0xfffffa811ff360c0, 0xfffffa8119d1ff20, 0x2af7bf6000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5533342,     sqlservr.exe (2504),       2864, 0xfffffa8119bf1c60
+             FileIoRead,    5533346,     sqlservr.exe (2504),       2700,  14, 0xfffffa80684a10c0, 0xfffffa8119d20050, 0x024d46a000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+             FileIoRead,    5533352,     sqlservr.exe (2504),       2744,   7, 0xfffffa8119c50c80, 0xfffffa8119d6b260, 0x2cdb580000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5533354,     sqlservr.exe (2504),       2700, 0xfffffa80626c2010
+           DiskReadInit,    5533361,     sqlservr.exe (2504),       2744, 0xfffffa811fffc8e0
+            FileIoWrite,    5533368,     sqlservr.exe (2504),       2864,   9, 0xfffffa8120071b30, 0xfffffa8119ceead0, 0x0b3bc9c000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5533371,     sqlservr.exe (2504),       2864, 0xfffffa80dc5a0410
+            FileIoWrite,    5533390,     sqlservr.exe (2504),       2864,   9, 0xfffffa8119bf5b60, 0xfffffa8119c38160, 0x165a066000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+          DiskWriteInit,    5533396,     sqlservr.exe (2504),       2864, 0xfffffa811fec4430
+             FileIoRead,    5533411,     sqlservr.exe (2504),       1640,   6, 0xfffffa811fef70c0, 0xfffffa8119d1ff20, 0x067fbe8000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+           DiskReadInit,    5533417,     sqlservr.exe (2504),       1640, 0xfffffa8119db7c60
+            FileIoWrite,    5533421,     sqlservr.exe (2504),       2864,   9, 0xfffffa8062325720, 0xfffffa8119d20050, 0x03af274000, 0x00002000, 0x00060a01,   Normal, "\FI_UNKNOWN", 0 | 9 | 11 | 17 | 18
+             FileIoRead,    5533428,     sqlservr.exe (2504),       2700,  14, 0xfffffa811fea9780, 0xfffffa80622aa920, 0x2cb4732000, 0x00002000, 0x00060901,   Normal, "\FI_UNKNOWN", 0 | 8 | 11 | 17 | 18
+          DiskWriteInit,    5533429,     sqlservr.exe (2504),       2864, 0xfffffa8062494430
+                CSwitch,    5533432,     sqlservr.exe (2504),       2868,   15,   -1,         214,        1,             Idle (   0),          0,   16,   -1,         Running,        Executive,  NonSwap,    214,   0,   0,          0,    0,    0
+              DiskWrite,    5533434,     sqlservr.exe (2504),        820, 0xfffffa80dc8ed010, 0x039d7dbe00, 0x00002000,        1898,       15, 0x060a01,         687,       3, Original, 0xfffffa8063729190, "\FI_UNKNOWN"
+           DiskReadInit,    5533435,     sqlservr.exe (2504),       2700, 0xfffffa80626ac010

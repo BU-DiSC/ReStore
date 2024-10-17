@@ -1,6 +1,0 @@
-﻿Experiments,Policy,Total exec time,Page hits in Tier1,Page hits in Tier2,Page hits in Tier3,Total number of Migration,Migrations from Tier2 to Tier1,Migrations from Tier3 to Tier2
-20hf90_rw1,static,354995,1004,3363,5633,0,0,0
-,RL,58641,4475,4730,795,86,9,77
-,RLs1,81097,4070,5152,778,271,8,263
-,LFU,81962,4459,4759,782,485,214,271
-,LRU,145142,4416,4770,814,802,32,770
