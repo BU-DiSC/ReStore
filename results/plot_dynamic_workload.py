@@ -5,13 +5,13 @@ import seaborn as sns
 import numpy as np
 from matplotlib import scale as mscale
 from matplotlib import transforms as mtransforms
-from matplotlib.ticker import FixedLocator, FuncFormatter, ScalarFormatter
+from matplotlib.ticker import FixedLocator, FuncFormatter
 from matplotlib.font_manager import FontProperties
-# Using font LinuxLibertine
 # Provide the full path to the font file
-font_path = '/Users/xxx/Library/Fonts/LinLibertine_R.otf'
+font_path = '/Users/tiazh991/Library/Fonts/LinLibertine_R.otf'
+prop28 = FontProperties(fname=font_path, size=28)
+prop36 = FontProperties(fname=font_path, size=36)
 prop = FontProperties(fname=font_path, size=50)
-
 
 # Define the custom scale class
 class ExpScale(mscale.ScaleBase):
@@ -87,15 +87,17 @@ def collect_data(directory):
     data = {}
     for setting in os.listdir(directory):
         setting_dir = os.path.join(directory, setting)
-        if os.path.isdir(setting_dir):
-            times = []
-            # sort os.listdir to make sure it follows alphabet orders
-            for log_file in sorted(os.listdir(setting_dir)):
-                if log_file.endswith('.log'):
-                    log_file_path = os.path.join(setting_dir, log_file)
-                    total_time, loop_time = extract_times_from_log(log_file_path)
-                    times.append((total_time, loop_time))  # Store as tuple
-            data[setting] = times
+        # Skip hidden directories (those that start with '.') and non-directories
+        if setting.startswith('.') or not os.path.isdir(setting_dir):
+            continue
+        times = []
+        # sort os.listdir to make sure it follows alphabet orders
+        for log_file in sorted(os.listdir(setting_dir)):
+            if log_file.endswith('.log'):
+                log_file_path = os.path.join(setting_dir, log_file)
+                total_time, loop_time = extract_times_from_log(log_file_path)
+                times.append((total_time, loop_time))  # Store as tuple
+        data[setting] = times
     return data
 
 def format_title(setting):
@@ -112,24 +114,25 @@ def plot_data(*data_list):
     # print(num_logs)
     # original order after calling sorted(os.listdir()):
     # log_labels = ['EXD','LFU','LRFU','LRU','RLs2','TEMP','ideal','static']
+
     # new order of log_labels
-    log_labels = ['tLFU','tLRU','LRFU','EXD','Static','TEMP','ReStore']
+    log_labels = ['tLFU','tLRU','LRFU','EXD','Logi','XGB','Oracle','TEMP','ReStore']
     num_logs = len(log_labels)
     # mapping from origin log orders to new orders
-    labels = [1,3,2,0,6,5,4]
+    labels = [1,3,2,0,4,7,8,6,5]
     percentage_list = [[] for _ in range(len(log_labels))]
-    workload_labels = ['5hf90','10hf90','10hf80']
-    # workload_labels = ['Ch_Wl_1','Ch_Wl_2','Ch_Wl_3']
+    # workload_labels = ['5hf90','10hf90','10hf80']
+    workload_labels = ['A','B','C','D']
 
-    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(25, 15))
-    plt.subplots_adjust(wspace=0.0, hspace=0.06)  # Adjust width and height spacing
+    fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(25, 15))
+    plt.subplots_adjust(wspace=-0.01, hspace=0.2)  # Adjust width and height spacing
     axs = axs.flatten()
 
     # Use seaborn color palette for better colors
     # colors = sns.color_palette("Set2")
-    colors = ['gainsboro','gainsboro', 'gray', 'gray', 'lightslategray', 'salmon', 'black']
+    colors = ['gainsboro','gainsboro','gray','gray','darkseagreen','steelblue','lightslategray','salmon','black']
     # use patterns to reduce usage of colors
-    patterns = ['\\', '.', '/', 'o', '', '', '']  # Hatching patterns
+    patterns = ['\\', '.', '/', 'o', '', '', '', '', '']  # Hatching patterns
     # Define the darker colors by darkening the original colors
     darker_colors = [sns.set_hls_values(c, l=0.4) for c in colors]
 
@@ -170,14 +173,14 @@ def plot_data(*data_list):
                 #         fontsize=11, 
                 #         color='black')
                 
-                # record the percentage versus Static
+                # record the percentage
                 if data: #== data1:
                     percentage_list[labels[j]].append(times_total[labels[j]]/times_total[6])
 
         # Set the labels and title
         ax.set_title(format_title(setting), fontproperties=prop)  # Set the title with the formatted setting
         # only plot xlable on bottom subplots
-        if idx in [6,7,8]:
+        if idx in [4,5]:
             ax.set_xlabel('Workloads', fontproperties=prop)
             ax.set_xticks(x)
             ax.set_xticklabels(workload_labels, fontproperties=prop)
@@ -185,46 +188,48 @@ def plot_data(*data_list):
             ax.set_xlabel('')
             ax.set_xticks([])
         # Only add ylabel to the first subplot
-        if idx == 3:
-            ax.set_ylabel('Runtime (microseconds)', fontproperties=prop)
-        # use different ylim
-        if idx in [0,3]:
-            ax.set_ylim(0, 6.0*1e8)
-        elif idx in [1,4]:
-            ax.set_ylim(0, 4.0*1e8)
-        else:
-            ax.set_ylim(0, 1.6*1e8)
+        if idx == 2:
+            ax.set_ylabel('Overall runtime (microseconds)', fontproperties=prop)
+        # # use different ylim
+        # if idx in [0]:
+        ax.set_ylim(0, 7.0*1e8)
+        # elif idx in [1,4]:
+        #     ax.set_ylim(0, 4.0*1e8)
+        # else:
+        #     ax.set_ylim(0, 7.0*1e8)
+        # ax.set_ylim(0, 6.0*1e8)
         # if idx != 0:  # Only add yticks to the first subplot
-            # ax.set_yticks([])
-        if idx not in [0,3,1,4]:
-            ax.set_yticks([0,1e8,2e8])
-        # Use ScalarFormatter and force scientific notation
-        scalar_formatter = ScalarFormatter(useMathText=True)
-        scalar_formatter.set_powerlimits((8, 8))  # Set the power limit for scientific notation
-        ax.yaxis.set_major_formatter(scalar_formatter)
-        # Modify the offset text (which shows x10^8) to '1e8'
-        ax.yaxis.get_offset_text().set_visible(False)
-        ax.text(0.01, 1.01, '1e8', transform=ax.transAxes, fontsize=28)
-        # ax.set_yscale('exp_scale')
-        # ax.set_yticks([])
-        # ax.set_ylim(0, 2e8)
+        #     ax.set_yticks([])
+        # if idx in [3,6]:
+        #     ax.set_yticks([0,0.3*1e8,0.6*1e8,0.9*1e8])
+        # else:
+        #     ax.set_yticks([])
+        # ax.set_yscale('log')
         ax.tick_params(axis='y', labelsize=28)
-        # ax.yaxis.offsetText.set_fontsize(28)
+        ax.yaxis.offsetText.set_fontsize(28)
         # if idx == 8:  # Only add the legend to the first subplot
-        #     ax.legend(fontsize=25, loc='upper right', ncol=3)
+        #     ax.legend(fontsize=22, loc='upper right', ncol=3)
 
     plt.tight_layout()
-    plt.savefig('Results_capacity_tests_static.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
+    # plt.savefig('Results_capacity_tests_constant.png',format='png',dpi=320, bbox_inches='tight')
+    plt.savefig('Results_capacity_tests_changings_2x3_newcolor.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
     plt.show()
 
+    # percentage_list = [x/(len(workload_labels)*len(settings)) for x in percentage_list]
     return percentage_list
 
 # Main execution
 if __name__ == "__main__":
     # Directories for each workload
-    workload1_dir = 'Results_5hf90_1e4_rw1_1e6/capacity_tests_30-200-500'
-    workload2_dir = 'Results_10hf90_1e4_rw1_1e6/capacity_tests_30-200-500'
-    workload3_dir = 'Results_10hf80_1e4_rw1_1e6/capacity_tests_30-200-500'
+    # workload_dir = 'Results_5hf90+uni+10hf80_1e4_rw1_1e6/capacity_tests_30-200-500'
+    # workload1_dir = 'Results_5hf90_1e4_rw1_1e6/capacity_tests_30-200-500'
+    # workload2_dir = 'Results_10hf90_1e4_rw1_1e6/capacity_tests_30-200-500'
+    # workload3_dir = 'Results_10hf80_1e4_rw1_1e6/capacity_tests_30-200-500'
+    workload1_dir = 'Results_5hf90+10hf80_1e4_rw1_1e6/capacity_tests_30-200-500'
+    workload2_dir = 'Results_5hf90+10hf80+20hf80_1e4_rw1_1e6/capacity_tests_30-200-500'
+    # workload1_dir = 'Results_5hf90*20_1e4_rw1_1e6/capacity_tests_30-200-500'
+    workload3_dir = 'Results_5hf90*10_1e4_rw1_1e6/capacity_tests_30-200-500'
+    workload4_dir = 'Results_5hf90*50_1e4_rw1_1e6/capacity_tests_30-200-500'
     
     # Collect data
     data1 = collect_data(workload1_dir)
@@ -233,13 +238,23 @@ if __name__ == "__main__":
     # print(len(data2))
     data3 = collect_data(workload3_dir)
     # print(len(data3))
+    data4 = collect_data(workload4_dir)
+    # print(len(data3))
     
     # Plot the data
-    percentage_list = plot_data(data1, data2, data3)
+    percentage_list = plot_data(data1, data2, data3, data4)
     print(len(percentage_list))
     print(len(percentage_list[0]))
-    policy_list = ['LFU','LRU','LRFU','EXD','Static','TEMP','ReStore']
-    labels = [1,3,2,0,6,5,4]
+    policy_list = ['tLFU','tLRU','LRFU','EXD','Logi','XGB','Oracle','TEMP','ReStore']
+    labels = [1,3,2,0,4,7,8,6,5]
     for i in range(len(policy_list)):
         avg_percentage = sum(percentage_list[i])/len(percentage_list[i])
         print('Average percentage of', policy_list[labels[i]], 'over Static: ', avg_percentage)
+
+# Average percentage of LFU over Static:  0.805156327470927
+# Average percentage of LRU over Static:  0.7898772728713168
+# Average percentage of LRFU over Static:  0.7428796414012624
+# Average percentage of EXD over Static:  0.7702405510621297
+# Average percentage of ReStore over Static:  0.4270362463586392
+# Average percentage of TEMP over Static:  0.5096210321060584
+# Average percentage of Static over Static:  1.0

@@ -1,16 +1,17 @@
 CXX := g++-12
 CXXFLAGS := -O3 -std=c++20 -pthread -g
-SRCS := Simulation_RL.cpp \ 
-		Simulation_TEMP.cpp \
-		Simulation_LFU.cpp \
-		Simulation_LFU-OSA.cpp \
-		Simulation_LRU.cpp \
-		Simulation_LRU-OSA.cpp \
-		Simulation_LRFU.cpp \
-		Simulation_EXD.cpp \
-		Simulation_ideal.cpp \
-		Simulation_static.cpp
-DEPS := BS_thread_pool.hpp RL_Agent_2states.h
+SRCS := Run_RL.cpp \
+		Run_TEMP.cpp \
+		Run_tLFU.cpp \
+		Run_tLRU.cpp \
+		Run_LRFU.cpp \
+		Run_EXD.cpp \
+		Run_ideal.cpp \
+		Run_static.cpp \
+		Run_LogiReg.cpp \
+		Run_XGBfast.cpp \
+		
+DEPS := BS_thread_pool.hpp RL_Agent_2states.h ReStore_driver.hpp
 
 # Extract the base name (without extension) of each source file
 EXECS := $(SRCS:.cpp=)
@@ -18,5 +19,10 @@ EXECS := $(SRCS:.cpp=)
 # Rule to compile each source file into an executable
 all: $(EXECS)
 
+# Special rule for Run_XGBfast to link with fastforest
+Run_XGBfast: Run_XGBfast.cpp $(DEPS)
+	$(CXX) $(CXXFLAGS) -o $@ $< -I$(HOME)/.local/include -L$(HOME)/.local/lib64 -lfastforest
+
+# Generic rule for all other .cpp files
 %: %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -o $@ $<

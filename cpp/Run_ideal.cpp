@@ -40,57 +40,62 @@
 #include "BS_thread_pool.hpp"
 //#include "BS_thread_pool_utils.hpp"
 
+// Includer ReStore driver
+#include "ReStore_driver.hpp"
+
 
 // Read/Write from/to Tier
-void R_n_W(int pageNum, std::string action,
-          int read_time_tier, float asym_tier
+void R_n_W(int pageNum, std::string action, int tier_num,
+          int read_time_tier1, float asym_tier1,
+          int read_time_tier2, float asym_tier2,
+          int read_time_tier3, float asym_tier3
           ){
-    // R/W time
-    if (action == "Read"){
-        // Sleep for 0.01 seconds to simulate the read action
-        std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier));
+    // R/W in Tier1
+    if (tier_num == 1){
+        if (action == "Read"){
+            // Sleep for 0.01 seconds to simulate the read action
+            std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier1));
+        }
+        else if (action == "Write"){
+            // Sleep for 0.03 seconds to simulate the write action
+            // write_time_tier1 = read_time_tier1*asym_tier1
+            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier1*asym_tier1)));
+        }
+        else {
+            std::cerr << "Unknown action !" << std::endl;
+        }
     }
-    else if (action == "Write"){
-        // Sleep for 0.03 seconds to simulate the write action
-        // write_time_tier1 = read_time_tier1*asym_tier1
-        std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier*asym_tier)));
+    // R/W in Tier2
+    else if (tier_num == 2){
+        if (action == "Read"){
+            // Sleep for 0.05 seconds to simulate the read action
+            std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier2));
+        }
+        else if (action == "Write"){
+            // Sleep for 0.1 seconds to simulate the write action
+            // write_time_tier2 = read_time_tier2*asym_tier2
+            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier2*asym_tier2)));
+        }
+        else {
+            std::cerr << "Unknown action !" << std::endl;
+        }
     }
-    else {
-        std::cerr << "Unknown action !" << std::endl;
+    // R/W in Tier3
+    else if (tier_num == 3){
+        if (action == "Read"){
+            // Sleep for 0.2 seconds to simulate the read action
+            std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier3));
+        }
+        else if (action == "Write"){
+            // Sleep for 0.3 seconds to simulate the write action
+            // write_time_tier3 = read_time_tier3*asym_tier3
+            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier3*asym_tier3)));
+        }
+        else {
+            std::cerr << "Unknown action ! \n" << std::endl;
+        }    
     }
 }
-    
-//     // R/W in Tier2
-//     else if (tier_num == 2){
-//         if (action == "Read"){
-//             // Sleep for 0.05 seconds to simulate the read action
-//             std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier2));
-//         }
-//         else if (action == "Write"){
-//             // Sleep for 0.1 seconds to simulate the write action
-//             // write_time_tier2 = read_time_tier2*asym_tier2
-//             std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier2*asym_tier2)));
-//         }
-//         else {
-//             std::cerr << "Unknown action !" << std::endl;
-//         }
-//     }
-//     // R/W in Tier3
-//     else if (tier_num == 3){
-//         if (action == "Read"){
-//             // Sleep for 0.2 seconds to simulate the read action
-//             std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier3));
-//         }
-//         else if (action == "Write"){
-//             // Sleep for 0.3 seconds to simulate the write action
-//             // write_time_tier3 = read_time_tier3*asym_tier3
-//             std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier3*asym_tier3)));
-//         }
-//         else {
-//             std::cerr << "Unknown action ! \n" << std::endl;
-//         }    
-//     }
-// }
 
 // Page movement between tiers
 // void movePage(int page_id, std::unordered_set<int>& from_tier, std::unordered_set<int>& to_tier) {
@@ -111,9 +116,9 @@ int main(
     ){
     // set environmental arguments here
     // read/write time of each tier
-    int read_time_tier1 = 30;   double asym_tier1 = 1.5;
-    int read_time_tier2 = 200;  double asym_tier2 = 2.0;
-    int read_time_tier3 = 500;  double asym_tier3 = 4.0;
+    int read_time_tier1 = 30;   float asym_tier1 = 1.5;
+    int read_time_tier2 = 200;  float asym_tier2 = 2.0;
+    int read_time_tier3 = 500;  float asym_tier3 = 4.0;
     // capacity of each tier
     int max_capacity_tier1 = 100;
     int max_capacity_tier2 = 400;
@@ -160,6 +165,10 @@ int main(
             asym_tier2 = std::stod(arg.substr(12)); // Extracts and converts the substring after "-asym_tier2=" to an double
         } else if (arg.find("-asym_tier3=") == 0) {
             asym_tier3 = std::stod(arg.substr(12)); // Extracts and converts the substring after "-asym_tier3=" to an double
+        } else if (arg.find("-num_threads_tier1=") == 0) {
+            num_threads_tier1 = static_cast<int>(std::stod(arg.substr(19))); // Extracts and converts the substring after "-num_threads_tier1=" to an integer
+        } else if (arg.find("-num_threads_tier2=") == 0) {
+            num_threads_tier2 = static_cast<int>(std::stod(arg.substr(19))); // Extracts and converts the substring after "-num_threads_tier2=" to an integer
         } else if (arg.find("-num_threads_tier3=") == 0) {
             num_threads_tier3 = static_cast<int>(std::stod(arg.substr(19))); // Extracts and converts the substring after "-num_threads_tier3=" to an integer
         } 
@@ -184,7 +193,7 @@ int main(
     }
 
     // Open the log file for writing
-    std::string log_path = folder_name + "/output_" + workload + "_static.log";
+    std::string log_path = folder_name + "/output_" + workload + "_ideal.log";
     std::ofstream logFile(log_path);
 
     /*// Create a stringstream to capture the output
@@ -200,12 +209,12 @@ int main(
     std::cout.rdbuf(logFile.rdbuf());
 
     // Open txt file for tiers' content in each step
-    // std::ofstream outTier("Tier123_5hf90_rw1_10000_static.txt");
+    // std::ofstream outTier("Tier123_5hf90_rw1_10000_ideal.txt");
 
-    // Define thread pools, with different concurrency
-    BS::thread_pool pool1(num_threads_tier1);
-    BS::thread_pool pool2(num_threads_tier2);
-    BS::thread_pool pool3(num_threads_tier3);
+    // Define driver of Tiers
+    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, read_time_tier1, asym_tier1);
+    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, read_time_tier2, asym_tier2);
+    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, read_time_tier3, asym_tier3);
 
     // Declare maps with int keys (page no.) and double values (temperature)
     // For pages in each tier
@@ -214,10 +223,10 @@ int main(
     std::unordered_set<int> Tier3;
 
     // Initiation rule can be changed here.
-    // static initial: fill each tier with the hf pageIds and keep them static
+    // ideal initial: fill each tier with the hf pageIds and keep them static
     // Define all keys
     std::vector<int> allKeys;
-    if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE") {
+    if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE" || workload.find("MSR") != std::string::npos) {
         // initial policy for workload_YCSB: fill with specific page ids
         std::string page_ids_file = std::string("workload_") + workload + ".allpageids";  // Order file to read from
         std::ifstream IDs(page_ids_file);
@@ -259,21 +268,86 @@ int main(
         return 1;
     }
 
-    // Static placement
-    // Insert first max_capacity_tier1 ids into Tier1
-    for (size_t i = 0; i < max_capacity_tier1 && i < allKeys.size(); ++i) {
-        int key = allKeys[i];
-        Tier1.insert(key);
+    // Define the keys to be inserted into Tier1 according to the hf pageIds
+    std::string hfpage_ids = std::string("workload_") + workload + ".pageids";
+    std::ifstream hfIDs(hfpage_ids);
+    std::vector<int> initialKeys;
+    if (!hfIDs.is_open()) {
+        std::cerr << "Error opening file: " << hfpage_ids << std::endl;
+        return 1;
     }
-    // Insert next max_capacity_tier2 ids into Tier2
-    for (size_t i = max_capacity_tier1; i < max_capacity_tier1 + max_capacity_tier2 && i < allKeys.size(); ++i) {
-        int key = allKeys[i];
-        Tier2.insert(key);
+
+    // Read only the first line from .pageids
+    std::string hfpageids;
+    if (std::getline(hfIDs, hfpageids)) {
+        // Parse the line and extract page IDs separated by commas
+        std::stringstream ss(hfpageids);
+        std::string token;
+        while (std::getline(ss, token, ',')) {
+            try {
+                token = trim(token); // Trim any leading/trailing whitespace
+                if (!token.empty()) {
+                    initialKeys.push_back(std::stoi(token));
+                }
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Invalid argument: " << token << " is not a valid integer." << std::endl;
+            } catch (const std::out_of_range& e) {
+                std::cerr << "Out of range: " << token << " is out of integer range." << std::endl;
+            }
+        }
     }
-    // Insert remaining ids into Tier3
-    for (size_t i = max_capacity_tier1 + max_capacity_tier2; i < allKeys.size(); ++i) {
-        int key = allKeys[i];
-        Tier3.insert(key);
+    // Close the file after reading the first line
+    hfIDs.close();
+
+    // Exclude initial keys from allKeys
+    std::set<int> excludeKeys(initialKeys.begin(), initialKeys.end());
+    allKeys.erase(std::remove_if(allKeys.begin(), allKeys.end(), [&excludeKeys](int key) {
+        return excludeKeys.find(key) != excludeKeys.end();
+    }), allKeys.end());
+
+    // Shuffle the remaining keys
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(allKeys.begin(), allKeys.end(), g);
+
+    if (initialKeys.size() <= max_capacity_tier1) {
+        // If initialKeys fits in Tier1
+        Tier1.insert(initialKeys.begin(), initialKeys.end());
+
+        // Fill the remaining of Tier1 with random keys from allKeys
+        int remaining_tier1 = max_capacity_tier1 - initialKeys.size();
+        Tier1.insert(allKeys.begin(), allKeys.begin() + remaining_tier1);
+
+        // Insert remaining keys into Tier2 and Tier3
+        Tier2.insert(allKeys.begin() + remaining_tier1, allKeys.begin() + remaining_tier1 + max_capacity_tier2);
+        Tier3.insert(allKeys.begin() + remaining_tier1 + max_capacity_tier2, allKeys.end());
+
+    }
+    // If initialKeys is larger than max_capacity_tier1
+    else {
+        // Randomly select max_capacity_tier1 from initialKeys for Tier1
+        std::shuffle(initialKeys.begin(), initialKeys.end(), g);
+        Tier1.insert(initialKeys.begin(), initialKeys.begin() + max_capacity_tier1);
+
+        // Insert the remaining initialKeys into Tier2 and Tier3
+        int remaining_initial = initialKeys.size() - max_capacity_tier1;
+        int remaining_tier2 = std::min(remaining_initial, max_capacity_tier2);
+        Tier2.insert(initialKeys.begin() + max_capacity_tier1, initialKeys.begin() + max_capacity_tier1 + remaining_tier2);
+
+        int remaining_tier3 = remaining_initial - remaining_tier2;
+        if (remaining_tier3 > 0) {
+            Tier3.insert(initialKeys.begin() + max_capacity_tier1 + remaining_tier2, initialKeys.end()); //initialKeys.begin() + max_capacity_tier1 + remaining_tier2 + remaining_tier3);
+        }
+
+        // Fill the remaining of Tier2 and Tier3 with random keys from allKeys
+        if (remaining_tier2 < max_capacity_tier2) {
+            Tier2.insert(allKeys.begin(), allKeys.begin() + (max_capacity_tier2 - remaining_tier2));
+            allKeys.erase(allKeys.begin(), allKeys.begin() + (max_capacity_tier2 - remaining_tier2));
+        }
+        
+        if (!allKeys.empty()) {
+            Tier3.insert(allKeys.begin(), allKeys.end());
+        }
     }
 
 
@@ -341,27 +415,14 @@ int main(
         auto it2 = Tier2.find(n_page);
         auto it3 = Tier3.find(n_page);
 
-        // auto end_time_i_find = std::chrono::high_resolution_clock::now();
+        auto end_time_i_find = std::chrono::high_resolution_clock::now();
 
         if (it1 != Tier1.end()) {
             // std::cout << "page " << n_page << " currently in Tier1\n" << std::endl;
             ++page_hit_Tier1;
 
             // Execute action
-            int tier_num = 1;
-            std::future<void> my_future = pool1.submit_task(
-                [n_page, action,
-                read_time_tier1, asym_tier1]{
-                R_n_W(n_page, action,
-                      read_time_tier1, asym_tier1);
-                //return curr_thrds_tier1-1;  //after finishing the action, current threads -= 1
-                });
-            //my_future.wait();
-            // my_future.wait_for(std::chrono::microseconds(1));
-            //std::cout << action << " done.\n"<< std::endl;
-
-            // Update its temperature
-            // ptm.requestPage(n_page);
+            tier1_dr.exec(n_page, action);
 
         }
         else if (it2 != Tier2.end()) {
@@ -369,19 +430,7 @@ int main(
             ++page_hit_Tier2;
 
             // Execute action
-            int tier_num = 2;
-            std::future<void> my_future = pool2.submit_task(
-                [n_page, action,
-                read_time_tier2, asym_tier2]{
-                R_n_W(n_page, action,
-                      read_time_tier2, asym_tier2);
-                //return curr_thrds_tier2-1;  //after finishing the action, current threads -= 1
-                });
-            //my_future.wait();
-            //std::cout << action << " done.\n"<< std::endl;
-
-            // Update its temperature
-            // ptm.requestPage(n_page);
+            tier2_dr.exec(n_page, action);
 
         }
         else if (it3 != Tier3.end()) {
@@ -389,19 +438,7 @@ int main(
             ++page_hit_Tier3;
 
             // Execute action
-            int tier_num = 3;
-            std::future<void> my_future = pool3.submit_task(
-                [n_page, action,
-                read_time_tier3, asym_tier3]{
-                R_n_W(n_page, action,
-                      read_time_tier3, asym_tier3);
-                //return curr_thrds_tier3-1;  //after finishing the action, current threads -= 1
-                });
-            //my_future.wait();
-            //std::cout << action << " done.\n"<< std::endl;
-
-            // Update its temperature
-            // ptm.requestPage(n_page);
+            tier3_dr.exec(n_page, action);
 
         }
         else {
@@ -415,8 +452,12 @@ int main(
     // End the timer of for loop
     auto end_time_for = std::chrono::high_resolution_clock::now();
 
-    while (pool1.get_tasks_running() > 0 || pool2.get_tasks_running() > 0 || pool3.get_tasks_running() > 0 || 
-           pool1.get_tasks_queued() > 0  || pool2.get_tasks_queued() > 0  || pool3.get_tasks_queued() > 0) {
+    while (tier1_dr.pool.get_tasks_running() > 0 || 
+           tier2_dr.pool.get_tasks_running() > 0 || 
+           tier3_dr.pool.get_tasks_running() > 0 || 
+           tier1_dr.pool.get_tasks_queued() > 0  || 
+           tier2_dr.pool.get_tasks_queued() > 0  || 
+           tier3_dr.pool.get_tasks_queued() > 0) {
     // Check if tasks are still running in pools and if there are queued tasks
     // If tasks are still running/queued, continue to wait
     // If not, proceed to end the timer

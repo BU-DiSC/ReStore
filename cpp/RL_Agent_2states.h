@@ -18,10 +18,11 @@ private:
 public:
     std::vector<double> p;
     double a1, a2, b1, b2;
+    double a_scale; // scale for a_i, to prevent overflow in exp(a_i), adjust according to total_num_pages
 
-    TDAgent(int n_states, std::vector<double> p_init, double beta, double lam,
+    TDAgent(int n_states, std::vector<double> p_init, double beta, double lam, double a_scale,
             std::vector<double> a_i, std::vector<double> b_i)
-        : n_states(n_states), p(p_init), beta(beta), lam(lam) {
+        : n_states(n_states), p(p_init), beta(beta), lam(lam), a_scale(a_scale) {
         a1 = a_i[0];
         a2 = a_i[1];
         b1 = b_i[0];
@@ -41,9 +42,9 @@ public:
         double s2 = state[1];
 
         // Fuzzy Rule-Based function
-        double mu_L1 = (1 / (1 + exp( -b1 * s1 + 1e10*log(a1) )));  // use exp(log()) to prevent overflow
+        double mu_L1 = (1 / (1 + exp( -b1 * s1 + a_scale*log(a1) )));  // use exp(log()) to prevent overflow
         double mu_S1 = 1 - mu_L1;
-        double mu_L2 = (1 / (1 + a2 * exp(-b2 * s2)));
+        double mu_L2 = (1 / (1 + exp( -b2 * s2 + a_scale*log(a2) )));
         double mu_S2 = 1 - mu_L2;
 
         std::vector<double> w = {mu_L1, mu_S1, mu_L2, mu_S2};
@@ -118,6 +119,18 @@ public:
         for (size_t i = 0; i < p.size(); ++i) {
             p[i] = p[i] + delta_p[i];
         }
+
+        // // Update a2, b2 (a1, b1 are maintained using historical values)
+        // double dv_da2 = (p[3] - p[2]) * exp( -b2 * s2_up) * pow(last_phi[2], 2) / 2;
+        // double dv_db2 = (p[2] - p[3]) * s2_up * last_phi[2] * last_phi[3] / 2;
+        // // update by learning_rate * TD error * PartialDifference
+        // // std::cout << "TD error: " << td_error << std::endl;
+        // // std::cout << "dv_da2: " << dv_da2 << std::endl;
+        // // std::cout << "Updates on a2: " << eta * td_error * dv_da2 << std::endl;
+        // // std::cout << "dv_db2: " << dv_db2 << std::endl;
+        // // std::cout << "Updates on b2: " << eta * td_error * dv_db2 << "\n" << std::endl;
+        // a2 = a2 + eta * dv_da2; //* td_error * dv_da2;
+        // b2 = b2 + eta * dv_db2; //* td_error * dv_db2;
 
         // Return [phi^i] for phi_list
         return p;

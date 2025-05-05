@@ -39,71 +39,9 @@
 #include "BS_thread_pool.hpp"
 //#include "BS_thread_pool_utils.hpp"
 
+// Includer ReStore driver
+#include "ReStore_driver.hpp"
 
-// Read/Write from/to Tier
-void R_n_W(int pageNum, std::string action, int tier_num,
-          int read_time_tier1, float asym_tier1,
-          int read_time_tier2, float asym_tier2,
-          int read_time_tier3, float asym_tier3
-          ){
-    // R/W in Tier1
-    if (tier_num == 1){
-        if (action == "Read"){
-            // std::cout << "reading page " << pageNum << " from Tier 1 ...\n";
-            // Sleep for 0.01 seconds to simulate the read action
-            std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier1));
-            // std::cout << "Read Done." << std::endl;
-        }
-        else if (action == "Write"){
-            // std::cout << "writing page " << pageNum << " to Tier 1 ...\n";
-            // Sleep for 0.03 seconds to simulate the write action
-            // write_time_tier1 = read_time_tier1*asym_tier1
-            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier1*asym_tier1)));
-            // std::cout << "Write Done." << std::endl;
-        }
-        else {
-            std::cerr << "Unknown action !" << std::endl;
-        }
-    }
-    // R/W in Tier2
-    else if (tier_num == 2){
-        if (action == "Read"){
-            // std::cout << "reading page " << pageNum << " from Tier 2 ...\n";
-            // Sleep for 0.05 seconds to simulate the read action
-            std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier2));
-            // std::cout << "Read Done." << std::endl;
-        }
-        else if (action == "Write"){
-            // std::cout << "writing page " << pageNum << " to Tier 2 ...\n";
-            // Sleep for 0.1 seconds to simulate the write action
-            // write_time_tier2 = read_time_tier2*asym_tier2
-            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier2*asym_tier2)));
-            // std::cout << "Write Done." << std::endl;
-        }
-        else {
-            std::cerr << "Unknown action !" << std::endl;
-        }
-    }
-    // R/W in Tier3
-    else if (tier_num == 3){
-        if (action == "Read"){
-            // std::cout << "reading page " << pageNum << " from Tier 3 ...\n";
-            // Sleep for 0.2 seconds to simulate the read action
-            std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier3));
-            // std::cout << "Read Done." << std::endl;
-        }
-        else if (action == "Write"){
-            // std::cout << "writing page " << pageNum << " to Tier 3 ...\n";
-            // Sleep for 0.3 seconds to simulate the write action
-            // write_time_tier3 = read_time_tier3*asym_tier3
-            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier3*asym_tier3)));
-            // std::cout << "Write Done." << std::endl;
-        }
-        else {
-            std::cerr << "Unknown action ! \n" << std::endl;
-        }    
-    }
-}
 
 // Helper function to trim whitespace from both ends of a string
 std::string trim(const std::string &str) {
@@ -129,26 +67,6 @@ void PageMigrate(
     // std::cout << "Page " << keyToMove << " migrated.";
 }
 
-
-// shorter version of PageMigrate()
-/*
-{
-    auto& source = (map1.count(keyToMove) > 0) ? map1 : map2;
-    auto& destination = (map1.count(keyToMove) > 0) ? map2 : map1;
-
-    auto it = source.find(keyToMove);
-    
-    if (it != source.end()) {
-        destination.insert(*it);
-        source.erase(it);
-        std::cout << "Page " << keyToMove << " moved.\n";
-    } else {
-        std::cout << "Page " << keyToMove << " not found in either map.\n";
-    }
-    
-    return {map1, map2};
-}
-*/
 
 // Temperature structure for min_heap_temp
 struct Page {
@@ -502,6 +420,10 @@ int main(
             asym_tier2 = std::stod(arg.substr(12)); // Extracts and converts the substring after "-asym_tier2=" to a double
         } else if (arg.find("-asym_tier3=") == 0) {
             asym_tier3 = std::stod(arg.substr(12)); // Extracts and converts the substring after "-asym_tier3=" to a double
+        } else if (arg.find("-num_threads_tier1=") == 0) {
+            num_threads_tier1 = static_cast<int>(std::stod(arg.substr(19))); // Extracts and converts the substring after "-num_threads_tier1=" to an integer
+        } else if (arg.find("-num_threads_tier2=") == 0) {
+            num_threads_tier2 = static_cast<int>(std::stod(arg.substr(19))); // Extracts and converts the substring after "-num_threads_tier2=" to an integer
         } else if (arg.find("-num_threads_tier3=") == 0) {
             num_threads_tier3 = static_cast<int>(std::stod(arg.substr(19))); // Extracts and converts the substring after "-num_threads_tier3=" to an integer
         } 
@@ -553,10 +475,10 @@ int main(
     // std::ofstream outTier(outtier_path);
 
 
-    // Define thread pools, with different concurrency
-    BS::thread_pool pool1(num_threads_tier1);
-    BS::thread_pool pool2(num_threads_tier2);
-    BS::thread_pool pool3(num_threads_tier3);
+    // Define driver of Tiers
+    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, read_time_tier1, asym_tier1);
+    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, read_time_tier2, asym_tier2);
+    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, read_time_tier3, asym_tier3);
 
     // Check the type of pool
     // const std::type_info& typeInfo = typeid(pool1);
@@ -580,7 +502,7 @@ int main(
     TEMPCache LC_T3(max_capacity_tier3, temp_incr_alpha, temp_incr_buffersize);
 
     // Initiation rule can be changed here.
-    if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE") {
+    if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE" || workload.find("MSR") != std::string::npos) {
         // initial policy for workload_YCSB: fill with specific page ids
         std::string page_ids_file = std::string("workload_") + workload + ".allpageids";  // Order file to read from
         std::ifstream IDs(page_ids_file);
@@ -624,12 +546,29 @@ int main(
             LC_T2.addPage(Page{key, 0.5, {}, 0, 0});
         }
         // Insert remaining ids into Tier3
-        for (size_t i = max_capacity_tier1 + max_capacity_tier2; i < max_capacity_tier3 && i < allKeys.size(); ++i) {
+        for (size_t i = max_capacity_tier1 + max_capacity_tier2; i < allKeys.size(); ++i) {
             int key = allKeys[i];
             LC_T3.addPage(Page{key, 0.5, {}, 0, 0});
-            // clear the useless min_hap for Tier3 to free space
+            // clean LC_T3.min_heap to free space
             LC_T3.min_heap.pop();
         }
+        // // Insert 1 ids into Tier1 (to avoid empty error)
+        // for (size_t i = 0; i < 1 && i < allKeys.size(); ++i) {
+        //     int key = allKeys[i];
+        //     LC_T1.addPage(Page{key, 0.5, {}, 0, 0});
+        // }
+        // // Insert 1 ids into Tier2 (to avoid empty error)
+        // for (size_t i = 1; i < 2 && i < allKeys.size(); ++i) {
+        //     int key = allKeys[i];
+        //     LC_T2.addPage(Page{key, 0.5, {}, 0, 0});
+        // }
+        // // Insert all ids into Tier3
+        // for (size_t i = 2; i < allKeys.size(); ++i) {
+        //     int key = allKeys[i];
+        //     LC_T3.addPage(Page{key, 0.5, {}, 0, 0});
+        //     // clean LC_T3.min_heap to free space
+        //     LC_T3.min_heap.pop();
+        // }
     }
     else {
         // initial policy: fill each tier first
@@ -665,6 +604,9 @@ int main(
     // Counter of page migration
     int num_migr_t2t1 = 0;
     int num_migr_t3t2 = 0;
+
+    // Counter of runtime
+    long long total_runtime_TEMP = 0; // Variable to accumulate durations
 
 
     // Open the workload file
@@ -726,22 +668,8 @@ int main(
             // std::cout << "page " << n_page << " currently in Tier1" << std::endl;
             ++page_hit_Tier1;
 
-            // auto start_time_action = std::chrono::high_resolution_clock::now();
             // Execute action
-            int tier_num = 1;
-            std::future<void> my_future = pool1.submit_task(
-                [n_page, action, tier_num,
-                read_time_tier1, asym_tier1,
-                read_time_tier2, asym_tier2,
-                read_time_tier3, asym_tier3]{
-                R_n_W(n_page, action, tier_num,
-                      read_time_tier1, asym_tier1,
-                      read_time_tier2, asym_tier2,
-                      read_time_tier3, asym_tier3);
-                });
-            // my_future.wait_for(std::chrono::microseconds(1));
-            //my_future.wait();
-            //std::cout << action << " done.\n"<< std::endl;
+            tier1_dr.exec(n_page, action);
 
             // Access the key
             // int page_id = it1->first;
@@ -768,21 +696,8 @@ int main(
             // std::cout << "page " << n_page << " currently in Tier2" << std::endl;
             ++page_hit_Tier2;
 
-            // auto start_time_action = std::chrono::high_resolution_clock::now();
             // Execute action
-            int tier_num = 2;
-            std::future<void> my_future = pool2.submit_task(
-                [n_page, action, tier_num,
-                read_time_tier1, asym_tier1,
-                read_time_tier2, asym_tier2,
-                read_time_tier3, asym_tier3]{
-                R_n_W(n_page, action, tier_num,
-                      read_time_tier1, asym_tier1,
-                      read_time_tier2, asym_tier2,
-                      read_time_tier3, asym_tier3);
-                });
-            //my_future.wait();
-            //std::cout << action << " done.\n"<< std::endl;
+            tier2_dr.exec(n_page, action);
 
             // Access the key
             // int page_id = it2->first;
@@ -802,6 +717,7 @@ int main(
             // std::cout << "Action and update temp takes " << duration_action.count() << " microseconds" << std::endl;
 
             // Decide migration by temperature
+            auto start_time_TEMP = std::chrono::high_resolution_clock::now();
             // if current page's temperature is higher than the avg_temp at upper tier, upgrade
             // if avg_temp_T1 < 0.5, use temp_increase(2) instead
             if (page.temperature > std::max(avg_temp_T1, 1-0.5/exp(temp_incr_alpha*min_access_toT1))){
@@ -849,68 +765,35 @@ int main(
                     // update avg_temp_T1&2
                     avg_temp_T1 = (avg_temp_T1 * (LC_T1.page_map.size() + 1) - lt_page_t1.temperature) / LC_T1.page_map.size();
                     avg_temp_T2 = (avg_temp_T2 * (LC_T2.page_map.size() - 1) + lt_page_t1.temperature) / LC_T2.page_map.size();
-
                     // new task should be submitted here to simulate page downgrade
                     // read from Tier1
-                    std::future<void> my_future = pool1.submit_task(
-                        [read_time_tier1]{
-                        // page moving time, or replace with R_n_W func
-                        // sleep for ms to simulate page movement from tier1
-                        std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier1));
-                        });
+                    tier1_dr.exec(lt_page_t1.id, "Read");
                     // write to Tier2
-                    std::future<void> my_future2 = pool2.submit_task(
-                        [read_time_tier2, asym_tier2]{
-                        // page moving time, or replace with R_n_W func
-                        // sleep for ms to simulate page movement to tier2
-                        std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier2*asym_tier2)));
-                        // std::cout << "Page downgrading done.\n" << std::endl;
-                        });
+                    tier2_dr.exec(lt_page_t1.id, "Write");
                 }
-                // new task due to the migration
+                // new task for the migration
                 // read from Tier2
-                std::future<void> my_future2 = pool2.submit_task(
-                    [read_time_tier2]{
-                    // page moving time, or replace with R_n_W func
-                     // sleep for ms to simulate page movement from tier2 to tier1
-                    std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier2));
-                    });
+                tier2_dr.exec(page.id, "Read");
                 // write to Tier1
-                std::future<void> my_future1 = pool1.submit_task(
-                    [read_time_tier1, asym_tier1]{
-                    // page moving time, or replace with R_n_W func
-                     // sleep for ms to simulate page movement from tier2 to tier1
-                    std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier1*asym_tier1)));
-                    // std::cout << "Page upgrading done.\n" << std::endl;
-                    });
-                // auto end_time_migr = std::chrono::high_resolution_clock::now();
-                // auto duration_migr = std::chrono::duration_cast<std::chrono::microseconds>(end_time_migr - start_time_migr);
-                // std::cout << "migration takes " << duration_migr.count() << " microseconds" << std::endl;
+                tier1_dr.exec(page.id, "Write");
+            // check whether Tiers = LC_Ti.cache
             }
             else{
                 // std::cout << "Page " << n_page << " should remain in Tier2.\n"<< std::endl;
             }
+            auto end_time_TEMP = std::chrono::high_resolution_clock::now();
+            // Calculate the duration
+            auto duration_TEMP = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_TEMP - start_time_TEMP);
+            // std::cout << "Descision by TEMP takes " << duration_TEMP.count() << " nanoseconds\n" << std::endl;
+            total_runtime_TEMP += duration_TEMP.count(); // Accumulate duration in microseconds
         }
 
         else if (it3 != LC_T3.page_map.end()) {
             // std::cout << "page " << n_page << " currently in Tier3" << std::endl;
             ++page_hit_Tier3;
 
-            // auto start_time_action = std::chrono::high_resolution_clock::now();
             // Execute action
-            int tier_num = 3;
-            std::future<void> my_future = pool3.submit_task(
-                [n_page, action, tier_num,
-                read_time_tier1, asym_tier1,
-                read_time_tier2, asym_tier2,
-                read_time_tier3, asym_tier3]{
-                R_n_W(n_page, action, tier_num,
-                      read_time_tier1, asym_tier1,
-                      read_time_tier2, asym_tier2,
-                      read_time_tier3, asym_tier3);
-                });
-            //my_future.wait();
-            // std::cout << action << " done.\n"<< std::endl;
+            tier3_dr.exec(n_page, action);
 
             // Access the key
             // int page_id = it3->first;
@@ -931,6 +814,7 @@ int main(
             // std::cout << "Action and update temp takes " << duration_action.count() << " microseconds" << std::endl;
 
             // Decide migration by temperature
+            auto start_time_TEMP = std::chrono::high_resolution_clock::now();
             // if current page's temperature is higher than the avg_temp at upper tier, upgrade
             // if avg_temp_T2 < 0.5, use temp_increase(2) instead
             if (page.temperature > std::max(avg_temp_T2, 1-0.5/exp(temp_incr_alpha*min_access_toT2))){
@@ -978,47 +862,26 @@ int main(
                     // update avg_temp_T2&3
                     avg_temp_T2 = (avg_temp_T2 * (LC_T2.page_map.size() + 1) - lt_page_t2.temperature) / LC_T2.page_map.size();
                     avg_temp_T3 = (avg_temp_T3 * (LC_T3.page_map.size() - 1) + lt_page_t2.temperature) / LC_T3.page_map.size();
-
                     // new task should be submitted here to simulate page downgrade
                     // read from Tier2
-                    std::future<void> my_future = pool2.submit_task(
-                        [read_time_tier2]{
-                        // page moving time, or replace with R_n_W func
-                        // sleep for ms to simulate page movement from tier2
-                        std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier2));
-                        });
+                    tier2_dr.exec(lt_page_t2.id, "Read");
                     // write to Tier3
-                    std::future<void> my_future2 = pool3.submit_task(
-                        [read_time_tier3, asym_tier3]{
-                        // page moving time, or replace with R_n_W func
-                        // sleep for ms to simulate page movement to tier3
-                        std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier3*asym_tier3)));
-                        // std::cout << "Page downgrading done.\n" << std::endl;
-                        });
+                    tier3_dr.exec(lt_page_t2.id, "Write");
                 }
-                // new task due to the migration (combining upgrade&downgrade as one task right now)
+                // new task for the migration
                 // read from Tier3
-                std::future<void> my_future3 = pool3.submit_task(
-                    [read_time_tier3]{
-                    // page moving time, or replace with R_n_W func
-                     // sleep for ms to simulate page movement from tier3 to tier2
-                    std::this_thread::sleep_for(std::chrono::microseconds(read_time_tier3));
-                    });
+                tier3_dr.exec(page.id, "Read");
                 // write to Tier2
-                std::future<void> my_future2 = pool2.submit_task(
-                    [read_time_tier2, asym_tier2]{
-                    // page moving time, or replace with R_n_W func
-                     // sleep for ms to simulate page movement from tier3 to tier2
-                    std::this_thread::sleep_for(std::chrono::microseconds(static_cast<int>(read_time_tier2*asym_tier2)));
-                    // std::cout << "Page upgrading done.\n" << std::endl;
-                    });
-                // auto end_time_migr = std::chrono::high_resolution_clock::now();
-                // auto duration_migr = std::chrono::duration_cast<std::chrono::microseconds>(end_time_migr - start_time_migr);
-                // std::cout << "migration takes " << duration_migr.count() << " microseconds" << std::endl;
+                tier2_dr.exec(page.id, "Write");
             }
             else{
                 // std::cout << "Page " << n_page << " should remain in Tier3.\n"<< std::endl;
             }
+            auto end_time_TEMP = std::chrono::high_resolution_clock::now();
+            // Calculate the duration
+            auto duration_TEMP = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_TEMP - start_time_TEMP);
+            // std::cout << "Descision by TEMP takes " << duration_TEMP.count() << " nanoseconds\n" << std::endl;
+            total_runtime_TEMP += duration_TEMP.count(); // Accumulate duration in microseconds
         }
         
         else {
@@ -1084,8 +947,12 @@ int main(
     // End the timer of for loop
     auto end_time_for = std::chrono::high_resolution_clock::now();
 
-    while (pool1.get_tasks_running() > 0 || pool2.get_tasks_running() > 0 || pool3.get_tasks_running() > 0 || 
-           pool1.get_tasks_queued() > 0  || pool2.get_tasks_queued() > 0  || pool3.get_tasks_queued() > 0) {
+    while (tier1_dr.pool.get_tasks_running() > 0 || 
+           tier2_dr.pool.get_tasks_running() > 0 || 
+           tier3_dr.pool.get_tasks_running() > 0 || 
+           tier1_dr.pool.get_tasks_queued() > 0  || 
+           tier2_dr.pool.get_tasks_queued() > 0  || 
+           tier3_dr.pool.get_tasks_queued() > 0) {
     // Check if tasks are still running in pools and if there are queued tasks
     // If tasks are still running/queued, continue to wait
     // If not, proceed to end the timer
@@ -1100,6 +967,7 @@ int main(
 
     // Output the duration
     std::cout << "For loop time: " << duration_for.count() << " microseconds" << std::endl;
+    std::cout << "Total TEMP runtime: " << total_runtime_TEMP << " nanoseconds" << std::endl;
     std::cout << "Total requests time: " << duration.count() << " microseconds\n" << std::endl;
 
     // counter of read/write
@@ -1112,6 +980,9 @@ int main(
 
     std::cout << "\nNumber of page upgraded from Tier2 to Tier1: " << num_migr_t2t1 << std::endl;
     std::cout << "Number of page upgraded from Tier3 to Tier2: " << num_migr_t3t2 << std::endl;
+
+    std::cout << "\nAverage runtime per call: " << total_runtime_TEMP/(page_hit_Tier2+page_hit_Tier3) << " nanoseconds" << std::endl;
+    std::cout << "Average runtime per migration: " << total_runtime_TEMP/(num_migr_t2t1+num_migr_t3t2) << " nanoseconds" << std::endl;
     
 
     // std::cout << "\nPages in Tier1: " <<std::endl;
