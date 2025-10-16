@@ -41,11 +41,11 @@
 //#include "BS_thread_pool_utils.hpp"
 
 // Include ReStore driver
-#include "ReStore_driver.hpp"
+#include "ReStore_driver_IO.hpp"
 
 // Use the FastForest for quicker XGBoost
 #include <fastforest.h>
-// need to be compiled by: g++-12 -O3 -std=c++20 -pthread -g -o Run_XGBfast-driver Run_XGBfast-driver.cpp -I$HOME/.local/include -L$HOME/.local/lib64 -lfastforest
+// need to be compiled by: g++-12 -O3 -std=c++20 -pthread -g -o Run_XGBfast Run_XGBfast.cpp -I$HOME/.local/include -L$HOME/.local/lib64 -lfastforest
 // also might need to add runtime linking: export LD_LIBRARY_PATH=$HOME/.local/lib64:$LD_LIBRARY_PATH
 
 
@@ -225,11 +225,16 @@ int main(
     // choose XGBoost model (which percentage of pages used for training)
     int train_percentage = 5;
 
+    // Initialize workdir
+    std::string workdir = ".";  // Default to current directory
+    
     // Command line argument parsing
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg.find("-workload=") == 0) {
             workload = arg.substr(10); // Extracts the substring after "-workload=" and assigns it to workload
+        } else if (arg.find("-workdir=") == 0) {
+            workdir = arg.substr(9); // Extracts the substring after "-workdir=" and assigns it to workdir
         } else if (arg.find("-total_num_pages=") == 0) {
             total_num_pages = static_cast<int>(std::stod(arg.substr(17))); // Extracts and converts the substring after "-total_num_pages=" to an integer
         } else if (arg.find("-total_num_reqs=") == 0) {
@@ -265,25 +270,25 @@ int main(
     }
 
     // workload path
-    std::string workload_path = std::string("workload_") + workload + ".txt";
+    std::string workload_path = workdir + "/workloads/workload_" + workload + ".txt";
 
     // Check if the folder for results exists
-    std::string folder_name = std::string("Results_") + workload + "/capacity_tests_" 
+    std::string folder_name = workdir + "/Results_" + workload + "/capacity_tests_" 
                               + std::to_string(read_time_tier1) + "-" + std::to_string(read_time_tier2) + "-" + std::to_string(read_time_tier3)
                               + "/" + std::to_string(max_capacity_tier1) + "-" + std::to_string(max_capacity_tier2);
     if (!std::filesystem::exists(folder_name)) {
         // If the folder does not exist, create it
-        if (std::filesystem::create_directory(folder_name)) {
-            std::cout << "Folder created successfully: " << folder_name << std::endl;
+        if (std::filesystem::create_directories(folder_name)) {
+            std::cout << "Results folder created successfully: " << folder_name << std::endl;
         } else {
-            std::cerr << "Failed to create folder: " << folder_name << std::endl;
+            std::cerr << "Failed to create Results folder: " << folder_name << std::endl;
         }
     } else {
-        std::cout << "Folder already exists: " << folder_name << std::endl;
+        std::cout << "Results folder already exists: " << folder_name << std::endl;
     }
 
     // Open the log file for writing
-    std::string log_path = folder_name + "/output_" + workload + "_XGBfast-driver_" + std::to_string(train_percentage) + "%.log";
+    std::string log_path = folder_name + "/output_" + workload + "_XGBfast_" + std::to_string(train_percentage) + "%.log";
     std::ofstream logFile(log_path);
 
     auto cout_buff = std::cout.rdbuf(); 
@@ -295,13 +300,13 @@ int main(
 
 
     // Define driver of Tiers
-    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, read_time_tier1, asym_tier1);
-    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, read_time_tier2, asym_tier2);
-    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, read_time_tier3, asym_tier3);
+    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, 1);
+    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, 2);
+    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, 3);
 
 
     // XGB class for Tier1, Tier2, Tier3
-    std::string xgb_model_path = "ML_models/XGBoost_models/xgboost_model_" + workload + "_" + std::to_string(train_percentage) + "%.txt";
+    std::string xgb_model_path = workdir + "/ML_models/XGBoost_models/xgboost_model_" + workload + "_" + std::to_string(train_percentage) + "%.txt";
     XGBCache LC_T1(max_capacity_tier1, xgb_model_path);
     XGBCache LC_T2(max_capacity_tier2, xgb_model_path);
     XGBCache LC_T3(max_capacity_tier3, xgb_model_path);
@@ -314,7 +319,7 @@ int main(
     // Initiation rule can be changed here.
     if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE" || workload.find("MSR") != std::string::npos) {
         // initial policy for workload_YCSB: fill with specific page ids
-        std::string page_ids_file = std::string("workload_") + workload + ".allpageids";  // Order file to read from
+        std::string page_ids_file = workdir + "/workloads/workload_" + workload + ".allpageids";  // Order file to read from
         std::ifstream IDs(page_ids_file);
         std::vector<int> allKeys;
         if (!IDs.is_open()) {

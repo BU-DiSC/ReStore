@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# ReStore CLI wrapper script
+# This script ensures the restore command can find all necessary executables
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+INSTALL_PREFIX="@CMAKE_INSTALL_PREFIX@"
+
+# Set up environment
+export PATH="${INSTALL_PREFIX}/bin:${PATH}"
+export RESTORE_WORKLOAD_DIR="${INSTALL_PREFIX}/share/ReStore/workload"
+export RESTORE_RESULTS_DIR="${INSTALL_PREFIX}/share/ReStore/results"
+
+# Change to the installation directory to ensure relative paths work
+cd "${INSTALL_PREFIX}/bin" 2>/dev/null || {
+    echo "Warning: Could not change to installation directory"
+}
+
+# Execute the actual restore binary
+exec "${INSTALL_PREFIX}/bin/restore" "$@"
+

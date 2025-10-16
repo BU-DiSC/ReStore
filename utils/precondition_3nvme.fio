@@ -1,0 +1,40 @@
+[global]
+# Global settings for sequential execution
+numjobs=1 # set numjobs=1 to ensure sequential fio
+group_reporting=1
+
+[precondition1]
+filename=/dev/nvme0n1
+direct=1
+rw=write
+bs=4k
+iodepth=1
+#fill_device=1  #do not fill the entire device to avoid FTL Exhaustion
+size=95%
+thinktime=1000
+thinktime_blocks=1
+thinktime_spin=0
+
+[precondition2]
+filename=/dev/nvme1n1
+direct=1
+rw=write
+bs=4k
+iodepth=1
+#fill_device=1  #do not fill the entire device to avoid FTL Exhaustion
+size=95%
+thinktime=1000
+thinktime_blocks=1
+thinktime_spin=0
+
+[precondition3]
+filename=/dev/nvme2n1
+direct=1
+rw=write
+bs=4k
+iodepth=1
+#fill_device=1  #do not fill the entire device to avoid FTL Exhaustion
+size=95%
+thinktime=1000
+thinktime_blocks=1
+thinktime_spin=0

@@ -1,0 +1,15 @@
+For loop time: 1763857 microseconds
+Total LFU runtime: 167976274 nanoseconds
+Total requests time: 1126810517 microseconds
+
+There are 500491 reads, and 499509 writes.
+
+Number of page hits in Tier1: 269199
+Number of page hits in Tier2: 630253
+Number of page hits in Tier3: 100548
+
+Number of page migrated from Tier2 to Tier1: 10560
+Number of page migrated from Tier3 to Tier2: 2083
+
+Average runtime per call: 229 nanoseconds
+Average runtime per migration: 13286 nanoseconds

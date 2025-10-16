@@ -40,7 +40,8 @@
 //#include "BS_thread_pool_utils.hpp"
 
 // Includer ReStore driver
-#include "ReStore_driver.hpp"
+#include "ReStore_driver_IO.hpp"
+// to compile this _IO version, use: g++ -O3 -std=c++2a -pthread -g -o Run_EXD_IO Run_EXD_IO.cpp /home/femu/ReStore_IO/Sibyl_driver/Sibyl_lib.so
 
 
 // Helper function to trim whitespace from both ends of a string
@@ -165,15 +166,20 @@ int main(
     // total number of requests
     int total_num_reqs = 1e6;
     // use real workload
-    std::string workload = "10hf80_1e4_rw1_1e6";
+    std::string workload = "5hf90_1e4_rw1_1e6";
     // weight decay factor for EXD
     double alpha_exd = -2*1e-8;
 
+    // Initialize workdir
+    std::string workdir = ".";  // Default to current directory
+    
     // Command line argument parsing
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg.find("-workload=") == 0) {
             workload = arg.substr(10); // Extracts the substring after "-workload=" and assigns it to workload
+        } else if (arg.find("-workdir=") == 0) {
+            workdir = arg.substr(9); // Extracts the substring after "-workdir=" and assigns it to workdir
         } else if (arg.find("-total_num_pages=") == 0) {
             total_num_pages = static_cast<int>(std::stod(arg.substr(17))); // Extracts and converts the substring after "-total_num_pages=" to an integer
         } else if (arg.find("-total_num_reqs=") == 0) {
@@ -210,21 +216,21 @@ int main(
     }
 
     // workload path
-    std::string workload_path = std::string("workload_") + workload + ".txt";
+    std::string workload_path = workdir + "/workloads/workload_" + workload + ".txt";
 
     // Check if the folder for results exists
-    std::string folder_name = std::string("Results_") + workload + "/capacity_tests_" 
+    std::string folder_name = workdir + "/Results_" + workload + "/capacity_tests_" 
                               + std::to_string(read_time_tier1) + "-" + std::to_string(read_time_tier2) + "-" + std::to_string(read_time_tier3)
                               + "/" + std::to_string(max_capacity_tier1) + "-" + std::to_string(max_capacity_tier2);
     if (!std::filesystem::exists(folder_name)) {
         // If the folder does not exist, create it
-        if (std::filesystem::create_directory(folder_name)) {
-            std::cout << "Folder created successfully: " << folder_name << std::endl;
+        if (std::filesystem::create_directories(folder_name)) {
+            std::cout << "Results folder created successfully: " << folder_name << std::endl;
         } else {
-            std::cerr << "Failed to create folder: " << folder_name << std::endl;
+            std::cerr << "Failed to create Results folder: " << folder_name << std::endl;
         }
     } else {
-        std::cout << "Folder already exists: " << folder_name << std::endl;
+        std::cout << "Results folder already exists: " << folder_name << std::endl;
     }
 
     // Open the log file for writing
@@ -240,9 +246,9 @@ int main(
 
 
     // Define driver of Tiers
-    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, read_time_tier1, asym_tier1);
-    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, read_time_tier2, asym_tier2);
-    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, read_time_tier3, asym_tier3);
+    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, 1);
+    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, 2);
+    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, 3);
 
 
     // EXD class for Tier1, Tier2, Tier3
@@ -258,7 +264,7 @@ int main(
     // Initiation rule can be changed here.
     if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE" || workload.find("MSR") != std::string::npos) {
         // initial policy for workload_YCSB: fill with specific page ids
-        std::string page_ids_file = std::string("workload_") + workload + ".allpageids";  // Order file to read from
+        std::string page_ids_file = workdir + "/workloads/workload_" + workload + ".allpageids";  // Order file to read from
         std::ifstream IDs(page_ids_file);
         std::vector<int> allKeys;
         if (!IDs.is_open()) {

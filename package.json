@@ -1,0 +1,75 @@
+{
+  "name": "restore",
+  "version": "1.0.0",
+  "description": "Multi-Tiered Storage System Simulator with Reinforcement Learning",
+  "main": "src/main.cpp",
+  "scripts": {
+    "install": "./install.sh",
+    "test": "./test_package.sh",
+    "build": "mkdir -p build && cd build && cmake .. && make",
+    "clean": "rm -rf build",
+    "examples": "./examples/run_experiments.sh"
+  },
+  "keywords": [
+    "storage",
+    "simulation",
+    "reinforcement-learning",
+    "caching",
+    "multi-tier",
+    "database",
+    "performance"
+  ],
+  "author": "ReStore Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/ReStore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/ReStore/issues"
+  },
+  "homepage": "https://github.com/your-org/ReStore#readme",
+  "dependencies": {
+    "cmake": ">=3.16",
+    "g++": ">=9.0",
+    "make": ">=4.0"
+  },
+  "optionalDependencies": {
+    "fastforest": "For XGBfast policy support"
+  },
+  "files": [
+    "src/",
+    "cpp/",
+    "workload/",
+    "results/",
+    "examples/",
+    "cmake/",
+    "scripts/",
+    "CMakeLists.txt",
+    "install.sh",
+    "test_package.sh",
+    "PACKAGE_README.md"
+  ],
+  "bin": {
+    "restore": "./src/main.cpp"
+  },
+  "directories": {
+    "lib": "cpp/",
+    "bin": "src/",
+    "share": "workload/",
+    "doc": "PACKAGE_README.md"
+  },
+  "engines": {
+    "cmake": ">=3.16",
+    "gcc": ">=9.0"
+  },
+  "os": [
+    "linux",
+    "darwin"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+}
+

@@ -1,0 +1,33 @@
+# using default g++ 9 now
+CXX := g++
+CXXFLAGS := -O3 -std=c++2a -pthread -g
+SRCS := Run_RL.cpp \
+		Run_TEMP.cpp \
+		Run_LFU.cpp \
+		Run_LRU.cpp \
+		Run_LRFU.cpp \
+		Run_EXD.cpp \
+		Run_ideal.cpp \
+		Run_static.cpp \
+		Run_LogiReg.cpp \
+		Run_XGBfast.cpp \
+
+# Dependencies
+DEPS := BS_thread_pool.hpp RL_Agent_2states.h ReStore_driver_IO.hpp
+
+# Sibyl driver library
+SIBYL_LIB := /home/femu/ReStore_IO/Sibyl_driver/Sibyl_lib.so
+
+# Extract the base name (without extension) of each source file
+EXECS := $(SRCS:.cpp=)
+
+# Rule to compile each source file into an executable
+all: $(EXECS)
+
+# Special rule for Run_XGBfast to link with fastforest
+Run_XGBfast: Run_XGBfast.cpp $(DEPS)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(SIBYL_LIB) -I/usr/local/include -L/usr/local/lib -lfastforest
+
+# Generic rule for all other .cpp files
+%: %.cpp $(DEPS)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(SIBYL_LIB)

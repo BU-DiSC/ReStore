@@ -1,0 +1,12 @@
+For loop time: 1669805 microseconds
+Total EXD runtime: 112297 microseconds
+Total requests time: 2569832879 microseconds
+
+There are 500491 reads, and 499509 writes.
+
+Number of page hits in Tier1: 269126
+Number of page hits in Tier2: 630315
+Number of page hits in Tier3: 100559
+
+Number of page migrated from Tier2 to Tier1: 20175
+Number of page migrated from Tier3 to Tier2: 2853

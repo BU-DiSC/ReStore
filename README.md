@@ -6,12 +6,16 @@ This repository contains the implementation of `ReStore`, a reinforcement learni
 ![ReStore](figures/MTS-DBMS+RL.png?raw=true "Title")
 
 ## Build & Run
-Go into ./cpp folder, then run make for compiling.
+Use the following steps for quick installation.
 ```
-cd cpp
-make -f Makefile
+git clone <repository-url>
+cd ReStore
+chmod +x install.sh
+sudo ./install.sh
 ```
-The Makefile is tested in Linux 6.4, with compiler g++ version 12, please adjust the Makefile according to your environment.
+For customized installation, please refer to [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) and [PACKAGE_README.md](PACKAGE_README.md).
+
+The package is tested in Linux 6.4, with compiler g++ version 12, please adjust the Makefile according to your environment.
 
 After executables being compiled, run ```./run_simulation.sh``` to start a simulation experiment. For experiments on I/O banchmark traces, see [workload/traces/run_traces.sh](workload/traces/run_traces.sh).
 

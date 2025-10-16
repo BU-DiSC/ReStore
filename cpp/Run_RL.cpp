@@ -40,11 +40,11 @@
 
 // Include the header files for the thread pool library and its utilities.
 #include "BS_thread_pool.hpp"
-#include "../../../usr/include/c++/12/pstl/glue_numeric_defs.h"
-//#include "BS_thread_pool_utils.hpp"
+// #include "../../../usr/include/c++/12/pstl/glue_numeric_defs.h"
+// #include "BS_thread_pool_utils.hpp"
 
 // Includer ReStore driver
-#include "ReStore_driver.hpp"
+#include "ReStore_driver_IO.hpp"
 
 
 // Helper function to trim whitespace from both ends of a string
@@ -54,6 +54,40 @@ std::string trim(const std::string &str) {
     return (start == std::string::npos) ? "" : str.substr(start, end - start + 1);
 }
 
+// Helper function to read I/O queue depth from a specified device stat file
+// Usage: replace tierK_dr.pool.get_tasks_queued() by get_in_flight("/sys/block/nvme{K-1}n1/stat")
+int get_in_flight(const std::string& device_path) {
+    std::ifstream stat_file(device_path);
+    if (!stat_file.is_open()) {
+        std::cerr << "Failed to open " << device_path << std::endl;
+        return 0; // Return 0 if file cannot be opened
+    }
+    
+    std::string line;
+    if (std::getline(stat_file, line)) {
+        std::istringstream iss(line);
+        std::vector<int> values;
+        int value;
+        
+        // Parse all values from the stat file
+        while (iss >> value) {
+            values.push_back(value);
+        }
+        
+        stat_file.close();
+        
+        // The 9th value (index 8) is the I/O queue depth (in_flight)
+        if (values.size() >= 9) {
+            return values[8];
+        } else {
+            std::cerr << "Invalid stat file format, expected at least 9 values" << std::endl;
+            return 0;
+        }
+    }
+    
+    stat_file.close();
+    return 0;
+}
 
 // Page movement between tiers
 void PageMigrate(
@@ -532,10 +566,10 @@ int main(
     double beta = 0.10;
     double lam = 0.8;
     // a_i,b_i related, delta_s2_ti is for rng_s2_ti
-    int a_b_update_freq_s1 = 4;
-    int a_b_update_freq_s2 = 4;
-    int num_elements_to_consider_s1 = 500;
-    int num_elements_to_consider_s2 = 500;
+    int a_b_update_freq_s1 = 1;
+    int a_b_update_freq_s2 = 1;
+    int num_elements_to_consider_s1 = 300;
+    int num_elements_to_consider_s2 = 300;
     // int delta_s2_t1 = 4;
     // int delta_s2_t2 = 10;
     // int delta_s2_t3 = 50;
@@ -544,11 +578,16 @@ int main(
     // initiate max_s2 = 2 queued tasks, min_s2 = 0, avg = 1 queued task
 
 
+    // Initialize workdir
+    std::string workdir = ".";  // Default to current directory
+    
     // Command line argument parsing
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg.find("-workload=") == 0) {
             workload = arg.substr(10); // Extracts the substring after "-workload=" and assigns it to workload
+        } else if (arg.find("-workdir=") == 0) {
+            workdir = arg.substr(9); // Extracts the substring after "-workdir=" and assigns it to workdir
         } else if (arg.find("-total_num_pages=") == 0) {
             total_num_pages = static_cast<int>(std::stod(arg.substr(17))); // Extracts and converts the substring after "-total_num_pages=" to an integer
         } else if (arg.find("-total_num_reqs=") == 0) {
@@ -614,25 +653,25 @@ int main(
     }
 
     // define workload path
-    std::string workload_path = std::string("workload_") + workload + ".txt";
+    std::string workload_path = workdir + "/workloads/workload_" + workload + ".txt";
 
     // Check if the folder for results exists
-    std::string folder_name = std::string("Results_") + workload + "/capacity_tests_" 
+    std::string folder_name = workdir + "/Results_" + workload + "/capacity_tests_" 
                               + std::to_string(read_time_tier1) + "-" + std::to_string(read_time_tier2) + "-" + std::to_string(read_time_tier3)
                               + "/" + std::to_string(max_capacity_tier1) + "-" + std::to_string(max_capacity_tier2);
     if (!std::filesystem::exists(folder_name)) {
         // If the folder does not exist, create it
-        if (std::filesystem::create_directory(folder_name)) {
-            std::cout << "Folder created successfully: " << folder_name << std::endl;
+        if (std::filesystem::create_directories(folder_name)) {
+            std::cout << "Results folder created successfully: " << folder_name << std::endl;
         } else {
-            std::cerr << "Failed to create folder: " << folder_name << std::endl;
+            std::cerr << "Failed to create Results folder: " << folder_name << std::endl;
         }
     } else {
-        std::cout << "Folder already exists: " << folder_name << std::endl;
+        std::cout << "Results folder already exists: " << folder_name << std::endl;
     }
 
     // Open the log file for writing
-    std::string log_path = folder_name + "/output_" + workload + "_RLs2.log";//-" + std::to_string(temp_drop_freqs) + "-" + std::to_string(RL_update_freqs) + ".log";
+    std::string log_path = folder_name + "/output_" + workload + "_RL.log";//-" + std::to_string(temp_drop_freqs) + "-" + std::to_string(RL_update_freqs) + ".log";
     std::ofstream logFile(log_path);
 
     auto cout_buff = std::cout.rdbuf(); 
@@ -644,9 +683,9 @@ int main(
 
 
     // Define driver of Tiers
-    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, read_time_tier1, asym_tier1);
-    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, read_time_tier2, asym_tier2);
-    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, read_time_tier3, asym_tier3);
+    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, 1);
+    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, 2);
+    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, 3);
 
     // Check the type of pool
     // const std::type_info& typeInfo = typeid(tier1_dr.pool);
@@ -669,7 +708,7 @@ int main(
     // Initiation rule can be changed here.
     if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE" || workload.find("MSR") != std::string::npos) {
         // initial policy for workload_YCSB: fill with specific page ids
-        std::string page_ids_file = std::string("workload_") + workload + ".allpageids";  // Order file to read from
+        std::string page_ids_file = workdir + "/workloads/workload_" + workload + ".allpageids";  // Order file to read from
         std::ifstream IDs(page_ids_file);
         std::vector<int> allKeys;
         if (!IDs.is_open()) {
@@ -816,9 +855,9 @@ int main(
     std::deque<double> s1_t1_list = {0.50};
     std::deque<double> s1_t2_list = {0.50};
     std::deque<double> s1_t3_list = {0.50};
-    std::deque<double> s2_t1_list = {cal_s2(1, num_threads_tier1, read_time_tier1, asym_tier1)};
-    std::deque<double> s2_t2_list = {cal_s2(1, num_threads_tier2, read_time_tier2, asym_tier2)};
-    std::deque<double> s2_t3_list = {cal_s2(1, num_threads_tier3, read_time_tier3, asym_tier3)};
+    std::deque<double> s2_t1_list = {cal_s2(0, num_threads_tier1, read_time_tier1, asym_tier1)};
+    std::deque<double> s2_t2_list = {cal_s2(0, num_threads_tier2, read_time_tier2, asym_tier2)};
+    std::deque<double> s2_t3_list = {cal_s2(0, num_threads_tier3, read_time_tier3, asym_tier3)};
 
     // Flag to mark when to start RL updates
     bool RL_start_update = false;
@@ -1264,7 +1303,7 @@ int main(
             // std::cout << "left = " << left << ", right = " << right << std::endl;
             // add exploration
             double rand_num = dist(gen);
-            if (left <= right || rand_num < 0.005){
+            if (left <= right || rand_num < 0.00){
                 // auto start_time_migr = std::chrono::high_resolution_clock::now();
                 // std::cout << "Page " << n_page << " should be moved from Tier3 to Tier2\n"<< std::endl;
                 ++num_migr_t3t2;
@@ -1555,7 +1594,7 @@ int main(
 
             // Update a_i, b_i for RL agents
             // agent1
-            double average_t1 = (max_s1_t1 + min_s1_t1) / 2;//(max_s1_t1 + s1_t1_last) / 2;
+            double average_t1 = (max_s1_t1 + s1_t1_last) / 2; //(max_s1_t1 + min_s1_t1) / 2;
             //double average_t1 = std::round(101*s1_t1)/100;
             // double average_t1 = 1.01*max_s1_t1;
             double range_t1 = max_s1_t1 - min_s1_t1;
@@ -1585,7 +1624,7 @@ int main(
             // std::cout << std::endl;
             
             // agent2
-            double average_t2 = (max_s1_t2 + min_s1_t2) / 2;//(max_s1_t2 + s1_t2_last) / 2;
+            double average_t2 =  (max_s1_t2 + min_s1_t2) / 2; //(max_s1_t2 + s1_t2_last) / 2;
             //double average_t2 = std::round(100*s1_t2)/100;
             //double average_t2 = max_s1_t2;
             double range_t2 = max_s1_t2 - min_s1_t2;
