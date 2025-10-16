@@ -6,18 +6,25 @@ This repository contains the implementation of `ReStore`, a reinforcement learni
 ![ReStore](figures/MTS-DBMS+RL.png?raw=true "Title")
 
 ## Build & Run
-Use the following steps for quick installation.
+Use the following steps to quickly install ```restore```.
 ```
 git clone <repository-url>
 cd ReStore
 chmod +x install.sh
 sudo ./install.sh
 ```
+After installation you can valid by running ```restore --help```
+
 For customized installation, please refer to [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) and [PACKAGE_README.md](PACKAGE_README.md).
 
-The package is tested in Linux 6.4, with compiler g++ version 12, please adjust the Makefile according to your environment.
+The package is tested in Linux 6.4/Ubuntu 22.04, with compiler gcc/g++ version 9/12, please adjust the Makefile according to your environment.
 
-After executables being compiled, run ```./run_simulation.sh``` to start a simulation experiment. For experiments on I/O banchmark traces, see [workload/traces/run_traces.sh](workload/traces/run_traces.sh).
+After executables being compiled, run ```examples/run_simulation.sh``` to start a simulation experiment. For experiments on I/O banchmark traces, see [workload/traces/run_traces.sh](workload/traces/run_traces.sh).
+
+## Denpendency
+The XGBoost policy is implemented using the C++ library [XGBoost-FastForest](https://github.com/guitargeek/XGBoost-FastForest.git) for deploying XGBoost model, please install it first to avoid compiling errors.
+
+As for the storage tier, ```restore``` by default use ```/dev/nvme0n1``` ```/dev/nvme1n1``` ```/dev/nvme2n1``` as the three tiers, please adjust to your environment by changing them in [/cpp/Sibyl_driver/Sibyl_lib_configurable.c][/cpp/Sibyl_driver/Sibyl_lib_configurable.c], or build with custom device paths via ```restore build -fast_device DEVICE1_PATH -middle_device DEVICE2_PATH -slow_device DEVICE3_PATH```.
 
 ## Workloads
 Synthetic workloads are generated using [workload/synthetic/workload_gen.cpp](workload/synthetic/workload_gen.cpp), change the parameters in order to generate various workloads.
