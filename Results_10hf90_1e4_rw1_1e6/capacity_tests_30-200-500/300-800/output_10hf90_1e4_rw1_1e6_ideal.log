@@ -1,8 +1,0 @@
-For loop time: 1147399 microseconds
-Total requests time: 1354378328 microseconds
-
-There are 500491 reads, and 499509 writes.
-
-Number of page hits in Tier1: 269705
-Number of page hits in Tier2: 629920
-Number of page hits in Tier3: 100375
