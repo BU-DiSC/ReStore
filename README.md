@@ -22,7 +22,7 @@ The package is tested in Linux 6.4/Ubuntu 22.04, with compiler gcc/g++ version 9
 After executables being compiled, run ```examples/run_simulation.sh``` to start a simulation experiment. For experiments on I/O banchmark traces, see [workload/traces/run_traces.sh](workload/traces/run_traces.sh).
 
 ## Denpendency
-The XGBoost policy is implemented using the C++ library [XGBoost-FastForest](https://github.com/guitargeek/XGBoost-FastForest.git) for deploying XGBoost model, please install it first to avoid compiling errors.
+The XGB policy is implemented using the C++ library [XGBoost-FastForest](https://github.com/guitargeek/XGBoost-FastForest.git) for deploying XGBoost model, please install it first to avoid compiling errors.
 
 As for the storage tier, ```restore``` by default use ```/dev/nvme0n1``` ```/dev/nvme1n1``` ```/dev/nvme2n1``` as the three tiers, please adjust to your environment by changing them in [/cpp/Sibyl_driver/Sibyl_lib_configurable.c][/cpp/Sibyl_driver/Sibyl_lib_configurable.c], or build with custom device paths via ```restore build -fast_device DEVICE1_PATH -middle_device DEVICE2_PATH -slow_device DEVICE3_PATH```.
 
