@@ -24,7 +24,7 @@ After executables being compiled, run ```examples/run_simulation.sh``` to start 
 ## Denpendency
 The XGB policy is implemented using the C++ library [XGBoost-FastForest](https://github.com/guitargeek/XGBoost-FastForest.git) for deploying XGBoost model, please install it first to avoid compiling errors.
 
-As for the storage tier, ```restore``` by default use ```/dev/nvme0n1``` ```/dev/nvme1n1``` ```/dev/nvme2n1``` as the three tiers, emulated by [FEMU][https://github.com/MoatLab/FEMU.git] blackbox SSDs, please refer to their repo to install FEMU. The tier settings can also be adjusted by changing them in [cpp/Sibyl_driver/Sibyl_lib_configurable.c][cpp/Sibyl_driver/Sibyl_lib_configurable.c], or build with custom device paths via ```restore build -fast_device DEVICE1_PATH -middle_device DEVICE2_PATH -slow_device DEVICE3_PATH```.
+As for the storage tier, ```restore``` by default use ```/dev/nvme0n1``` ```/dev/nvme1n1``` ```/dev/nvme2n1``` as the three tiers, emulated by [FEMU](https://github.com/MoatLab/FEMU.git) blackbox SSDs, please refer to their repo to install FEMU. The tier settings can also be adjusted by changing them in [cpp/Sibyl_driver/Sibyl_lib_configurable.c](cpp/Sibyl_driver/Sibyl_lib_configurable.c), or build with custom device paths via ```restore build -fast_device DEVICE1_PATH -middle_device DEVICE2_PATH -slow_device DEVICE3_PATH```.
 
 ## Workloads
 Synthetic workloads with diverse drifting and skewness are generated using [workload/synthetic/workload_gen.cpp](workload/synthetic/workload_gen.cpp), change the parameters in order to generate various workloads.
