@@ -42,6 +42,7 @@
 
 // Includer ReStore driver
 #include "ReStore_driver_IO.hpp"
+#include "ReStore_utils.hpp"
 
 
 // Helper function to trim whitespace from both ends of a string
@@ -121,7 +122,7 @@ int main(
     }
 
     // workload path
-    std::string workload_path = workdir + "/workloads/workload_" + workload + ".txt";
+    std::string workload_path = find_workload_file(workdir, workload, ".txt");
 
     // Check if the folder for results exists
     std::string folder_name = workdir + "/Results_" + workload + "/capacity_tests_" 
@@ -153,14 +154,15 @@ int main(
 
     auto cout_buff = std::cout.rdbuf(); 
     std::cout.rdbuf(logFile.rdbuf());
+    CoutRestorer cout_restorer(cout_buff);  // restores std::cout on every return path, before logFile is destroyed
 
     // Open txt file for tiers' content in each step
     // std::ofstream outTier("Tier123_5hf90_rw1_10000_static.txt");
 
     // Define driver of Tiers
-    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, 1);
-    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, 2);
-    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, 3);
+    Tier tier1_dr(max_capacity_tier1, num_threads_tier1, 1, read_time_tier1, asym_tier1);
+    Tier tier2_dr(max_capacity_tier2, num_threads_tier2, 2, read_time_tier2, asym_tier2);
+    Tier tier3_dr(max_capacity_tier3, num_threads_tier3, 3, read_time_tier3, asym_tier3);
 
     // Declare maps with int keys (page no.) and double values (temperature)
     // For pages in each tier
@@ -174,7 +176,7 @@ int main(
     std::vector<int> allKeys;
     if (workload == "YCSB" || workload == "TPCC" || workload == "TPCE" || workload.find("MSR") != std::string::npos) {
         // initial policy for workload_YCSB: fill with specific page ids
-        std::string page_ids_file = workdir + "/workloads/workload_" + workload + ".allpageids";  // Order file to read from
+        std::string page_ids_file = find_workload_file(workdir, workload, ".allpageids");  // Order file to read from
         std::ifstream IDs(page_ids_file);
         // std::vector<int> allKeys;
         if (!IDs.is_open()) {

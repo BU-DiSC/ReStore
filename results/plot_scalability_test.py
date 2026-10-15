@@ -5,8 +5,7 @@ import seaborn as sns
 import numpy as np
 from matplotlib.font_manager import FontProperties
 # Provide the full path to the font file
-font_path = '/Users/tiazh991/Library/Fonts/LinLibertine_R.otf'
-prop = FontProperties(fname=font_path, size=42)
+prop = FontProperties(size=42)
 
 
 def extract_times_from_log(file_path):

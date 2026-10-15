@@ -2,11 +2,16 @@
 #include <random>
 #include <iostream>
 #include <unordered_set>
+#include <string>
 
 
-int main(){
-    int total_num_pages = 1e4;
-    int num_reqs = 1e6;
+// Usage: ./workload_gen [total_num_pages] [num_reqs] [name]
+// Writes workload_<name>.txt and workload_<name>.pageids (defaults: 1e4 1e6 5hf90_1e4_rw1_1e6),
+// e.g. ./workload_gen 1e5 1e7 5hf90_1e5_rw1_1e7
+int main(int argc, char* argv[]){
+    int total_num_pages = argc > 1 ? static_cast<int>(std::stod(argv[1])) : 1e4;
+    int num_reqs = argc > 2 ? static_cast<int>(std::stod(argv[2])) : 1e6;
+    std::string name = argc > 3 ? argv[3] : "5hf90_1e4_rw1_1e6";
     float r_w_ratio = 0.5;
 
     // Seed the random number generator
@@ -39,7 +44,7 @@ int main(){
             indices.push_back(i);
         }
     }
-    std::ofstream pageid_file("workload_5hf90_1e4_rw1_1e6.pageids");
+    std::ofstream pageid_file("workload_" + name + ".pageids");
     std::cout << "hf pageIds: ";
     for (int index : indices) {
         //std::cout
@@ -121,7 +126,7 @@ int main(){
     std::uniform_real_distribution<double> udis01(0.0, 1.0);
 
 
-    std::ofstream workload_file("workload_5hf90_1e4_rw1_1e6.txt");
+    std::ofstream workload_file("workload_" + name + ".txt");
 
     for (int i = 0; i < num_reqs; i++) {
         

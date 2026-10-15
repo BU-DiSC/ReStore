@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Test script for measuring read/write latency on /dev/vdx using Sibyl library
-# This script compiles the library with /dev/vdx and runs latency tests
+# Test script for measuring read/write latency on /dev/vdx using the ReStore_device driver
+# This script compiles the driver with /dev/vdx and runs latency tests.
+# WARNING: this writes to the raw device. The device must not be mounted or in use, unless
+# RESTORE_ALLOW_BUSY_DEVICE=1 is set (see README.md, "Tier devices").
 
 set -e  # Exit on any error
 
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Configuration
 DEVICE_PATH="/dev/vdb"
@@ -12,7 +15,7 @@ TEST_SIZE_KB=4096  # 4MB test size
 NUM_ITERATIONS=100
 TEST_OFFSET=0  # Start from beginning of device
 
-echo "=== Latency Test for $DEVICE_PATH via Sibyl_driver ==="
+echo "=== Latency Test for $DEVICE_PATH via the ReStore_device driver ==="
 echo "Date: $(date)"
 echo ""
 
@@ -69,7 +72,7 @@ check_permissions() {
 
 # Compile the test program
 compile_test() {
-    print_status "Compiling Sibyl library with $DEVICE_PATH..."
+    print_status "Compiling the device driver with $DEVICE_PATH..."
     
     # Create a temporary test program
     cat > test_latency.c << 'EOF'
@@ -86,12 +89,12 @@ compile_test() {
 
 // Device paths will be defined at compile time
 
-// Include the Sibyl functions
+// Device driver functions (cpp/device_driver/ReStore_device.c)
 int openFastDevice();
 int openMiddleDevice();
 int openSlowDevice();
-int sibyl_read(int fd, unsigned long byte_offset, unsigned int nSize);
-int sibyl_write(int fd, unsigned long byte_offset, unsigned int nSize);
+int device_read(int fd, unsigned long byte_offset, unsigned int nSize);
+int device_write(int fd, unsigned long byte_offset, unsigned int nSize);
 void closeDevice(int fd);
 
 // Function to get current time in microseconds
@@ -135,7 +138,7 @@ int main(int argc, char *argv[]) {
     int num_iterations = atoi(argv[2]);
     unsigned long offset = argc > 3 ? atol(argv[3]) : 0;
     
-    printf("=== Sibyl Latency Test ===\n");
+    printf("=== Device Latency Test ===\n");
     printf("Device: %s\n", FAST_DEVICE_PATH);
     printf("Test size: %u bytes (%u KB)\n", test_size, test_size / 1024);
     printf("Iterations: %d\n", num_iterations);
@@ -165,7 +168,7 @@ int main(int argc, char *argv[]) {
     printf("\n--- Write Latency Test ---\n");
     for (int i = 0; i < num_iterations; i++) {
         long long start = get_time_us();
-        int result = sibyl_write(fd, offset, test_size);
+        int result = device_write(fd, offset, test_size);
         long long end = get_time_us();
         
         if (result < 0) {
@@ -184,7 +187,7 @@ int main(int argc, char *argv[]) {
     printf("\n--- Read Latency Test ---\n");
     for (int i = 0; i < num_iterations; i++) {
         long long start = get_time_us();
-        int result = sibyl_read(fd, offset, test_size);
+        int result = device_read(fd, offset, test_size);
         long long end = get_time_us();
         
         if (result < 0) {
@@ -237,9 +240,9 @@ int main(int argc, char *argv[]) {
 }
 EOF
 
-    # Compile the test program with the Sibyl library
+    # Compile the test program with the device driver
     print_status "Compiling test program..."
-    gcc -O2 -DFAST_DEVICE_PATH=\"$DEVICE_PATH\" -DMIDDLE_DEVICE_PATH=\"$DEVICE_PATH\" -DSLOW_DEVICE_PATH=\"$DEVICE_PATH\" -o test_latency test_latency.c Sibyl_lib_configurable.c -lrt -lm
+    gcc -O2 -DFAST_DEVICE_PATH=\"$DEVICE_PATH\" -DMIDDLE_DEVICE_PATH=\"$DEVICE_PATH\" -DSLOW_DEVICE_PATH=\"$DEVICE_PATH\" -o test_latency test_latency.c "$REPO_ROOT/cpp/device_driver/ReStore_device.c" -lrt -lm
     
     if [ $? -eq 0 ]; then
         print_success "Compilation successful"
@@ -274,7 +277,7 @@ cleanup() {
 
 # Main execution
 main() {
-    echo "Starting Sibyl latency test for $DEVICE_PATH"
+    echo "Starting device latency test for $DEVICE_PATH"
     echo "Test parameters:"
     echo "  Device: $DEVICE_PATH"
     echo "  Test size: ${TEST_SIZE_KB}KB"

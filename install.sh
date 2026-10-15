@@ -73,15 +73,12 @@ build_project() {
     mkdir -p "$BUILD_DIR"
     cd "$BUILD_DIR"
     
-    # Configure with CMake (with default device paths)
+    # Configure with CMake (no default tier devices: tiers are simulated unless devices are passed)
     print_status "Configuring with CMake..."
     cmake .. \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$INSTALL_PREFIX" \
-        -DCMAKE_CXX_COMPILER=g++ \
-        -DFAST_DEVICE_PATH="/dev/nvme0n1" \
-        -DMIDDLE_DEVICE_PATH="/dev/nvme1n1" \
-        -DSLOW_DEVICE_PATH="/dev/nvme2n1"
+        -DCMAKE_CXX_COMPILER=g++
     
     # Build
     print_status "Compiling..."
@@ -128,13 +125,13 @@ verify_installation() {
         return 1
     fi
     
-    # Test the restore command with timeout (no args shows usage)
-    print_status "Testing restore command (this may take a moment)..."
-    if timeout 5 "$INSTALL_PREFIX/bin/restore" &> /dev/null; then
+    # Test the restore command
+    print_status "Testing restore command..."
+    if timeout 5 "$INSTALL_PREFIX/bin/restore" --help &> /dev/null; then
         print_status "✓ restore command working correctly"
     else
-        print_warning "✗ restore command test failed or timed out"
-        print_warning "This may be normal - you can test manually later with: restore list policies"
+        print_error "✗ 'restore --help' failed"
+        return 1
     fi
     
     print_status "Installation verification completed."
@@ -145,15 +142,14 @@ print_usage_info() {
     echo
     print_status "ReStore has been successfully installed!"
     echo
-    echo "Usage examples:"
-    echo "  restore list policies                    # List available policies"
-    echo "  restore init -workload my_workload      # Initialize configuration"
-    echo "  restore init -devices /dev/sda /dev/sdb /dev/sdc  # Configure device paths"
-    echo "  restore build                            # Build/rebuild executables"
-    echo "  restore run -policy LFU -workload my_workload  # Run simulation"
+    echo "Run 'restore' from the repository root (or pass -workdir <repo>) so that"
+    echo "workloads/ and ML_models/ are found. Usage examples:"
+    echo "  restore list policies                          # List available policies"
+    echo "  restore list workloads                         # List workloads under ./workloads"
+    echo "  restore init -workload MSR_hm_1                # Write ./restore_config.json"
+    echo "  restore run -policy LFU -workload MSR_hm_1     # Run a policy on a workload"
     echo
-    echo "Configuration file: $INSTALL_PREFIX/share/ReStore/restore_config.json"
-    echo "Note: Provide your own workload data when running experiments"
+    echo "Quick check: ./examples/quick_start.sh"
     echo
     
     if [[ "$INSTALL_PREFIX" != "/usr/local" ]]; then

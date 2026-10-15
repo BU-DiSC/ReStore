@@ -1,0 +1,18 @@
+# Build output
+build/
+*.o
+*.so
+
+# Experiment output and local configuration (written to the working directory)
+/Results_*/
+/results/fig*/
+restore_config.json
+device_config.json
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor files
+.DS_Store
+.vscode/

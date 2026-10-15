@@ -8,10 +8,9 @@ from matplotlib import transforms as mtransforms
 from matplotlib.ticker import FixedLocator, FuncFormatter, ScalarFormatter
 from matplotlib.font_manager import FontProperties
 # Provide the full path to the font file
-font_path = '/Users/tiazh991/Library/Fonts/LinLibertine_R.otf'
-prop28 = FontProperties(fname=font_path, size=28)
-prop40 = FontProperties(fname=font_path, size=40)
-prop = FontProperties(fname=font_path, size=50)
+prop28 = FontProperties(size=28)
+prop40 = FontProperties(size=40)
+prop = FontProperties(size=50)
 
 
 # Define the custom scale class

@@ -1,152 +1,67 @@
 #!/bin/bash
 
-# Test script for the ReStore package
-# This script tests the basic functionality of the installed package
+# Smoke test for the ReStore CLI (a few seconds; does not run a simulation).
+# For a short end-to-end run, use ./examples/quick_start.sh.
 
-set -e
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+FAILED=0
+
+check() {
+    local description="$1"; shift
+    if "$@" &> /dev/null; then
+        echo "✓ $description"
+    else
+        echo "✗ $description"
+        FAILED=1
+    fi
+}
 
 echo "ReStore Package Test Script"
 echo "==========================="
-echo
 
-# Test 1: Check if restore command exists
-echo "Test 1: Checking if 'restore' command is available..."
+# Use an installed `restore`, or the one in ./build
 if command -v restore &> /dev/null; then
-    echo "✓ restore command found"
-    restore --help 2>/dev/null || echo "✓ restore command responds"
+    RESTORE="$(command -v restore)"
+elif [[ -x "$REPO_ROOT/build/restore" ]]; then
+    RESTORE="$REPO_ROOT/build/restore"
 else
-    echo "✗ restore command not found"
-    echo "Please install ReStore first: sudo ./install.sh"
+    echo "✗ restore command not found. Build it first, e.g.: ./install.sh --prefix ~/.local"
     exit 1
 fi
-echo
+echo "Using: $RESTORE"
 
-# Test 2: List available options
-echo "Test 2: Testing list commands..."
-echo "Available policies:"
-if restore list policies &> /dev/null; then
-    echo "✓ list policies works"
-else
-    echo "✗ list policies failed"
-fi
+check "restore --help" "$RESTORE" --help
+check "restore list policies" "$RESTORE" list policies
+check "restore list workloads" "$RESTORE" list workloads -workdir "$REPO_ROOT"
 
-echo "Available workloads:"
-if restore list workloads &> /dev/null; then
-    echo "✓ list workloads works"
-else
-    echo "✗ list workloads failed"
-fi
-echo
+# Configuration commands write restore_config.json to the current directory: use a scratch dir
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+(
+    cd "$TMP_DIR"
+    check "restore init -workload MSR_hm_1" "$RESTORE" init -workload MSR_hm_1
+    check "configuration file created" test -f restore_config.json
+    check "restore config get" "$RESTORE" config get max_capacity_tier1
+    check "restore config set" "$RESTORE" config set max_capacity_tier1 6000
+    check "config value updated" bash -c "\"$RESTORE\" config get max_capacity_tier1 | grep -qx 6000"
+    exit $FAILED
+) || FAILED=1
 
-# Test 3: Configuration management
-echo "Test 3: Testing configuration management..."
-if restore init -workload MSR_hm_1 &> /dev/null; then
-    echo "✓ init command works"
-    
-    if [[ -f "restore_config.json" ]]; then
-        echo "✓ configuration file created"
-    else
-        echo "✗ configuration file not created"
-    fi
-    
-    # Test config get/set
-    if restore config get max_capacity_tier1 &> /dev/null; then
-        echo "✓ config get works"
-    else
-        echo "✗ config get failed"
-    fi
-    
-    if restore config set test_param test_value &> /dev/null; then
-        echo "✓ config set works"
-        if restore config get test_param | grep -q "test_value"; then
-            echo "✓ config value correctly set and retrieved"
-        else
-            echo "✗ config value not correctly set"
-        fi
-    else
-        echo "✗ config set failed"
-    fi
-else
-    echo "✗ init command failed"
-fi
-
-# Test device configuration
-echo "Testing device configuration..."
-if restore init -devices /dev/test1 /dev/test2 /dev/test3 &> /dev/null; then
-    echo "✓ device configuration works"
-    if [[ -f "device_config.json" ]]; then
-        echo "✓ device configuration file created"
-    else
-        echo "✗ device configuration file not created"
-    fi
-else
-    echo "✗ device configuration failed"
-fi
-echo
-
-# Test 4: Test build command
-echo "Test 4: Testing build command..."
-if restore build &> /dev/null; then
-    echo "✓ build command works"
-else
-    echo "⚠ build command failed (may need dependencies)"
-fi
-echo
-
-# Test 5: Check if policy executables exist
-echo "Test 5: Checking policy executables..."
-policies=("Run_RL" "Run_LFU" "Run_LRU" "Run_LRFU" "Run_EXD" "Run_TEMP" "Run_static" "Run_ideal" "Run_LogiReg" "Run_XGBfast")
-
-for policy in "${policies[@]}"; do
-    if command -v "$policy" &> /dev/null; then
-        echo "✓ $policy executable found"
-    else
-        echo "✗ $policy executable not found"
-    fi
+# Policy executables are looked up next to `restore`, then on PATH
+RESTORE_DIR="$(dirname "$RESTORE")"
+for policy in Run_RL Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP Run_static Run_ideal Run_LogiReg; do
+    check "$policy executable" bash -c "[[ -x \"$RESTORE_DIR/$policy\" ]] || command -v $policy"
 done
-echo
-
-# Test 6: Test a simple simulation (if possible)
-echo "Test 6: Testing simple simulation..."
-echo "Note: This test may take some time and requires workload data..."
-
-# Check if workload data exists
-if [[ -d "/usr/local/share/ReStore/workload" ]] || [[ -d "./workload" ]]; then
-    echo "Workload data found, attempting simple simulation..."
-    
-    # Try to run a quick simulation
-    if timeout 30 restore run -policy static -workload MSR_hm_1 &> /dev/null; then
-        echo "✓ Simple simulation completed successfully"
-    else
-        echo "⚠ Simple simulation timed out or failed (this may be normal)"
-    fi
+if [[ -x "$RESTORE_DIR/Run_XGBfast" ]] || command -v Run_XGBfast &> /dev/null; then
+    echo "✓ Run_XGBfast executable"
 else
-    echo "⚠ Workload data not found, skipping simulation test"
-    echo "Make sure workload data is installed in the correct location"
+    echo "- Run_XGBfast not built (optional; needs XGBoost-FastForest)"
 fi
-echo
 
-# Test 7: Check installation directories
-echo "Test 7: Checking installation directories..."
-install_dirs=("/usr/local/bin" "/usr/local/share/ReStore" "/usr/local/lib/cmake/ReStore")
-
-for dir in "${install_dirs[@]}"; do
-    if [[ -d "$dir" ]]; then
-        echo "✓ $dir exists"
-    else
-        echo "✗ $dir missing"
-    fi
-done
 echo
-
-echo "Test Summary"
-echo "============"
-echo "Basic package functionality test completed."
-echo "If you see mostly ✓ marks above, the package is working correctly."
-echo
-echo "For a full test with actual simulations, run:"
-echo "  ./examples/run_experiments.sh"
-echo
-echo "For batch comparison testing, run:"
-echo "  ./examples/batch_comparison.sh"
-
+if [[ $FAILED -eq 0 ]]; then
+    echo "All checks passed."
+else
+    echo "Some checks failed."
+fi
+exit $FAILED

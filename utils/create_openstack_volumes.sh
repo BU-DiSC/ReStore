@@ -31,6 +31,8 @@ openstack volume create \
 
 set -e  # Exit on any error
 
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
 # Configuration
 VOLUME_SIZE_GB=10
 VOLUME_PREFIX="restore"
@@ -317,10 +319,10 @@ setup_filesystems() {
 create_volume_test_script() {
     print_status "Creating test script for the new volumes..."
     
-    cat > test_volume_latency.sh << 'EOF'
+    cat > test_all_volumes_latency.sh << 'EOF'
 #!/bin/bash
 
-# Test script for Sibyl latency testing on mounted volumes
+# Test script for device latency testing on mounted volumes
 # This script tests the raw block devices, not the mounted filesystems
 
 set -e
@@ -349,7 +351,7 @@ DEVICES=(
     "/dev/vdd:Slow"
 )
 
-print_status "Starting Sibyl latency tests on mounted volumes..."
+print_status "Starting device latency tests on mounted volumes..."
 echo "Test parameters:"
 echo "  Test size: ${TEST_SIZE_KB}KB"
 echo "  Iterations: $NUM_ITERATIONS"
@@ -367,8 +369,8 @@ for device_info in "${DEVICES[@]}"; do
     print_status "Testing $name volume ($device)..."
     
     # Run the latency test
-    cd /home/ubuntu/ReStore/cpp/Run_IO/cpp/Sibyl_driver/
-    sudo ./test_vda_latency.sh -d "$device" -s $TEST_SIZE_KB -n $NUM_ITERATIONS -o $TEST_OFFSET
+    # (the volumes are mounted, so the device guard has to be overridden)
+    sudo env RESTORE_ALLOW_BUSY_DEVICE=1 "__REPO_ROOT__/utils/test_volume_latency.sh" -d "$device" -s $TEST_SIZE_KB -n $NUM_ITERATIONS -o $TEST_OFFSET
     
     echo ""
     echo "=========================================="
@@ -378,8 +380,9 @@ done
 print_success "All volume tests completed!"
 EOF
 
-    chmod +x test_volume_latency.sh
-    print_success "Volume test script created: test_volume_latency.sh"
+    sed -i "s#__REPO_ROOT__#$REPO_ROOT#g" test_all_volumes_latency.sh
+    chmod +x test_all_volumes_latency.sh
+    print_success "Volume test script created: test_all_volumes_latency.sh"
 }
 
 # Save volume information
@@ -387,7 +390,7 @@ save_volume_info() {
     print_status "Saving volume information..."
     
     cat > volume_info.txt << EOF
-# Sibyl Test Volumes Information
+# ReStore Test Volumes Information
 # Created: $(date)
 # Instance: $INSTANCE_NAME ($INSTANCE_ID)
 
@@ -419,8 +422,7 @@ Slow Volume:
   Concurrency: $SLOW_CONCURRENCY
 
 # To run tests:
-cd /home/ubuntu/ReStore/utils/
-./test_volume_latency.sh
+./test_all_volumes_latency.sh
 
 # To cleanup volumes:
 openstack volume delete $FAST_VOLUME_ID $MIDDLE_VOLUME_ID $SLOW_VOLUME_ID
@@ -431,7 +433,7 @@ EOF
 
 # Main execution
 main() {
-    echo "=== OpenStack Volume Creation for Sibyl Testing ==="
+    echo "=== OpenStack Volume Creation for ReStore Testing ==="
     echo "Date: $(date)"
     echo ""
     
@@ -450,7 +452,7 @@ main() {
     print_success "All volumes created and ready for testing!"
     echo ""
     echo "Next steps:"
-    echo "1. Run the test: ./test_volume_latency.sh"
+    echo "1. Run the test: ./test_all_volumes_latency.sh"
     echo "2. Check results in the output"
     echo "3. Cleanup when done: see volume_info.txt"
 }
@@ -474,7 +476,7 @@ while [[ $# -gt 0 ]]; do
             echo "Usage: $0 [options]"
             echo "Options:"
             echo "  -s, --size SIZE        Volume size in GB (default: 10)"
-            echo "  -p, --prefix PREFIX    Volume name prefix (default: sibyl-test)"
+            echo "  -p, --prefix PREFIX    Volume name prefix (default: restore)"
             echo "  -i, --instance ID      Instance ID (auto-detected if not provided)"
             echo "  -h, --help             Show this help message"
             exit 0

@@ -7,7 +7,7 @@ bindir=${exec_prefix}/bin
 Name: ReStore
 Description: Multi-Tiered Storage System Simulator with Reinforcement Learning
 Version: @PROJECT_VERSION@
-URL: https://github.com/your-org/ReStore
+URL: https://github.com/BU-DiSC/ReStore
 
 Executables: restore Run_RL Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP Run_static Run_ideal Run_LogiReg Run_XGBfast
 Note: Users should provide their own workload data when running experiments

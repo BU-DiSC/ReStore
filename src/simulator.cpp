@@ -7,27 +7,56 @@
 #include <thread>
 #include <vector>
 #include <unistd.h>
+#include <sys/wait.h>
 
 ReStoreSimulator::ReStoreSimulator() {
     initializePolicyRunners();
 }
 
+// Prefer the policy executable that sits next to this `restore` binary (e.g. build/Run_RL),
+// so the CLI works straight from the build directory; otherwise fall back to a PATH lookup.
+static std::string resolvePolicyExecutable(const std::string& executable) {
+    std::error_code ec;
+    std::filesystem::path self = std::filesystem::read_symlink("/proc/self/exe", ec);
+    if (!ec) {
+        std::filesystem::path candidate = self.parent_path() / executable;
+        if (std::filesystem::exists(candidate, ec)) {
+            return candidate.string();
+        }
+    }
+    return executable;
+}
+
 // Static helper function to build command with working directory
 std::string ReStoreSimulator::buildCommandWithWorkdir(const std::string& executable, const std::map<std::string, std::string>& config) {
     std::ostringstream args;
-    
-    // Add working directory as an argument
+
+    // Add working directory as an argument (a -workdir in config, if given, comes later and wins)
     char* cwd = getcwd(nullptr, 0);
     if (cwd) {
-        args << "-workdir=" << cwd << " ";
+        args << "-workdir=\"" << cwd << "\" ";
         free(cwd);
     }
-    
+
+    // Tier device paths are passed to the policy executable as environment variables
+    // (see tierDevicePath() in cpp/device_driver/ReStore_device.c); tiers without a device are simulated.
+    static const std::map<std::string, std::string> device_env = {
+        {"fast_device", "RESTORE_FAST_DEVICE"},
+        {"middle_device", "RESTORE_MIDDLE_DEVICE"},
+        {"slow_device", "RESTORE_SLOW_DEVICE"},
+    };
+    std::ostringstream env;
+
     for (const auto& [key, value] : config) {
-        args << "-" << key << "=" << value << " ";
+        auto it = device_env.find(key);
+        if (it != device_env.end()) {
+            env << it->second << "=\"" << value << "\" ";
+        } else {
+            args << "-" << key << "=\"" << value << "\" ";
+        }
     }
-    
-    return executable + " " + args.str();
+
+    return env.str() + "\"" + resolvePolicyExecutable(executable) + "\" " + args.str();
 }
 
 void ReStoreSimulator::initializePolicyRunners() {
@@ -54,17 +83,31 @@ int ReStoreSimulator::run(const std::string& policy, const std::map<std::string,
     
     auto start_time = std::chrono::high_resolution_clock::now();
     
-    int result = policy_runners[policy]->run(config);
-    
+    // std::system() returns a wait status, not an exit code: decode it so that crashes and
+    // errors in the policy executable are reported (and propagated) as failures.
+    int status = policy_runners[policy]->run(config);
+    int result = 1;
+    std::string failure;
+    if (status == -1) {
+        failure = "could not start the policy executable";
+    } else if (WIFEXITED(status)) {
+        result = WEXITSTATUS(status);
+        if (result == 127) failure = "policy executable not found (is it built/installed?)";
+        else if (result != 0) failure = "exit code " + std::to_string(result);
+    } else if (WIFSIGNALED(status)) {
+        result = 128 + WTERMSIG(status);
+        failure = "terminated by signal " + std::to_string(WTERMSIG(status));
+    }
+
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time);
-    
+
     if (result == 0) {
         std::cout << "Simulation completed successfully in " << duration.count() << " seconds." << std::endl;
     } else {
-        std::cout << "Simulation failed with exit code: " << result << std::endl;
+        std::cerr << "Simulation failed: " << failure << std::endl;
     }
-    
+
     return result;
 }
 

@@ -25,8 +25,11 @@ public:
         }
         
         std::string command = argv[1];
-        
-        if (command == "init") {
+
+        if (command == "--help" || command == "-h" || command == "help") {
+            printUsage();
+            return 0;
+        } else if (command == "init") {
             return handleInit(argc, argv);
         } else if (command == "run" || command == "simulate") {
             return handleRun(argc, argv);
@@ -51,14 +54,19 @@ private:
         std::cout << "  restore init -devices <fast> <middle> <slow>    Configure device paths\n";
         std::cout << "  restore run -policy <policy> -workload <workload> [options]  Run simulation\n";
         std::cout << "  restore list policies                          List available policies\n";
+        std::cout << "  restore list workloads                         List workloads found under ./workloads\n";
         std::cout << "  restore config [get|set] <key> [value]         Manage configuration\n";
         std::cout << "  restore build [options]                        Build/rebuild executables\n\n";
+        std::cout << "Run from the repository root (or pass -workdir <repo>) so that workloads/ and ML_models/ are found.\n";
+        std::cout << "Results are written to <workdir>/Results_<workload>/.\n\n";
         std::cout << "Examples:\n";
-        std::cout << "  restore init -workload my_workload\n";
-        std::cout << "  restore init -devices /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1\n";
-        std::cout << "  restore run -policy LFU -workload my_workload\n";
-        std::cout << "  restore run -policy RL -workload my_workload -max_capacity_tier1 5000\n";
-        std::cout << "  restore build -fast_device /dev/sda -middle_device /dev/sdb -slow_device /dev/sdc\n";
+        std::cout << "  restore init -workload MSR_hm_1\n";
+        std::cout << "  restore run -policy LFU -workload MSR_hm_1\n";
+        std::cout << "  restore run -policy RL -workload MSR_hm_1 -max_capacity_tier1 5000\n";
+        std::cout << "  restore run -policy RL -workload MSR_hm_1 -fast_device /dev/nvme1n1 -middle_device /dev/nvme2n1 -slow_device /dev/nvme3n1\n\n";
+        std::cout << "By default the tiers are simulated (read_time_*, asym_*, num_threads_*). With -fast_device/-middle_device/\n";
+        std::cout << "-slow_device, the policy performs real direct I/O on these devices or files.\n";
+        std::cout << "WARNING: tier devices are overwritten with raw writes. Never point them at a disk holding data.\n";
     }
     
     int handleInit(int argc, char* argv[]) {
@@ -69,7 +77,7 @@ private:
         // Check if this is device configuration
         if (args.find("devices") != args.end()) {
             // Handle device configuration
-            if (argc < 5) {
+            if (argc < 6) {
                 std::cerr << "Error: Device configuration requires 3 device paths\n";
                 std::cerr << "Usage: restore init -devices <fast_device> <middle_device> <slow_device>\n";
                 return 1;
@@ -150,7 +158,15 @@ private:
         if (!configMgr.loadConfig(config_file, config)) {
             std::cerr << "Warning: Could not load config file, using defaults\n";
         }
-        
+
+        // A config initialized for another workload would carry the wrong page/request counts
+        if (config.count("workload") && config["workload"] != workload) {
+            std::cerr << "Note: " << config_file << " was initialized for workload '" << config["workload"]
+                      << "', not '" << workload << "'; using the defaults for '" << workload << "' instead.\n";
+            config.clear();
+            configMgr.loadWorkloadDefaults(workload, config);
+        }
+
         // Override with command line arguments
         for (const auto& [key, value] : args) {
             config[key] = value;
@@ -163,7 +179,7 @@ private:
     
     int handleList(int argc, char* argv[]) {
         if (argc < 3) {
-            std::cerr << "Usage: restore list policies\n";
+            std::cerr << "Usage: restore list <policies|workloads>\n";
             return 1;
         }
         
@@ -181,9 +197,31 @@ private:
             std::cout << "  ideal   - Ideal (oracle) policy\n";
             std::cout << "  LogiReg - Logistic Regression\n";
             std::cout << "  XGBfast - XGBoost (fastforest)\n";
+        } else if (type == "workloads") {
+            // Workloads are workloads/**/workload_<name>.txt, relative to -workdir (default: current directory)
+            std::map<std::string, std::string> args = parseArgs(argc, argv);
+            std::filesystem::path root = std::filesystem::path(args.count("workdir") ? args["workdir"] : ".") / "workloads";
+            std::error_code ec;
+            if (!std::filesystem::is_directory(root, ec)) {
+                std::cerr << "No workloads/ directory found at " << root.string()
+                          << " (run from the repository root or pass -workdir <repo>)\n";
+                return 1;
+            }
+            std::map<std::string, std::string> found;  // name -> location, sorted by name
+            for (auto it = std::filesystem::recursive_directory_iterator(root, ec);
+                 !ec && it != std::filesystem::recursive_directory_iterator(); it.increment(ec)) {
+                const std::string fname = it->path().filename().string();
+                if (fname.rfind("workload_", 0) == 0 && it->path().extension() == ".txt") {
+                    found[fname.substr(9, fname.size() - 9 - 4)] = it->path().parent_path().string();
+                }
+            }
+            std::cout << "Available workloads (under " << root.string() << "):\n";
+            for (const auto& [name, dir] : found) {
+                std::cout << "  " << name << "    (" << dir << ")\n";
+            }
         } else {
             std::cerr << "Unknown list type: " << type << std::endl;
-            std::cerr << "Available options: policies\n";
+            std::cerr << "Available options: policies, workloads\n";
             return 1;
         }
         
@@ -237,10 +275,10 @@ private:
         if (configMgr.loadConfig("device_config.json", device_config)) {
             std::cout << "Using device configuration from device_config.json" << std::endl;
         } else {
-            std::cout << "No device configuration found, using defaults" << std::endl;
-            device_config["fast_device"] = "/dev/nvme0n1";
-            device_config["middle_device"] = "/dev/nvme1n1";
-            device_config["slow_device"] = "/dev/nvme2n1";
+            std::cout << "No device configuration found: tiers without a device are simulated" << std::endl;
+            device_config["fast_device"] = "";
+            device_config["middle_device"] = "";
+            device_config["slow_device"] = "";
         }
         
         // Override with command line arguments
@@ -260,8 +298,25 @@ private:
         std::cout << "  Slow: " << device_config["slow_device"] << std::endl;
         
         // Build command - change to source directory first
+        // (RESTORE_SOURCE_DIR env var, else the source tree this binary was configured from)
+        std::string source_dir;
+        if (const char* env = std::getenv("RESTORE_SOURCE_DIR")) {
+            source_dir = env;
+        }
+#ifdef RESTORE_SOURCE_DIR
+        if (source_dir.empty()) {
+            source_dir = RESTORE_SOURCE_DIR;
+        }
+#endif
+        if (source_dir.empty() || !std::filesystem::exists(std::filesystem::path(source_dir) / "CMakeLists.txt")) {
+            std::cerr << "Error: ReStore source directory not found"
+                      << (source_dir.empty() ? std::string() : " at '" + source_dir + "'")
+                      << ". Set RESTORE_SOURCE_DIR to the repository root.\n";
+            return 1;
+        }
+
         std::ostringstream build_cmd;
-        build_cmd << "cd /home/ubuntu/ReStore/ && mkdir -p build && cd build && cmake ..";
+        build_cmd << "cd \"" << source_dir << "\" && mkdir -p build && cd build && cmake ..";
         build_cmd << " -DFAST_DEVICE_PATH=\"" << device_config["fast_device"] << "\"";
         build_cmd << " -DMIDDLE_DEVICE_PATH=\"" << device_config["middle_device"] << "\"";
         build_cmd << " -DSLOW_DEVICE_PATH=\"" << device_config["slow_device"] << "\"";
@@ -272,12 +327,14 @@ private:
         int result = std::system(build_cmd.str().c_str());
         
         if (result == 0) {
-            std::cout << "Build completed successfully!" << std::endl;
+            std::cout << "Build completed successfully! Binaries are in " << source_dir << "/build" << std::endl;
+            std::cout << "To update an installed copy, run: cmake --install \"" << source_dir << "/build\"" << std::endl;
         } else {
-            std::cerr << "Build failed with exit code: " << result << std::endl;
+            std::cerr << "Build failed (status " << result << ")" << std::endl;
         }
-        
-        return result;
+
+        // std::system() returns a wait status; a failure must not truncate to exit code 0
+        return result == 0 ? 0 : 1;
     }
     
     std::map<std::string, std::string> parseArgs(int argc, char* argv[]) {
