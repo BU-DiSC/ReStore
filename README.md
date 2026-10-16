@@ -1,6 +1,6 @@
 # ReStore: A Reinforcement Learning Approach for Data Migration in Multi-Tiered Storage
 
-![Paper](https://img.shields.io/badge/Paper-SIGMOD%202026-blue?logo=acm) ![Demo](https://img.shields.io/badge/Demo-VLDB%202026-orange)
+[![Paper](https://img.shields.io/badge/Paper-SIGMOD%202026-blue?logo=acm)](https://dl.acm.org/doi/10.1145/3802104) [![Demo](https://img.shields.io/badge/Demo-VLDB%202026-orange)](https://disc-projects.bu.edu/ReStore/index.html)
 
 This repository contains the implementation of `ReStore`, a reinforcement-learning-based data migration policy for multi-tiered storage systems, together with the baseline policies, workloads, pre-trained baseline models, and the scripts to run the experiments and plot the figures of the paper.
 
