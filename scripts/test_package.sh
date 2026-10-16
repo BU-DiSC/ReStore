@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Smoke test for the ReStore CLI (a few seconds; does not run a simulation).
-# For a short end-to-end run, use ./examples/quick_start.sh.
+# For a short end-to-end run, use ./scripts/quick_start.sh.
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 FAILED=0

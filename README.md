@@ -1,6 +1,8 @@
 # ReStore: A Reinforcement Learning Approach for Data Migration in Multi-Tiered Storage
 
-This repository contains the implementation of `ReStore` (SIGMOD 2026), a reinforcement-learning-based data migration policy for multi-tiered storage systems, together with the baseline policies, workloads, pre-trained baseline models, and the scripts to run the experiments and plot the figures of the paper.
+This repository contains the implementation of `ReStore`, a reinforcement-learning-based data migration policy for multi-tiered storage systems, together with the baseline policies, workloads, pre-trained baseline models, and the scripts to run the experiments and plot the figures of the paper.
+
+**Paper:** [ReStore: A Reinforcement Learning Approach for Data Migration in Multi-Tiered Storage](https://dl.acm.org/doi/10.1145/3802104), SIGMOD 2026 (Proc. ACM Manag. Data 4(3), Article 227). **Demo:** [ReStore: RL Guided Data Migration in Tiered Storage](https://disc-projects.bu.edu/ReStore/index.html) (VLDB demo). See [Citation](#citation).
 
 `ReStore` dynamically manages data migration across storage tiers by learning from workload patterns, device characteristics, and system states, to optimize overall system performance while minimizing migration costs. The general workflow of `ReStore`:
 
@@ -19,9 +21,8 @@ This repository contains the implementation of `ReStore` (SIGMOD 2026), a reinfo
 | [`src/`](src/) | The `restore` command-line interface |
 | [`workloads/`](workloads/) | Synthetic workloads and their generator, and the real-world traces with their conversion scripts |
 | [`ML_models/`](ML_models/) | Pre-trained models for the `LogiReg` and `XGBfast` baselines |
-| [`scripts/`](scripts/) | [`reproduce.sh`](scripts/reproduce.sh): runs the experiments of the paper and plots the figures |
+| [`scripts/`](scripts/) | [`reproduce.sh`](scripts/reproduce.sh) (runs the experiments of the paper and plots the figures), [`quick_start.sh`](scripts/quick_start.sh), and [`test_package.sh`](scripts/test_package.sh) (smoke test) |
 | [`results/`](results/) | Plotting scripts for the figures; results of `scripts/reproduce.sh` are written here |
-| [`examples/`](examples/) | Quick start and smoke test |
 | [`utils/`](utils/) | Helper scripts for our testbeds (FEMU preconditioning, OpenStack volumes, latency checks) |
 
 ## Requirements
@@ -46,7 +47,7 @@ export PATH="$HOME/.local/bin:$PATH"
 restore --help
 ```
 
-Install XGBoost-FastForest first to include the `XGBfast` policy (see [ML-based policies](#ml-based-policies)). Alternatively, build with CMake directly; the binaries in `build/` can be used without installing:
+Install XGBoost-FastForest to include the `XGBfast` policy (see [ML-based policies](#ml-based-policies)). Alternatively, build with CMake directly; the binaries in `build/` can be used without installing:
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -59,10 +60,10 @@ cmake --build build -j
 From the repository root:
 
 ```bash
-./examples/quick_start.sh
+./scripts/quick_start.sh
 ```
 
-This runs the `LFU` baseline and `ReStore` (`RL`) on the bundled MSR Cambridge `hm_1` trace (2.3M requests) with simulated tiers and the default configuration of this trace (Tier 1/2/3 capacity 5,000/15,000/60,000 pages, read latency 30/200/500 µs), and prints a summary. The logs are in `Results_MSR_hm_1/output_MSR_hm_1_<policy>.log`; each log ends with the total request time, the number of reads and writes, the page hits in each tier, the number of migrations between tiers, and the policy's decision overhead. `./examples/test_package.sh` runs a few-second smoke test of the CLI.
+This runs the `LFU` baseline and `ReStore` (`RL`) on the bundled MSR Cambridge `hm_1` trace (2.3M requests) with simulated tiers and the default configuration of this trace (Tier 1/2/3 capacity 5,000/15,000/60,000 pages, read latency 30/200/500 µs), and prints a summary (about 10 minutes). The logs are in `Results_MSR_hm_1/output_MSR_hm_1_<policy>.log`; each log ends with the total request time, the number of reads and writes, the page hits in each tier, the number of migrations between tiers, and the policy's decision overhead. `./scripts/test_package.sh` runs a few-second smoke test of the CLI.
 
 The equivalent manual steps are:
 
@@ -163,7 +164,7 @@ Larger 5hf90 workloads (used for the scalability experiment) are generated with 
 | `temp_incr_alpha`, `temp_incr_buffersize`, `temp_drop_thrd`, `temp_drop_freqs` | Page temperature tracking (TEMP and RL) |
 | `train_percentage` | LogiReg / XGBfast: which pre-trained model to load (default 5) |
 
-`read_time_*` and `asym_*` define the latencies of the **simulated tiers** (the default): each read takes `read_time` µs and each write `read_time × asym` µs on one of the tier's `num_threads` I/O threads. When **real devices** are set as tiers, every read and write is a real direct I/O on the device, so the measured times are the devices' real I/O times; `read_time_*` and `asym_*` then only tell ReStore's RL agent the relative speed of the tiers, so set them to match the devices.
+`read_time_*` and `asym_*` define the latencies of the **simulated tiers**: each read takes `read_time` µs and each write `read_time × asym` µs on one of the tier's `num_threads` I/O threads. When **real devices** are set as tiers, every read and write is a real direct I/O on the device, so the measured times are the devices' real I/O times; `read_time_*` and `asym_*` then only tell ReStore's RL agent the relative speed of the tiers, so set them to match the devices.
 
 ### Tier devices
 
@@ -188,7 +189,7 @@ Each run's log starts with the setup of each tier, e.g. `Tier1: simulated (read 
 > ReStore reads and writes the tier devices **directly** (4 KB `O_DIRECT` I/O starting at offset 0). On a block device, this destroys any partition table and file system on it. Only use dedicated, empty (e.g. emulated) devices, or files.
 > As a safeguard, ReStore refuses a block device that, or a partition of which, is mounted or otherwise in use (e.g. the system disk, LVM, swap). If you are sure (e.g. scratch volumes that are mounted), set `RESTORE_ALLOW_BUSY_DEVICE=1`.
 
-**FEMU.** [FEMU](https://github.com/MoatLab/FEMU) is a good and convenient way to set up SSDs with different characteristics: it emulates NVMe SSDs with configurable geometry and read, program, and erase latencies, which appear to the host as standard NVMe devices. We used it for the device experiments in the paper (configurations in Table 5 of the paper, see [Fig. 13](#fig-13-different-femu-ssds)). Set up three FEMU NVMe devices following the FEMU documentation, precondition them with [`utils/precondition_3nvme.fio`](utils/precondition_3nvme.fio) (`sudo fio utils/precondition_3nvme.fio`, which overwrites 95% of each device; adjust the device names), and pass them as tiers as above.
+**FEMU.** In the paper, we use [FEMU](https://github.com/MoatLab/FEMU) to emulate different SSDs (configurations in Table 5 of the paper, see [Fig. 13](#fig-13-different-femu-ssds)); FEMU devices appear to the host as standard NVMe SSDs. Set up three FEMU NVMe devices following the FEMU documentation, precondition them with [`utils/precondition_3nvme.fio`](utils/precondition_3nvme.fio) (`sudo fio utils/precondition_3nvme.fio`, which overwrites 95% of each device; adjust the device names), and pass them as tiers as above.
 
 Device paths can also be compiled in as defaults, with `cmake -DFAST_DEVICE_PATH=... -DMIDDLE_DEVICE_PATH=... -DSLOW_DEVICE_PATH=...` or `restore build -fast_device ... -middle_device ... -slow_device ...`.
 
@@ -270,6 +271,28 @@ sudo env "PATH=$PATH" FAST_DEVICE=/dev/nvme1n1 MIDDLE_DEVICE=/dev/nvme2n1 SLOW_D
 - Fig. 1 summarizes results of Figs. 8 and 11.
 - Fig. 9 (robustness to the read/write ratio) and Fig. 14 (extension to a 2-tier setup) are supplementary robustness and extensibility results and are not part of this artifact.
 - Table 8 (CPU time and memory per policy) is not scripted; the policies' decision overhead is reported at the end of each log.
+
+## Citation
+
+If you use ReStore, please cite our SIGMOD 2026 paper:
+
+```bibtex
+@article{zhang2026restore,
+  author    = {Zhang, Tianru and Papon, Tarikul Islam and Bagashvili, Teona and Toor, Salman and Athanassoulis, Manos},
+  title     = {ReStore: A Reinforcement Learning Approach for Data Migration in Multi-Tiered Storage},
+  journal   = {Proceedings of the ACM on Management of Data},
+  volume    = {4},
+  number    = {3},
+  articleno = {227},
+  numpages  = {28},
+  year      = {2026},
+  month     = jun,
+  doi       = {10.1145/3802104},
+  url       = {https://doi.org/10.1145/3802104}
+}
+```
+
+Our VLDB demo of ReStore, *ReStore: RL Guided Data Migration in Tiered Storage*, is on the [ReStore demo page](https://disc-projects.bu.edu/ReStore/index.html).
 
 ## License
 

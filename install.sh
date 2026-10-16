@@ -149,7 +149,7 @@ print_usage_info() {
     echo "  restore init -workload MSR_hm_1                # Write ./restore_config.json"
     echo "  restore run -policy LFU -workload MSR_hm_1     # Run a policy on a workload"
     echo
-    echo "Quick check: ./examples/quick_start.sh"
+    echo "Quick check: ./scripts/quick_start.sh"
     echo
     
     if [[ "$INSTALL_PREFIX" != "/usr/local" ]]; then
