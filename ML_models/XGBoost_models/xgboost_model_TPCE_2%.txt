@@ -2282,4 +2282,4 @@ booster[99]:
 					16:[f4<108940] yes=23,no=24,missing=24
 						23:leaf=-0.167357445
 						24:leaf=0.000153508139
-base_score=0.5
+base_score=0

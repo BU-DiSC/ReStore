@@ -8264,4 +8264,4 @@ booster[99]:
 					42:[f3<8429] yes=61,no=62,missing=62
 						61:leaf=0.109759822
 						62:leaf=-0.0114522101
-base_score=0.5
+base_score=0

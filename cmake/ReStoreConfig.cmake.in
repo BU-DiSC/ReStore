@@ -13,7 +13,7 @@ find_program(ReStore_EXECUTABLE restore
 
 # Find policy executables
 set(ReStore_POLICY_EXECUTABLES
-    Run_RL Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP 
+    Run_RL Run_RL_device Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP 
     Run_static Run_ideal Run_LogiReg Run_XGBfast
 )
 

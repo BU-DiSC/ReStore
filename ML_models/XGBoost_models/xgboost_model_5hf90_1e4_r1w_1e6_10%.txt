@@ -8820,4 +8820,4 @@ booster[99]:
 					44:[f2<359] yes=81,no=82,missing=82
 						81:leaf=0.032781899
 						82:leaf=-7.54462089e-05
-base_score=0.5
+base_score=0

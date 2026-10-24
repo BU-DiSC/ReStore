@@ -216,7 +216,7 @@ def plot_data(*data_list):
         #     ax.legend(fontsize=25, loc='upper right', ncol=3)
 
     plt.tight_layout()
-    plt.savefig('Results_capacity_tests_static_2x3_newcolor.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
+    plt.savefig('Results_capacity_tests_static_2x3.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
     # plt.savefig('Results_capacity_tests_changings.png',format='png',dpi=320, bbox_inches='tight')
     plt.show()
 

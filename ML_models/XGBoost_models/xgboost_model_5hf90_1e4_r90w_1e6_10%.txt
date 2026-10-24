@@ -9216,4 +9216,4 @@ booster[99]:
 					60:[f0<1765] yes=113,no=114,missing=114
 						113:leaf=0.0520301946
 						114:leaf=0.00015858555
-base_score=0.5
+base_score=0

@@ -6046,4 +6046,4 @@ booster[99]:
 					24:[f2<206] yes=31,no=32,missing=32
 						31:leaf=0.17290841
 						32:leaf=0.000241383386
-base_score=0.5
+base_score=0

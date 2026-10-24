@@ -9362,4 +9362,4 @@ booster[99]:
 					48:[f2<1001] yes=79,no=80,missing=80
 						79:leaf=0.0217245333
 						80:leaf=-0.000227876764
-base_score=0.5
+base_score=0

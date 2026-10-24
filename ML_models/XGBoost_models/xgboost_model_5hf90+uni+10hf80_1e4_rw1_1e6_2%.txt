@@ -7160,4 +7160,4 @@ booster[99]:
 					56:[f3<1672] yes=93,no=94,missing=94
 						93:leaf=0.144001037
 						94:leaf=-0.00136072538
-base_score=0.5
+base_score=0

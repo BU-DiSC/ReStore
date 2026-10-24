@@ -6804,4 +6804,4 @@ booster[99]:
 					46:[f1<2504] yes=65,no=66,missing=66
 						65:leaf=-0.339196414
 						66:leaf=0.00541146658
-base_score=0.5
+base_score=0

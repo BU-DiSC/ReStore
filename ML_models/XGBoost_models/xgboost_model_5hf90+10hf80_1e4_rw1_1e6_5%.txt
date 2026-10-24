@@ -8552,4 +8552,4 @@ booster[99]:
 					52:[f3<302] yes=87,no=88,missing=88
 						87:leaf=0.0452604666
 						88:leaf=-0.000251770602
-base_score=0.5
+base_score=0

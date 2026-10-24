@@ -127,7 +127,7 @@ def plot_data(*data_list):
         ax.tick_params(axis='y', labelsize=32)
 
     plt.tight_layout()
-    plt.savefig('Results_scalability_tests_5hf90_new.pdf',format='pdf',dpi=600, bbox_inches='tight')
+    plt.savefig('Results_scalability_tests_5hf90.pdf',format='pdf',dpi=600, bbox_inches='tight')
     # plt.show()
 
     percentage_list = [x/(len(workload_labels)*len(settings)) for x in percentage_list]

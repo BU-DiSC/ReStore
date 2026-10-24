@@ -8,28 +8,22 @@ This repository contains the implementation of `ReStore`, a reinforcement-learni
 
 ![ReStore](figures/MTS-DBMS+RL.png?raw=true "ReStore workflow")
 
-**Reproducing the paper's results.** We provide a Docker container that builds ReStore, runs the experiments of the paper on simulated tiers, and plots the figures with a single command. Alternatively, you can install ReStore on your own server, set up the storage tiers, and run the experiments with one script. Both ways are described in [Reproducing the paper's experiments](#reproducing-the-papers-experiments).
+**Reproducing the paper's results.** We provide a Docker container that builds ReStore, runs the main experiment of the paper (Fig. 7) on simulated tiers, and plots its figures with a single command. Alternatively, you can install ReStore on your own server, set up the storage tiers, and run the experiments with one script. Both ways are described in [Reproducing the paper's experiments](#reproducing-the-papers-experiments).
 
 > [!WARNING]
 > When you give ReStore real storage devices as tiers, it accesses them with direct I/O and **overwrites their contents**. Never point it at a disk that holds data; see [Tier devices](#tier-devices). By default the tiers are simulated and no device is touched.
 
-
-
 ## Contents
-
 
 | Path                       | Description                                                                                                                                                                                                 |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `[cpp/](cpp/)`             | Policy implementations, the RL agent, the tier model, and the tier device driver (`[cpp/device_driver/](cpp/device_driver/)`)                                                                               |
-| `[src/](src/)`             | The `restore` command-line interface                                                                                                                                                                        |
-| `[workloads/](workloads/)` | Synthetic workloads and their generator, and the real-world traces with their conversion scripts                                                                                                            |
-| `[ML_models/](ML_models/)` | Pre-trained model weights for the `LogiReg` and `XGBfast` baselines                                                                                                                                         |
-| `[scripts/](scripts/)`     | `[reproduce.sh](scripts/reproduce.sh)` (runs the experiments of the paper and plots the figures), `[quick_start.sh](scripts/quick_start.sh)`, and `[test_package.sh](scripts/test_package.sh)` (smoke test) |
-| `[results/](results/)`     | Plotting scripts for the figures; results of `scripts/reproduce.sh` are written here                                                                                                                        |
-| `[utils/](utils/)`         | Helper scripts for our testbeds (FEMU preconditioning, OpenStack volumes, latency checks)                                                                                                                   |
-
-
-
+| [`cpp/`](cpp/)             | Policy implementations, the RL agent, the tier model, and the tier device driver ([`cpp/device_driver/`](cpp/device_driver/))                                                                               |
+| [`src/`](src/)             | The `restore` command-line interface                                                                                                                                                                        |
+| [`workloads/`](workloads/) | Synthetic workloads and their generator, and the real-world traces with their conversion scripts                                                                                                            |
+| [`ML_models/`](ML_models/) | Pre-trained model weights for the `LogiReg` and `XGBfast` baselines                                                                                                                                         |
+| [`scripts/`](scripts/)     | [`reproduce.sh`](scripts/reproduce.sh) (runs the experiments of the paper and plots the figures), [`quick_start.sh`](scripts/quick_start.sh), and [`test_package.sh`](scripts/test_package.sh) (smoke test) |
+| [`results/`](results/)     | Plotting scripts for the figures; results of `scripts/reproduce.sh` are written here                                                                                                                        |
+| [`utils/`](utils/)         | Helper scripts for our testbeds (FEMU preconditioning, OpenStack volumes, latency checks)                                                                                                                   |
 
 ## Requirements
 
@@ -44,8 +38,6 @@ This repository contains the implementation of `ReStore`, a reinforcement-learni
 
 - *Simulated tiers* (default): any Linux machine with >2 GB of memory.
 - *Real tiers*: three storage devices (or file systems) as the fast, middle, and slow tier, see [Tier devices](#tier-devices). In the paper, we use NVMe SSDs emulated with [FEMU](https://github.com/MoatLab/FEMU) and QoS-configured cloud volumes.
-
-
 
 ## Build
 
@@ -65,8 +57,6 @@ cmake --build build -j
 ./build/restore --help
 ```
 
-
-
 ## Quick start
 
 From the repository root:
@@ -75,7 +65,7 @@ From the repository root:
 ./scripts/quick_start.sh
 ```
 
-This runs the `LFU` baseline and `ReStore` (`RL`) on the bundled MSR Cambridge `hm_1` trace (2.3M requests) with simulated tiers and the default configuration of this trace (Tier 1/2/3 capacity 5,000/15,000/60,000 pages, read latency 30/200/500 µs), and prints a summary (about 10 minutes). The logs are in `Results_MSR_hm_1/output_MSR_hm_1_<policy>.log`; each log ends with the total request time, the number of reads and writes, the page hits in each tier, the number of migrations between tiers, and the policy's decision overhead. `./scripts/test_package.sh` runs a few-second smoke test of the CLI.
+This runs the `LFU` baseline and `ReStore` (`RL`) on the bundled MSR Cambridge `hm_1` trace (2.3M requests) with simulated tiers and the default configuration of this trace (Tier 1/2/3 capacity 5,000/15,000/60,000 pages, read latency 30/200/500 µs), and prints a summary (about 2 minutes on a Linux host). The logs are in `Results_MSR_hm_1/output_MSR_hm_1_<policy>.log`; each log ends with the total request time, the number of reads and writes, the page hits in each tier, the number of migrations between tiers, and the policy's decision overhead. `./scripts/test_package.sh` runs a few-second smoke test of the CLI.
 
 The equivalent manual steps are:
 
@@ -101,7 +91,6 @@ Parameters given on the command line (`-key value` or `-key=value`) override `re
 
 ### Policies
 
-
 | Policy    | Description                                                                    |
 | --------- | ------------------------------------------------------------------------------ |
 | `RL`      | ReStore (reinforcement learning)                                               |
@@ -115,12 +104,11 @@ Parameters given on the command line (`-key value` or `-key=value`) override `re
 | `ideal`   | Oracle: optimal initial placement with known access frequencies, no migrations |
 | `static`  | Static placement, no migrations                                                |
 
-
-
+**ReStore versions.** `RL` is the version of ReStore that produced the results on simulated tiers in the paper (Figs. 7, 8, 10, 11); `RL_device` is a later revision, used for the experiments on tier devices (Figs. 12, 13, 15), which differs in how the agents normalize their state variables. [`scripts/reproduce.sh`](scripts/reproduce.sh) uses each version for the figures it produced.
 
 #### ML-based policies
 
-`LogiReg` and `XGBfast` predict whether a page will be accessed again within a fixed future window, from the intervals between its five most recent accesses, and migrate pages accordingly. Their pre-trained models are in `[ML_models/](ML_models/)`, named after the workload and the percentage of the workload (from its start) they were trained on, e.g. `ML_models/Logistic_models/logistic_model_MSR_hm_1_5%.json` and `ML_models/XGBoost_models/xgboost_model_MSR_hm_1_5%.txt`. Select the model with `-train_percentage` (default 5):
+`LogiReg` and `XGBfast` predict whether a page will be accessed again within a fixed future window, from the intervals between its five most recent accesses, and migrate pages accordingly. Their pre-trained models are in [`ML_models/`](ML_models/), named after the workload and the percentage of the workload (from its start) they were trained on, e.g. `ML_models/Logistic_models/logistic_model_MSR_hm_1_5%.json` and `ML_models/XGBoost_models/xgboost_model_MSR_hm_1_5%.txt`. Select the model with `-train_percentage` (default 5):
 
 ```bash
 restore run -policy LogiReg -workload MSR_hm_1 -train_percentage 5
@@ -137,14 +125,13 @@ cmake --install XGBoost-FastForest/build
 ./install.sh --prefix ~/.local                # rebuild ReStore; the CMake output should say "FastForest found: building Run_XGBfast"
 ```
 
-
+FastForest v0-6-0 requires a `base_score=<value>` line at the end of the model dump and adds it to the model's raw (log-odds) output. The provided models end with `base_score=0`, which corresponds to XGBoost's default base score of 0.5 (a probability).
 
 ### Workloads
 
 `restore list workloads` lists the workloads under `workloads/` (files `workload_<name>.txt`; subfolders are searched). Pass the name with `-workload <name>`; names with `*` or `+` must be quoted in the shell.
 
-**Synthetic workloads** (`[workloads/synthetic/](workloads/synthetic/)`, 10,000 pages, 1,000,000 requests, 50% reads). `xhfy` means that y% of the accesses go to x% of the pages:
-
+**Synthetic workloads** ([`workloads/synthetic/`](workloads/synthetic/), 10,000 pages, 1,000,000 requests, 50% reads). `xhfy` means that y% of the accesses go to x% of the pages:
 
 | Workload | Name                              | Type    | Description                                             |
 | -------- | --------------------------------- | ------- | ------------------------------------------------------- |
@@ -156,24 +143,20 @@ cmake --install XGBoost-FastForest/build
 | C        | `5hf90*10_1e4_rw1_1e6`            | dynamic | 10 phases of 5hf90, each on a different 5% of the pages |
 | D        | `5hf90*50_1e4_rw1_1e6`            | dynamic | 50 phases of 5hf90                                      |
 
+Larger 5hf90 workloads (used for the scalability experiment) are generated with [`workload_gen.cpp`](workloads/synthetic/workload_gen.cpp), see [Fig. 10](#fig-10-scalability).
 
-Larger 5hf90 workloads (used for the scalability experiment) are generated with `[workload_gen.cpp](workloads/synthetic/workload_gen.cpp)`, see [Fig. 10](#fig-10-scalability).
-
-**Real-world traces** (`[workloads/traces/](workloads/traces/)`), converted to page-level requests (4 KB pages). Each folder contains the download and conversion instructions:
-
+**Real-world traces** ([`workloads/traces/`](workloads/traces/)), converted to page-level requests (4 KB pages). Each folder contains the download and conversion instructions:
 
 | Folder                                              | Workloads                | Source                                                        | #pages                  | #requests               |
 | --------------------------------------------------- | ------------------------ | ------------------------------------------------------------- | ----------------------- | ----------------------- |
-| `[MSR_Cambridge/](workloads/traces/MSR_Cambridge/)` | `MSR_hm_1`, `MSR_wdev_0` | [SNIA](https://iotta.snia.org/traces/block-io/388)            | 51,733 / 79,677         | 2,308,560 / 695,995     |
-| `[TPC/](workloads/traces/TPC/)`                     | `TPCC`, `TPCE`           | [SNIA](https://iotta.snia.org/traces/block-io/130)            | 16,842,331 / 19,274,163 | 62,925,641 / 31,884,418 |
-| `[YCSB/](workloads/traces/YCSB/)`                   | `YCSB`                   | [SNIA](https://iotta.snia.org/traces/block-io/28568)          | 61,960,292              | 92,728,323              |
-| `[Thesios/](workloads/traces/Thesios/)`             | `thesios`                | [Google](https://github.com/google-research-datasets/thesios) | 16,417                  | 95,970,071              |
+| [`MSR_Cambridge/`](workloads/traces/MSR_Cambridge/) | `MSR_hm_1`, `MSR_wdev_0` | [SNIA](https://iotta.snia.org/traces/block-io/388)            | 51,733 / 79,677         | 2,308,560 / 695,995     |
+| [`TPC/`](workloads/traces/TPC/)                     | `TPCC`, `TPCE`           | [SNIA](https://iotta.snia.org/traces/block-io/130)            | 16,842,331 / 19,274,163 | 62,925,641 / 31,884,418 |
+| [`YCSB/`](workloads/traces/YCSB/)                   | `YCSB`                   | [SNIA](https://iotta.snia.org/traces/block-io/28568)          | 61,960,292              | 92,728,323              |
+| [`Thesios/`](workloads/traces/Thesios/)             | `thesios`                | [Google](https://github.com/google-research-datasets/thesios) | 16,417                  | 95,970,071              |
 
-
-`restore init` has default configurations for `MSR_hm_1` and `MSR_wdev_0`; the configurations we used for the other traces are in `trace_args()` of `[scripts/reproduce.sh](scripts/reproduce.sh)`. For the synthetic workloads, the built-in defaults of the policies apply.
+`restore init` has default configurations for `MSR_hm_1` and `MSR_wdev_0`; the configurations we used for the other traces are in `trace_args()` of [`scripts/reproduce.sh`](scripts/reproduce.sh). For the synthetic workloads, the built-in defaults of the policies apply.
 
 ### Parameters
-
 
 | Parameter                                                                                                | Meaning                                                                      |
 | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -186,7 +169,6 @@ Larger 5hf90 workloads (used for the scalability experiment) are generated with 
 | `a_b_update_freq_s1`, `num_elements_to_consider_s1`, `a_b_update_freq_s2`, `num_elements_to_consider_s2` | ReStore: state normalization updates                                         |
 | `temp_incr_alpha`, `temp_incr_buffersize`, `temp_drop_thrd`, `temp_drop_freqs`                           | Page temperature tracking (TEMP and RL)                                      |
 | `train_percentage`                                                                                       | LogiReg / XGBfast: which pre-trained model to load (default 5)               |
-
 
 `read_time_*` and `asym_*` define the latencies of the **simulated tiers**: each read takes `read_time` µs and each write `read_time × asym` µs on one of the tier's `num_threads` I/O threads. When **real devices** are set as tiers, every read and write is a real direct I/O on the device, so the measured times are the devices' real I/O times; `read_time_`* and `asym_*` then only tell ReStore's RL agent the relative speed of the tiers, so set them to match the devices.
 
@@ -213,45 +195,50 @@ Each run's log starts with the setup of each tier, e.g. `Tier1: simulated (read 
 > ReStore reads and writes the tier devices **directly** (4 KB `O_DIRECT` I/O starting at offset 0). On a block device, this destroys any partition table and file system on it. Only use dedicated, empty (e.g. emulated) devices, or files.
 > As a safeguard, ReStore refuses a block device that, or a partition of which, is mounted or otherwise in use (e.g. the system disk, LVM, swap). If you are sure (e.g. scratch volumes that are mounted), set `RESTORE_ALLOW_BUSY_DEVICE=1`.
 
-**FEMU.** In the paper, we use [FEMU](https://github.com/MoatLab/FEMU) to emulate different SSDs (configurations in Table 5 of the paper, see [Fig. 13](#fig-13-different-femu-ssds)); FEMU devices appear to the host as standard NVMe SSDs. Set up three FEMU NVMe devices following the FEMU documentation, precondition them with `[utils/precondition_3nvme.fio](utils/precondition_3nvme.fio)` (`sudo fio utils/precondition_3nvme.fio`, which overwrites 95% of each device; adjust the device names), and pass them as tiers as above.
+**FEMU.** In the paper, we use [FEMU](https://github.com/MoatLab/FEMU) to emulate different SSDs (configurations in Table 5 of the paper, see [Fig. 13](#fig-13-different-femu-ssds)); FEMU devices appear to the host as standard NVMe SSDs. Set up three FEMU NVMe devices following the FEMU documentation, precondition them with [`utils/precondition_3nvme.fio`](utils/precondition_3nvme.fio) (`sudo fio utils/precondition_3nvme.fio`, which overwrites 95% of each device; adjust the device names), and pass them as tiers as above.
 
 Device paths can also be compiled in as defaults, with `cmake -DFAST_DEVICE_PATH=... -DMIDDLE_DEVICE_PATH=... -DSLOW_DEVICE_PATH=...` or `restore build -fast_device ... -middle_device ... -slow_device ...`.
 
 ## Reproducing the paper's experiments
 
-The experiments are run with `[scripts/reproduce.sh](scripts/reproduce.sh)`, which runs all policies for an experiment, writes the results to `results/<experiment>/`, and plots the figure there (the plotting scripts are in `[results/](results/)`). A run whose log already exists is skipped, so an interrupted experiment can be resumed by running it again. Run `scripts/reproduce.sh` without arguments for its usage.
+The experiments are run with [`scripts/reproduce.sh`](scripts/reproduce.sh), which runs all policies for an experiment, writes the results to `results/<experiment>/`, and plots the figure there (the plotting scripts are in [`results/`](results/)). A run whose log already exists is skipped, so an interrupted experiment can be resumed by running it again. Run `scripts/reproduce.sh` without arguments for its usage.
 
-**Option 1: Docker container.** Our container runs the experiments on simulated tiers that need no special hardware and finish within the review period (Figs. 7 and 8, i.e. `scripts/reproduce.sh container`, about 30 hours), and plots the figures, with a single command.
+**Option 1: Docker container.** The [`Dockerfile`](Dockerfile) builds an image with ReStore, all its dependencies (including XGBoost-FastForest), and the workloads. By default, the container runs the experiment of Fig. 7 on simulated tiers, which needs no special hardware (`scripts/reproduce.sh container`, about 6.5 hours), and plots its figures into the mounted output folder:
+
+```bash
+docker build -t restore .
+docker run --rm -v "$PWD/output:/output" restore           # Fig. 7: results and figures in output/fig7/
+docker run --rm -v "$PWD/output:/output" restore quick     # quick start (about 2 minutes): output/quick_start/
+docker run --rm -v "$PWD/output:/output" restore fig8      # any other experiment of scripts/reproduce.sh
+```
+
+Run the container on a Linux host: the simulated tiers rely on accurate sleep timers, and in Docker Desktop on macOS, we measured up to 6x longer runtimes, which also distorts the relative speed of the tiers. If `docker build` fails to clone from GitHub (e.g. on cloud VMs whose network MTU is below Docker's default of 1500), build with `docker build --network host -t restore .`.
 
 **Option 2: your own server.** [Build](#build) ReStore with [XGBoost-FastForest](#ml-based-policies), set up the [tier devices](#tier-devices) for the device experiments, and run:
 
 ```bash
-scripts/reproduce.sh fig7 fig8                 # or any of: fig10 fig11 fig12 "fig13 <config>" fig15
+scripts/reproduce.sh fig7                 # or any of: fig8 fig10 fig11 fig12 "fig13 <config>" fig15
 ```
 
-
-| Figure      | Experiment                                          | Tiers         | Command          | In container                         | Time                   |
+| Figure      | Experiment                                          | Tiers         | Command          | In container                         | Time\*                 |
 | ----------- | --------------------------------------------------- | ------------- | ---------------- | ------------------------------------ | ---------------------- |
-| Fig. 7a, 7b | Static workloads, 6 tier-capacity settings          | simulated     | `fig7`           | yes                                  | ~9 h                   |
-| Fig. 8      | Dynamic workloads A-D, 6 tier-capacity settings     | simulated     | `fig8`           | yes                                  | ~22 h                  |
-| Fig. 10     | Scalability, 10^4 to 10^7 pages                     | simulated     | `fig10`          | no (long)                            | ~3 days                |
-| Fig. 11     | TPC-C, TPC-E, Google Thesios, YCSB                  | simulated     | `fig11`          | no (long; traces must be downloaded) | ~5 days                |
+| Fig. 7a, 7b | Static workloads, 6 tier-capacity settings          | simulated     | `fig7`           | yes                                  | ~7 h                 |
+| Fig. 8      | Dynamic workloads A-D, 6 tier-capacity settings     | simulated     | `fig8`           | on request (`restore fig8`)          | ~22 h                  |
+| Fig. 10     | Scalability, 10^4 to 10^7 pages                     | simulated     | `fig10`          | no (long)                            | ~5 days                |
+| Fig. 11     | TPC-C, TPC-E, Google Thesios, YCSB                  | simulated     | `fig11`          | no (long; traces must be downloaded) | ~9 days                |
 | Fig. 12     | MSR traces vs Sibyl, single-threaded and concurrent | FEMU          | `fig12`          | no (devices)                         | ~4 h                   |
-| Fig. 13     | MSR_wdev_0 on 4 FEMU configurations                 | FEMU          | `fig13 <config>` | no (devices)                         | ~1 h per configuration |
+| Fig. 13     | MSR_wdev_0 on 4 FEMU configurations                 | FEMU          | `scripts/femu/`  | no (optional scripts, KVM + 16 GB)   | ~1 h per configuration |
 | Fig. 15     | 10hf90, MSR_hm_1, Thesios on cloud volumes          | cloud volumes | `fig15`          | no (devices)                         | ~17 h                  |
 
-
- Estimated from the run times of our experiments; the runs execute one after another. On simulated tiers, a run of a 10^6-request synthetic workload takes 1 to 10 minutes, depending on the policy and the tier capacities.
-
-The ML-based policies use the models trained on 5% of each workload; for the workloads where no 5% model is available (XGB for the scalability workloads and TPC-C, both models for YCSB), the script uses the largest available one (2% or 1%), as training on 5% of these workloads is not feasible.
+\* Estimated from the run times of our experiments; the runs execute one after another. On simulated tiers, a run of a 10^6-request synthetic workload takes 1 to 10 minutes, depending on the policy and the tier capacities.
 
 ### Fig. 7: static workloads
 
-`scripts/reproduce.sh fig7` runs the static workloads 5hf90, 10hf90, and 10hf80 with Tier 1/Tier 2 capacities of 1%/4%, 1%/8%, 3%/8%, 3%/16%, 6%/8%, and 12%/16% of the pages (default tier latencies 30/200/500 µs, asymmetry 1.5/2/4, concurrency 8/4/2), and plots `results/fig7/Results_capacity_tests_static_2x3_newcolor.pdf` (Fig. 7a, runtime) and `results/fig7/Migration_capacity_tests_static_2x3_newcolor.pdf` (Fig. 7b, migrations).
+`scripts/reproduce.sh fig7` runs the static workloads 5hf90, 10hf90, and 10hf80 with Tier 1/Tier 2 capacities of 1%/4%, 1%/8%, 3%/8%, 3%/16%, 6%/8%, and 12%/16% of the pages (default tier latencies 30/200/500 µs, asymmetry 1.5/2/4, concurrency 8/4/2), and plots `results/fig7/Results_capacity_tests_static_2x3.pdf` (Fig. 7a, runtime) and `results/fig7/Migration_capacity_tests_static_2x3.pdf` (Fig. 7b, migrations).
 
 ### Fig. 8: dynamic workloads
 
-`scripts/reproduce.sh fig8` runs the dynamic workloads A-D with the same configurations as Fig. 7, and plots `results/fig8/Results_capacity_tests_changings_2x3_newcolor.pdf`.
+`scripts/reproduce.sh fig8` runs the dynamic workloads A-D with the same configurations as Fig. 7, and plots `results/fig8/Results_capacity_tests_changings_2x3.pdf`. It is not run in the container by default because of its runtime (about 22 hours); run it with `docker run --rm -v "$PWD/output:/output" restore fig8`.
 
 ### Fig. 10: scalability
 
@@ -266,23 +253,32 @@ g++ -O3 -std=c++20 -o workload_gen workload_gen.cpp
 cd ../.. && scripts/reproduce.sh fig10
 ```
 
-This runs the four workloads with Tier 1/Tier 2 capacities of 3%/8% of the pages and plots `results/fig10/Results_scalability_tests_5hf90_new.pdf`.
+This runs the four workloads with Tier 1/Tier 2 capacities of 3%/8% of the pages and plots `results/fig10/Results_scalability_tests_5hf90.pdf`.
 
 ### Fig. 11: real-world traces
 
-Not included in the container because of the size of the traces and their runtime. Download and convert TPC-C, TPC-E, YCSB, and Google Thesios as described in `[workloads/traces/](workloads/traces/)`, then run `scripts/reproduce.sh fig11`, which plots `results/fig11/Results_real_traces.pdf`. The tier capacities are 2M/8M/20M pages for TPC-C and TPC-E, 10M/20M/70M for YCSB, and 1.5K/5K/20K for Thesios.
+Not included in the container because of the size of the traces and their runtime. Download and convert TPC-C, TPC-E, YCSB, and Google Thesios as described in [`workloads/traces/`](workloads/traces/), then run `scripts/reproduce.sh fig11`, which plots `results/fig11/Results_real_traces.pdf`. The tier capacities are 2M/8M/20M pages for TPC-C and TPC-E, 10M/20M/70M for YCSB, and 1.5K/5K/20K for Thesios.
 
 ### Fig. 12: comparison with Sibyl
 
-Runs on three FEMU devices in the default configuration of Table 5 (read latency 30/200/500 µs). `scripts/reproduce.sh fig12` runs MSR_hm_1 and MSR_wdev_0 with single-threaded tiers (`hm_1_ST`, `wdev_0_ST`) and with concurrency 8/4/2 (`_Con`), and then plots `results/fig12/Results_Sibyl_traces.pdf`, which normalizes all latencies to [Sibyl](https://github.com/CMU-SAFARI/Sibyl) (Singh et al., ISCA 2022). Sibyl is a separate system and not part of this repository; we ran its public implementation under the same storage configuration. Add its results to each folder `results/fig12/Results_<workload>/num_threads{111,842}/5000-15000/` as `output_<workload>_Sibyl.log`, with the lines `Total requests time: <N> microseconds` and `For loop time: <N> microseconds`, and run `scripts/reproduce.sh plots`. (The plotting script assigns the logs to the bars by their alphabetical file order: `EXD`, `LFU`, `LRFU`, `LRU`, `LogiReg`, `RL`, `Sibyl`, `TEMP`, `XGBfast`.)
+Runs on three FEMU devices in the default configuration of Table 5 (read latency 30/200/500 µs). `scripts/reproduce.sh fig12` runs MSR_hm_1 and MSR_wdev_0 with single-threaded tiers (`hm_1_ST`, `wdev_0_ST`) and with concurrency 8/4/2 (`_Con`), and then plots `results/fig12/Results_Sibyl_traces.pdf`, which normalizes all latencies to [Sibyl](https://github.com/CMU-SAFARI/Sibyl) (Singh et al., ISCA 2022). Sibyl is a separate system and not part of this repository; we ran its public implementation under the same storage configuration. Add its results to each folder `results/fig12/Results_<workload>/num_threads{111,842}/5000-15000/` as `output_<workload>_Sibyl.log`, with the lines `Total requests time: <N> microseconds` and `For loop time: <N> microseconds`, and run `scripts/reproduce.sh plots`. (The plotting script assigns the logs to the bars by their alphabetical file order: `EXD`, `LFU`, `LRFU`, `LRU`, `LogiReg`, `RL_device`, `Sibyl`, `TEMP`, `XGBfast`.)
 
 ### Fig. 13: different FEMU SSDs
 
-Configure the three FEMU devices as one of the configurations of Table 5 (`default`, `config1`, `config2`, `config3`) and run `scripts/reproduce.sh fig13 <config>`; this runs MSR_wdev_0 with the matching read latencies and concurrency, and writes the results to `results/fig13/<config>/`. Repeat for each configuration.
+Fig. 13 runs MSR_wdev_0 on three FEMU SSDs in each of the four configurations of Table 5 (`default`, `config1`, `config2`, `config3`). It is not part of the Docker container, because FEMU runs a guest VM and needs more resources; instead, two optional scripts set up and run it on a Linux x86_64 host with KVM (`/dev/kvm`), sudo, 8 CPU cores, about 16 GB of free memory (8 GB for the guest VM and 2 GB per emulated SSD), 40 GB of disk, and internet access. FEMU's emulation threads keep about 7 cores busy, so do not run other experiments on the host at the same time:
+
+```bash
+scripts/femu/setup.sh          # once (about 30 minutes): builds FEMU, creates an Ubuntu 22.04 guest VM, installs ReStore in it
+scripts/femu/run_fig13.sh      # all four configurations (about 1 hour each), or e.g.: scripts/femu/run_fig13.sh default
+```
+
+`setup.sh` builds [FEMU](https://github.com/vtess/femu) at the version used for the paper, creates the guest from the official Ubuntu cloud image, and builds ReStore and XGBoost-FastForest in the guest (everything goes to `~/restore-femu`, or `$FEMU_HOME`). For each configuration, `run_fig13.sh` boots the guest with three FEMU SSDs that have the configuration's read/write latencies and number of channels (concurrency), runs `scripts/reproduce.sh fig13 <config>` in the guest on these SSDs, and copies the results to `results/fig13/<config>/`. Once all four configurations have been run, it plots `results/fig13/Results_femu_4config.pdf`.
+
+If you have your own FEMU setup, you can also run `scripts/reproduce.sh fig13 <config>` directly in your FEMU guest, with the three SSDs given as tier devices (see [Device experiments](#device-experiments)).
 
 ### Fig. 15: cloud volumes
 
-Runs on three cloud volumes with different OpenStack QoS limits (fast: 33,333 read / 22,222 write IOPS; medium: 5,000 / 2,500; slow: 2,000 / 500), created e.g. with `[utils/create_openstack_volumes.sh](utils/create_openstack_volumes.sh)`. `scripts/reproduce.sh fig15` runs 10hf90, MSR_hm_1, and Thesios (converted as for Fig. 11) and plots `results/fig15/Results_cloud_test.pdf`.
+Runs on three cloud volumes with different OpenStack QoS limits (fast: 33,333 read / 22,222 write IOPS; medium: 5,000 / 2,500; slow: 2,000 / 500), created e.g. with [`utils/create_openstack_volumes.sh`](utils/create_openstack_volumes.sh). `scripts/reproduce.sh fig15` runs 10hf90, MSR_hm_1, and Thesios (converted as for Fig. 11) and plots `results/fig15/Results_cloud_test.pdf`.
 
 ### Device experiments
 
@@ -292,15 +288,11 @@ Runs on three cloud volumes with different OpenStack QoS limits (fast: 33,333 re
 sudo env "PATH=$PATH" FAST_DEVICE=/dev/nvme1n1 MIDDLE_DEVICE=/dev/nvme2n1 SLOW_DEVICE=/dev/nvme3n1 scripts/reproduce.sh fig12
 ```
 
-
-
 ### Not included
 
 - Fig. 1 summarizes results of Figs. 8 and 11.
 - Fig. 9 (robustness to the read/write ratio) and Fig. 14 (extension to a 2-tier setup) are supplementary robustness and extensibility results and are not part of this artifact.
 - Table 8 (CPU time and memory per policy) is not scripted; the policies' decision overhead is reported at the end of each log.
-
-
 
 ## Citation
 
@@ -321,8 +313,6 @@ If you use ReStore, please cite our SIGMOD 2026 paper:
   url       = {https://doi.org/10.1145/3802104}
 }
 ```
-
-
 
 ## License
 

@@ -61,6 +61,7 @@ std::string ReStoreSimulator::buildCommandWithWorkdir(const std::string& executa
 
 void ReStoreSimulator::initializePolicyRunners() {
     policy_runners["RL"] = std::make_unique<RLRunner>();
+    policy_runners["RL_device"] = std::make_unique<RLDeviceRunner>();
     policy_runners["LFU"] = std::make_unique<LFURunner>();
     policy_runners["LRU"] = std::make_unique<LRURunner>();
     policy_runners["LRFU"] = std::make_unique<LRFURunner>();
@@ -148,6 +149,13 @@ int ReStoreSimulator::executePolicy(const std::string& policy, const std::map<st
 
 int RLRunner::run(const std::map<std::string, std::string>& config) {
     std::string command = ReStoreSimulator::buildCommandWithWorkdir("Run_RL", config);
+    std::cout << "Executing: " << command << std::endl;
+    
+    return std::system(command.c_str());
+}
+
+int RLDeviceRunner::run(const std::map<std::string, std::string>& config) {
+    std::string command = ReStoreSimulator::buildCommandWithWorkdir("Run_RL_device", config);
     std::cout << "Executing: " << command << std::endl;
     
     return std::system(command.c_str());

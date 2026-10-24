@@ -7528,4 +7528,4 @@ booster[99]:
 					58:[f0<1691] yes=95,no=96,missing=96
 						95:leaf=-0.0144933425
 						96:leaf=0.00252752239
-base_score=0.5
+base_score=0

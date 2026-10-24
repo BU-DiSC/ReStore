@@ -3,7 +3,7 @@
 # Runs the experiments of the ReStore paper (SIGMOD 2026) and plots the corresponding figures.
 #
 # Usage: scripts/reproduce.sh <experiment>...
-#   container        the experiments included in our Docker container: fig7 fig8
+#   container        the experiment included in our Docker container: fig7
 #   fig7             Fig. 7a/7b  static workloads, 6 tier-capacity settings          (simulated tiers)
 #   fig8             Fig. 8      dynamic workloads A-D, 6 tier-capacity settings     (simulated tiers)
 #   fig10            Fig. 10     scalability, 10^4 to 10^7 pages                     (simulated tiers; long)
@@ -43,8 +43,25 @@ RESTORE_BIN_DIR="$(dirname "$RESTORE")"
 # The plotting scripts assign the logs in a folder to the bars by their sorted file names, so all
 # of these policies must be run (ideal = Oracle, RL = ReStore).
 POLICIES=(LFU LRU LRFU EXD LogiReg XGBfast ideal TEMP RL)
-# Pre-trained models used by LogiReg/XGBfast: 5% of the workload, or the largest available below
-TRAIN_PERCENTAGES=(5 2 1)
+# On tier devices (Figs. 12, 13, 15), ReStore is the RL_device version, which produced these figures.
+# They run in the order of the paper's runs, on the same devices: RL_device after LFU, LRU, LRFU, and EXD.
+DEVICE_POLICIES=(LFU LRU LRFU EXD RL_device TEMP ideal LogiReg XGBfast)
+# Pre-trained models of LogiReg/XGBfast (percentage of the workload they were trained on): the ones used
+# for each figure of the paper. EXPERIMENT is set by each experiment below.
+EXPERIMENT=""
+train_percentage() {  # <policy> <workload>
+    case "$EXPERIMENT/$1/$2" in
+        fig7/XGBfast/10hf90_1e4_rw1_1e6)             echo 5 ;;
+        fig7/*|fig10/*)                              echo 1 ;;
+        fig8/LogiReg/*)                              echo 10 ;;
+        fig8/XGBfast/*)                              echo 5 ;;
+        fig11/*/TPCC)                                echo 2 ;;
+        fig11/*/TPCE)                                echo 5 ;;
+        fig11/*/thesios|fig11/*/YCSB)                echo 1 ;;
+        fig15/LogiReg/thesios)                       echo 1 ;;
+        *)                                           echo 5 ;;   # fig12, fig13, fig15
+    esac
+}
 
 # Tier capacities (pages) for the 10^4-page synthetic workloads: Tier1 1-12%, Tier2 4-16% (Fig. 7, 8)
 CAPACITIES=("100 400" "100 800" "300 800" "300 1600" "600 800" "1200 1600")
@@ -93,17 +110,6 @@ prepare_dir() {
     echo "$dir"
 }
 
-train_percentage() {  # <policy> <workload>
-    local pct
-    for pct in "${TRAIN_PERCENTAGES[@]}"; do
-        case $1 in
-            LogiReg) [[ -f "$REPO_ROOT/ML_models/Logistic_models/logistic_model_$2_$pct%.json" ]] && { echo $pct; return; } ;;
-            XGBfast) [[ -f "$REPO_ROOT/ML_models/XGBoost_models/xgboost_model_$2_$pct%.txt" ]] && { echo $pct; return; } ;;
-        esac
-    done
-    echo "${TRAIN_PERCENTAGES[0]}"
-}
-
 # run <dir> <log subfolder> <policy> <workload> [restore options...]
 run() {
     local dir=$1 sub=$2 policy=$3 workload=$4; shift 4
@@ -135,6 +141,27 @@ plot() {  # <dir> <plotting script>...
     done
 }
 
+# TEMP promotion thresholds of the paper's simulated-tier experiments (Figs. 7 and 8): a page is promoted
+# after 3 requests within the request window; the device experiments use the defaults (Tier1 4, Tier2 2)
+temp_args() {  # <policy>
+    [[ $1 == TEMP ]] && echo "-min_access_toT1 2 -min_access_toT2 2"
+}
+
+# ReStore parameters tuned per setting in the paper (Fig. 8): a_b_update_freq and num_elements_to_consider of both
+# state variables; settings not listed (and all of Fig. 7, which the defaults reproduce best) use the defaults
+RL_TUNED="
+5hf90+10hf80_1e4_rw1_1e6    300-800 6 1000  300-1600 3 1500  600-800 6 1000
+5hf90*10_1e4_rw1_1e6        100-400 5 2000  100-800 5 2000  300-800 6 2000  300-1600 6 1500
+"
+rl_args() {  # <policy> <workload> <tier1> <tier2>
+    [[ $1 == RL ]] || return 0
+    local xy
+    xy=$(awk -v w="$2" -v c="$3-$4" '$1 == w { for (i = 2; i < NF; i += 3) if ($i == c) print $(i+1), $(i+2) }' <<< "$RL_TUNED")
+    [[ -n $xy ]] || return 0
+    set -- $xy
+    echo "-a_b_update_freq_s1 $1 -a_b_update_freq_s2 $1 -num_elements_to_consider_s1 $2 -num_elements_to_consider_s2 $2"
+}
+
 # Synthetic workloads at the 6 capacity settings (Fig. 7 and 8)
 capacity_tests() {  # <experiment> <workload>...
     local dir; dir=$(prepare_dir "$1"); shift
@@ -143,25 +170,29 @@ capacity_tests() {  # <experiment> <workload>...
         for cap in "${CAPACITIES[@]}"; do
             set -- $cap
             for policy in "${POLICIES[@]}"; do
-                run "$dir" "capacity_tests_30-200-500/$1-$2" "$policy" "$workload" -max_capacity_tier1 "$1" -max_capacity_tier2 "$2"
+                run "$dir" "capacity_tests_30-200-500/$1-$2" "$policy" "$workload" -max_capacity_tier1 "$1" -max_capacity_tier2 "$2" \
+                    $(temp_args "$policy") $(rl_args "$policy" "$workload" "$1" "$2")
             done
         done
     done
 }
 
 fig7() {
+    EXPERIMENT=fig7
     check_policies
     capacity_tests fig7 5hf90_1e4_rw1_1e6 10hf90_1e4_rw1_1e6 10hf80_1e4_rw1_1e6
     plot "$RESULTS_DIR/fig7" plot_capacity_test.py plot_capacity_test_migrations.py
 }
 
 fig8() {
+    EXPERIMENT=fig8
     check_policies
     capacity_tests fig8 "5hf90+10hf80_1e4_rw1_1e6" "5hf90+10hf80+20hf80_1e4_rw1_1e6" "5hf90*10_1e4_rw1_1e6" "5hf90*50_1e4_rw1_1e6"
     plot "$RESULTS_DIR/fig8" plot_dynamic_workload.py
 }
 
 fig10() {
+    EXPERIMENT=fig10
     check_policies
     local dir; dir=$(prepare_dir fig10)
     # <workload> <#pages> <#requests>; Tier1/Tier2 = 3%/8% of the pages
@@ -214,6 +245,7 @@ trace_caps() {  # results subfolder of a trace
 }
 
 fig11() {
+    EXPERIMENT=fig11
     check_policies
     local dir; dir=$(prepare_dir fig11)
     require_workloads TPCC TPCE thesios YCSB
@@ -225,12 +257,20 @@ fig11() {
     plot "$dir" plot_traces.py
 }
 
+# RL_device parameters of the paper's device experiments, beyond the `restore init` defaults
+rl_device_args() {  # <policy> <workload>
+    if [[ $1 == RL_device && $2 == MSR_wdev_0 ]]; then
+        echo "-a_b_update_freq_s1 50 -a_b_update_freq_s2 50 -num_elements_to_consider_s1 1000 -num_elements_to_consider_s2 1000"
+    fi
+}
+
 # MSR traces with their `restore init` defaults (Tier1/Tier2 = 5000/15000 pages)
 msr_init() {  # <dir> <workload>
     (cd "$1" && "$RESTORE" init -workload "$2" > /dev/null)
 }
 
 fig12() {
+    EXPERIMENT=fig12
     check_policies
     check_devices fig12
     local dir; dir=$(prepare_dir fig12)
@@ -241,8 +281,8 @@ fig12() {
         for threads in "1 1 1" "8 4 2"; do
             set -- $threads
             local sub="num_threads$1$2$3/5000-15000"
-            for policy in LFU LRU LRFU EXD LogiReg XGBfast TEMP RL; do
-                run "$dir" "$sub" "$policy" "$w" "${DEVICE_ARGS[@]}" \
+            for policy in LFU LRU LRFU EXD LogiReg XGBfast TEMP RL_device; do
+                run "$dir" "$sub" "$policy" "$w" "${DEVICE_ARGS[@]}" $(rl_device_args "$policy" "$w") \
                     -num_threads_tier1 "$1" -num_threads_tier2 "$2" -num_threads_tier3 "$3"
                 # restore names the folder after read times and capacities; keep runs with different threads apart
                 local src="$dir/Results_$w/capacity_tests_30-200-500/5000-15000"
@@ -261,6 +301,7 @@ fig12() {
 }
 
 fig13() {
+    EXPERIMENT=fig13
     local config=${1:-}
     # Table 5: Tier1/2/3 read latency (us) and concurrency; R/W asymmetry is 1.5/2/4 in all configurations
     local args
@@ -277,18 +318,31 @@ fig13() {
     require_workloads MSR_wdev_0
     msr_init "$dir" MSR_wdev_0
     local rt; rt=$(echo "$args" | awk '{print $2"-"$4"-"$6}')
-    for policy in "${POLICIES[@]}"; do
-        run "$dir" "capacity_tests_$rt/5000-15000" "$policy" MSR_wdev_0 "${DEVICE_ARGS[@]}" $args
+    for policy in "${DEVICE_POLICIES[@]}"; do
+        run "$dir" "capacity_tests_$rt/5000-15000" "$policy" MSR_wdev_0 "${DEVICE_ARGS[@]}" $args $(rl_device_args "$policy" MSR_wdev_0)
     done
+    plot_fig13
+}
+
+plot_fig13() {  # once all four configurations have been run
+    local base="$RESULTS_DIR/fig13" c
+    for c in default config1 config2 config3; do
+        if ! compgen -G "$base/$c/Results_MSR_wdev_0/capacity_tests_*/5000-15000/output_MSR_wdev_0_RL_device.log" > /dev/null; then
+            log "Fig. 13 is plotted once all of default, config1, config2, and config3 have been run (missing: $c)"
+            return 0
+        fi
+    done
+    plot "$base" plot_femu_configs.py
 }
 
 fig15() {
+    EXPERIMENT=fig15
     check_policies
     check_devices fig15
     local dir; dir=$(prepare_dir fig15)
     require_workloads 10hf90_1e4_rw1_1e6 MSR_hm_1 thesios
     msr_init "$dir" MSR_hm_1
-    for policy in "${POLICIES[@]}"; do
+    for policy in "${DEVICE_POLICIES[@]}"; do
         run "$dir" capacity_tests_30-200-500/300-800 "$policy" 10hf90_1e4_rw1_1e6 "${DEVICE_ARGS[@]}" -max_capacity_tier1 300 -max_capacity_tier2 800
         run "$dir" capacity_tests_30-200-500/5000-15000 "$policy" MSR_hm_1 "${DEVICE_ARGS[@]}"
         run "$dir" "$(trace_caps thesios)" "$policy" thesios "${DEVICE_ARGS[@]}" $(trace_args thesios)
@@ -302,6 +356,7 @@ plots() {
     [[ -d "$RESULTS_DIR/fig10" ]] && plot "$RESULTS_DIR/fig10" plot_scalability_test.py
     [[ -d "$RESULTS_DIR/fig11" ]] && plot "$RESULTS_DIR/fig11" plot_traces.py
     [[ -d "$RESULTS_DIR/fig12" ]] && plot "$RESULTS_DIR/fig12" plot_MSR_Sibyl.py
+    [[ -d "$RESULTS_DIR/fig13" ]] && plot_fig13
     [[ -d "$RESULTS_DIR/fig15" ]] && plot "$RESULTS_DIR/fig15" plot_cloud_test.py
     return 0
 }
@@ -313,7 +368,7 @@ fi
 
 while (( $# )); do
     case $1 in
-        container) fig7; fig8 ;;
+        container) fig7 ;;
         fig7|fig8|fig10|fig11|fig12|fig15|plots) $1 ;;
         fig13) fig13 "${2:-}"; shift ;;
         *) echo "Unknown experiment: $1 (run without arguments for usage)"; exit 1 ;;

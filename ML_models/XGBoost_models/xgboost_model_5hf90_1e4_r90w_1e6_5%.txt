@@ -8528,4 +8528,4 @@ booster[99]:
 					48:[f1<526] yes=73,no=74,missing=74
 						73:leaf=0.0430270284
 						74:leaf=-2.18961231e-05
-base_score=0.5
+base_score=0

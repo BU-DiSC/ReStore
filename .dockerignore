@@ -1,0 +1,11 @@
+# Not needed in the Docker image (see Dockerfile)
+.git
+build/
+Results_*/
+results/fig*/
+output/
+restore_config.json
+device_config.json
+**/__pycache__
+**/.DS_Store
+workload/

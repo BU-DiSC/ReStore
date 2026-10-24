@@ -169,7 +169,7 @@ def plot_data(*data_list):
 
     
     plt.tight_layout()
-    plt.savefig('Migration_capacity_tests_static_2x3_newcolor.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
+    plt.savefig('Migration_capacity_tests_static_2x3.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
     # plt.show()
 
     return migr_ratio

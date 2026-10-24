@@ -7080,4 +7080,4 @@ booster[99]:
 					60:[f1<4453] yes=103,no=104,missing=104
 						103:leaf=0.0284812544
 						104:leaf=-0.00341396802
-base_score=0.5
+base_score=0

@@ -187,7 +187,8 @@ private:
         
         if (type == "policies") {
             std::cout << "Available policies:\n";
-            std::cout << "  RL      - Reinforcement Learning\n";
+            std::cout << "  RL      - ReStore (reinforcement learning)\n";
+            std::cout << "  RL_device - ReStore, version used for the experiments on tier devices\n";
             std::cout << "  LFU     - Least Frequently Used\n";
             std::cout << "  LRU     - Least Recently Used\n";
             std::cout << "  LRFU    - Least Recently/Frequently Used\n";

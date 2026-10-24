@@ -6,6 +6,7 @@ build/
 # Experiment output and local configuration (written to the working directory)
 /Results_*/
 /results/fig*/
+/output/
 restore_config.json
 device_config.json
 

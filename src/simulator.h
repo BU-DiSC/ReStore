@@ -45,6 +45,12 @@ public:
     std::string getExecutableName() const override { return "Run_RL"; }
 };
 
+class RLDeviceRunner : public PolicyRunner {
+public:
+    int run(const std::map<std::string, std::string>& config) override;
+    std::string getExecutableName() const override { return "Run_RL_device"; }
+};
+
 class LFURunner : public PolicyRunner {
 public:
     int run(const std::map<std::string, std::string>& config) override;

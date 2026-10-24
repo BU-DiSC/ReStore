@@ -9194,4 +9194,4 @@ booster[99]:
 					36:[f2<3304] yes=59,no=60,missing=60
 						59:leaf=-0.0698592663
 						60:leaf=0.00953785144
-base_score=0.5
+base_score=0

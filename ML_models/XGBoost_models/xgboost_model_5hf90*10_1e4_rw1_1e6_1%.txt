@@ -6770,4 +6770,4 @@ booster[99]:
 			14:[f4<11749] yes=27,no=28,missing=28
 				27:leaf=-0.0715724975
 				28:leaf=-0.00682102935
-base_score=0.5
+base_score=0

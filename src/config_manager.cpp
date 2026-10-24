@@ -127,7 +127,7 @@ bool ConfigManager::saveConfig(const std::string& filename, const std::map<std::
 
 
 std::vector<std::string> ConfigManager::getAvailablePolicies() const {
-    return {"RL", "LFU", "LRU", "LRFU", "EXD", "TEMP", "static", "ideal", "LogiReg", "XGBfast"};
+    return {"RL", "RL_device", "LFU", "LRU", "LRFU", "EXD", "TEMP", "static", "ideal", "LogiReg", "XGBfast"};
 }
 
 bool ConfigManager::setDevicePaths(const std::string& fast_device, const std::string& middle_device, const std::string& slow_device) {

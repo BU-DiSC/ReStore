@@ -244,4 +244,4 @@ booster[98]:
 0:leaf=-9.14614162e-08
 booster[99]:
 0:leaf=-9.14614162e-08
-base_score=0.5
+base_score=0

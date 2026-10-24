@@ -1,3 +1,5 @@
+// Run_RL.cpp - ReStore (RL-based data migration), the version used for the experiments on simulated tiers
+// (Figs. 7, 8, 10, 11 of the paper). Run_RL_device.cpp is the version used for the experiments on tier devices.
 #include <algorithm>   // std::min, std::shuffle, std::sort, std::unique, std::min_element
 #include <atomic>      // std::atomic
 #include <chrono>      // std::chrono
@@ -40,12 +42,12 @@
 
 // Include the header files for the thread pool library and its utilities.
 #include "BS_thread_pool.hpp"
-// #include "../../../usr/include/c++/12/pstl/glue_numeric_defs.h"
-// #include "BS_thread_pool_utils.hpp"
+//#include "BS_thread_pool_utils.hpp"
 
-// Includer ReStore driver
+// Include ReStore driver (Tier class: simulated tiers or tier devices) and helpers
 #include "ReStore_driver_IO.hpp"
 #include "ReStore_utils.hpp"
+
 
 
 // Helper function to trim whitespace from both ends of a string
@@ -55,40 +57,6 @@ std::string trim(const std::string &str) {
     return (start == std::string::npos) ? "" : str.substr(start, end - start + 1);
 }
 
-// Helper function to read I/O queue depth from a specified device stat file
-// Usage: replace tierK_dr.pool.get_tasks_queued() by get_in_flight("/sys/block/nvme{K-1}n1/stat")
-int get_in_flight(const std::string& device_path) {
-    std::ifstream stat_file(device_path);
-    if (!stat_file.is_open()) {
-        std::cerr << "Failed to open " << device_path << std::endl;
-        return 0; // Return 0 if file cannot be opened
-    }
-    
-    std::string line;
-    if (std::getline(stat_file, line)) {
-        std::istringstream iss(line);
-        std::vector<int> values;
-        int value;
-        
-        // Parse all values from the stat file
-        while (iss >> value) {
-            values.push_back(value);
-        }
-        
-        stat_file.close();
-        
-        // The 9th value (index 8) is the I/O queue depth (in_flight)
-        if (values.size() >= 9) {
-            return values[8];
-        } else {
-            std::cerr << "Invalid stat file format, expected at least 9 values" << std::endl;
-            return 0;
-        }
-    }
-    
-    stat_file.close();
-    return 0;
-}
 
 // Page movement between tiers
 void PageMigrate(
@@ -570,18 +538,29 @@ int main(
     int a_b_update_freq_s1 = 1;
     int a_b_update_freq_s2 = 1;
     int num_elements_to_consider_s1 = 300;
-    int num_elements_to_consider_s2 = 300;
-    // int delta_s2_t1 = 4;
-    // int delta_s2_t2 = 10;
-    // int delta_s2_t3 = 50;
+    int num_elements_to_consider_s2 = 500;
+    int delta_s2_t1 = 4;
+    int delta_s2_t2 = 10;
+    int delta_s2_t3 = 50;
     // b_i = 10 / (max_s_i-min_s_i), a_i = exp( avg(s_1) x b_i )
     // redefine a1 as a1^(1/1e10) to prevent overflow (*1e10 in RL.cost_phi)
     // initiate max_s2 = 2 queued tasks, min_s2 = 0, avg = 1 queued task
-
+    double init_rng_s2_t1 = cal_s2(2, num_threads_tier1, read_time_tier1, asym_tier1) - cal_s2(0, num_threads_tier1, read_time_tier1, asym_tier1);
+    double init_avg_s2_t1 = cal_s2(1, num_threads_tier1, read_time_tier1, asym_tier1);
+    double init_rng_s2_t2 = cal_s2(2, num_threads_tier2, read_time_tier2, asym_tier2) - cal_s2(0, num_threads_tier2, read_time_tier2, asym_tier2);
+    double init_avg_s2_t2 = cal_s2(1, num_threads_tier2, read_time_tier2, asym_tier2);
+    double init_rng_s2_t3 = cal_s2(2, num_threads_tier3, read_time_tier3, asym_tier3) - cal_s2(0, num_threads_tier3, read_time_tier3, asym_tier3);
+    double init_avg_s2_t3 = cal_s2(1, num_threads_tier3, read_time_tier3, asym_tier3);
+    std::vector<double> b_i_1 = { 5/(0.1/total_num_pages), 5/init_rng_s2_t1 };
+    std::vector<double> a_i_1 = { exp(1e-10*0.5*5/(0.1/total_num_pages)), exp(init_avg_s2_t1* 5/init_rng_s2_t1) };
+    std::vector<double> b_i_2 = { 5/(0.1/total_num_pages), 5/init_rng_s2_t2 };
+    std::vector<double> a_i_2 = { exp(1e-10*0.5*5/(0.1/total_num_pages)), exp(init_avg_s2_t2* 5/init_rng_s2_t2) };
+    std::vector<double> b_i_3 = { 5/(0.1/total_num_pages), 5/init_rng_s2_t3 };
+    std::vector<double> a_i_3 = { exp(1e-10*0.5*5/(0.1/total_num_pages)), exp(init_avg_s2_t3* 5/init_rng_s2_t3) };
 
     // Initialize workdir
     std::string workdir = ".";  // Default to current directory
-    
+
     // Command line argument parsing
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -643,14 +622,13 @@ int main(
             a_b_update_freq_s2 = static_cast<int>(std::stod(arg.substr(20))); // Extracts and converts the substring after "-a_b_update_freq_s2=" to an integer
         } else if (arg.find("-num_elements_to_consider_s2=") == 0) {
             num_elements_to_consider_s2 = static_cast<int>(std::stod(arg.substr(29))); // Extracts and converts the substring after "-num_elements_to_consider_s2=" to an integer
-        } 
-        // else if (arg.find("-delta_s2_t1=") == 0) {
-        //     delta_s2_t1 = static_cast<int>(std::stod(arg.substr(13))); // Extracts and converts the substring after "-delta_s2_t1=" to a int
-        // } else if (arg.find("-delta_s2_t2=") == 0) {
-        //     delta_s2_t2 = static_cast<int>(std::stod(arg.substr(13))); // Extracts and converts the substring after "-delta_s2_t2=" to a int
-        // } else if (arg.find("-delta_s2_t3=") == 0) {
-        //     delta_s2_t3 = static_cast<int>(std::stod(arg.substr(13))); // Extracts and converts the substring after "-delta_s2_t3=" to a int
-        // }
+        } else if (arg.find("-delta_s2_t1=") == 0) {
+            delta_s2_t1 = static_cast<int>(std::stod(arg.substr(13))); // Extracts and converts the substring after "-delta_s2_t1=" to a int
+        } else if (arg.find("-delta_s2_t2=") == 0) {
+            delta_s2_t2 = static_cast<int>(std::stod(arg.substr(13))); // Extracts and converts the substring after "-delta_s2_t2=" to a int
+        } else if (arg.find("-delta_s2_t3=") == 0) {
+            delta_s2_t3 = static_cast<int>(std::stod(arg.substr(13))); // Extracts and converts the substring after "-delta_s2_t3=" to a int
+        }
     }
 
     // define workload path
@@ -663,12 +641,12 @@ int main(
     if (!std::filesystem::exists(folder_name)) {
         // If the folder does not exist, create it
         if (std::filesystem::create_directories(folder_name)) {
-            std::cout << "Results folder created successfully: " << folder_name << std::endl;
+            std::cout << "Folder created successfully: " << folder_name << std::endl;
         } else {
-            std::cerr << "Failed to create Results folder: " << folder_name << std::endl;
+            std::cerr << "Failed to create folder: " << folder_name << std::endl;
         }
     } else {
-        std::cout << "Results folder already exists: " << folder_name << std::endl;
+        std::cout << "Folder already exists: " << folder_name << std::endl;
     }
 
     // Open the log file for writing
@@ -684,13 +662,13 @@ int main(
     // std::ofstream outTier(outtier_path);
 
 
-    // Define driver of Tiers
+    // Define driver of Tiers (simulated, or tier devices), with different concurrency
     Tier tier1_dr(max_capacity_tier1, num_threads_tier1, 1, read_time_tier1, asym_tier1);
     Tier tier2_dr(max_capacity_tier2, num_threads_tier2, 2, read_time_tier2, asym_tier2);
     Tier tier3_dr(max_capacity_tier3, num_threads_tier3, 3, read_time_tier3, asym_tier3);
 
     // Check the type of pool
-    // const std::type_info& typeInfo = typeid(tier1_dr.pool);
+    // const std::type_info& typeInfo = typeid(pool1);
     // std::cout << "Type name of pool: " << typeInfo.name() << std::endl;
 
 
@@ -752,29 +730,12 @@ int main(
             LC_T2.addPage(Page{key, 0.5, {}, 0, 0});
         }
         // Insert remaining ids into Tier3
-        for (size_t i = max_capacity_tier1 + max_capacity_tier2; i < allKeys.size(); ++i) {
+        for (size_t i = max_capacity_tier1 + max_capacity_tier2; i < max_capacity_tier3 && i < allKeys.size(); ++i) {
             int key = allKeys[i];
             LC_T3.addPage(Page{key, 0.5, {}, 0, 0});
-            // clean LC_T3.min_heap to free space
+            // clear the useless min_hap for Tier3 to free space
             LC_T3.min_heap.pop();
         }
-        // // Insert 1 ids into Tier1 (to avoid empty error)
-        // for (size_t i = 0; i < 1 && i < allKeys.size(); ++i) {
-        //     int key = allKeys[i];
-        //     LC_T1.addPage(Page{key, 0.5, {}, 0, 0});
-        // }
-        // // Insert 1 ids into Tier2 (to avoid empty error)
-        // for (size_t i = 1; i < 2 && i < allKeys.size(); ++i) {
-        //     int key = allKeys[i];
-        //     LC_T2.addPage(Page{key, 0.5, {}, 0, 0});
-        // }
-        // // Insert all ids into Tier3
-        // for (size_t i = 2; i < allKeys.size(); ++i) {
-        //     int key = allKeys[i];
-        //     LC_T3.addPage(Page{key, 0.5, {}, 0, 0});
-        //     // clean LC_T3.min_heap to free space
-        //     LC_T3.min_heap.pop();
-        // }
     }
     else {
         // initial policy: fill each tier first
@@ -796,13 +757,10 @@ int main(
     int n_states = 2;
 
     std::vector<double> p_init(4);  // initial value of p_i 2^n_states
-    // define a random generator for p_init
-    std::random_device rd;  // Seed generator
-    std::mt19937 gen(rd()); // Mersenne Twister PRNG
-    std::uniform_real_distribution<double> dist(0.0, 1.0); // Define the range [0, 1)
+    std::uniform_real_distribution<double> dis(0.0, 1.0); // Define the range [0, 1)
     // initial values for p
     for (int i = 0; i < p_init.size(); ++i) {
-        p_init[i] = 0; // = dist(gen); // Assign a random value to the vector at index i
+        p_init[i] = 0; // = dis(gen); // Assign a random value to the vector at index i
     }
     // std::cout << "Initial p values: ";
     // for (double p_value : p_init) {
@@ -810,24 +768,9 @@ int main(
     // }
     // std::cout << std::endl;
 
-    int exponent = static_cast<int>(std::floor(std::log10(1.0/total_num_pages)));
-    double a_scale = std::pow(10, exponent); // scale for a_i, to prevent overflow in exp(a_i), adjust according to total_num_pages
-    double init_rng_s2_t1 = cal_s2(2, num_threads_tier1, read_time_tier1, asym_tier1) - cal_s2(0, num_threads_tier1, read_time_tier1, asym_tier1);
-    double init_avg_s2_t1 = cal_s2(1, num_threads_tier1, read_time_tier1, asym_tier1);
-    double init_rng_s2_t2 = cal_s2(2, num_threads_tier2, read_time_tier2, asym_tier2) - cal_s2(0, num_threads_tier2, read_time_tier2, asym_tier2);
-    double init_avg_s2_t2 = cal_s2(1, num_threads_tier2, read_time_tier2, asym_tier2);
-    double init_rng_s2_t3 = cal_s2(2, num_threads_tier3, read_time_tier3, asym_tier3) - cal_s2(0, num_threads_tier3, read_time_tier3, asym_tier3);
-    double init_avg_s2_t3 = cal_s2(1, num_threads_tier3, read_time_tier3, asym_tier3);
-    std::vector<double> b_i_1 = { 5/(0.1/total_num_pages), 5/init_rng_s2_t1 };
-    std::vector<double> a_i_1 = { exp(a_scale*0.5*5/(0.1/total_num_pages)), exp(a_scale*init_avg_s2_t1* 5/init_rng_s2_t1) };
-    std::vector<double> b_i_2 = { 5/(0.1/total_num_pages), 5/init_rng_s2_t2 };
-    std::vector<double> a_i_2 = { exp(a_scale*0.5*5/(0.1/total_num_pages)), exp(a_scale*init_avg_s2_t2* 5/init_rng_s2_t2) };
-    std::vector<double> b_i_3 = { 5/(0.1/total_num_pages), 5/init_rng_s2_t3 };
-    std::vector<double> a_i_3 = { exp(a_scale*0.5*5/(0.1/total_num_pages)), exp(a_scale*init_avg_s2_t3* 5/init_rng_s2_t3) };
-
-    TDAgent agent1(n_states, p_init, beta, lam, 1/a_scale, a_i_1, b_i_1);
-    TDAgent agent2(n_states, p_init, beta, lam, 1/a_scale, a_i_2, b_i_2);
-    TDAgent agent3(n_states, p_init, beta, lam, 1/a_scale, a_i_3, b_i_3);
+    TDAgent agent1(n_states, p_init, beta, lam, a_i_1, b_i_1);
+    TDAgent agent2(n_states, p_init, beta, lam, a_i_2, b_i_2);
+    TDAgent agent3(n_states, p_init, beta, lam, a_i_3, b_i_3);
 
     // if use decreasing learning rate, collect sum of previous phi values:
     std::vector<double> sum_phi_t1 = {0.5, 0.5, 0.5, 0.5};
@@ -857,9 +800,9 @@ int main(
     std::deque<double> s1_t1_list = {0.50};
     std::deque<double> s1_t2_list = {0.50};
     std::deque<double> s1_t3_list = {0.50};
-    std::deque<double> s2_t1_list = {cal_s2(0, num_threads_tier1, read_time_tier1, asym_tier1)};
-    std::deque<double> s2_t2_list = {cal_s2(0, num_threads_tier2, read_time_tier2, asym_tier2)};
-    std::deque<double> s2_t3_list = {cal_s2(0, num_threads_tier3, read_time_tier3, asym_tier3)};
+    std::deque<double> s2_t1_list = {cal_s2(tier1_dr.pool.get_tasks_queued(), num_threads_tier1, read_time_tier1, asym_tier1)};
+    std::deque<double> s2_t2_list = {cal_s2(tier2_dr.pool.get_tasks_queued(), num_threads_tier2, read_time_tier2, asym_tier2)};
+    std::deque<double> s2_t3_list = {cal_s2(tier3_dr.pool.get_tasks_queued(), num_threads_tier3, read_time_tier3, asym_tier3)};
 
     // Flag to mark when to start RL updates
     bool RL_start_update = false;
@@ -879,9 +822,6 @@ int main(
     // Counter of page migration
     int num_migr_t2t1 = 0;
     int num_migr_t3t2 = 0;
-
-    // Counter of RL runtime
-    long long total_runtime_RL = 0; // Variable to accumulate durations
     
 
 
@@ -929,7 +869,7 @@ int main(
         else {
             std::cerr << "Invalid line: " << line << std::endl;
         }
-        // std::cout << "Request " << i << ", " << action << " page " << n_page << std::endl;
+
         
         // Locate current Tier the page is in
         auto it1 = Tier1.find(n_page);
@@ -951,8 +891,7 @@ int main(
         auto [cost_tier1_be, phi_t1] = agent1.cost_phi(state_t1_be);
         // Add phi to sum_phi using std::transform
         std::transform(sum_phi_t1.begin(), sum_phi_t1.end(), phi_t1.begin(), sum_phi_t1.begin(), std::plus<double>());
-        // std::cout << "agent1.b1: " << agent1.b1 << " agent1.a1: " << agent1.a1 
-        //           << " agent1.b2: " << agent1.b2 << " agent1.a2: " << agent1.a2 << std::endl;
+        // std::cout << "agent1.b1: " << agent1.b1 << " agent1.a1: " << agent1.a1 << std::endl;
         // std::cout << "state_t1_be: ";
         // for (double state_value : state_t1_be) {
         //     std::cout << state_value << ", ";
@@ -965,8 +904,7 @@ int main(
         auto [cost_tier2_be, phi_t2] = agent2.cost_phi(state_t2_be);
         // Add phi to sum_phi using std::transform
         std::transform(sum_phi_t2.begin(), sum_phi_t2.end(), phi_t2.begin(), sum_phi_t2.begin(), std::plus<double>());
-        // std::cout << "agent2.b1: " << agent2.b1 << " agent2.a1: " << agent2.a1 
-        //           << " agent2.b2: " << agent2.b2 << " agent2.a2: " << agent2.a2 << std::endl;
+        // std::cout << "agent2.b1: " << agent2.b1 << " agent2.a1: " << agent2.a1 << std::endl;
         // std::cout << "state_t2_be: ";
         // for (double state_value : state_t2_be) {
         //     std::cout << state_value << ", ";
@@ -979,8 +917,7 @@ int main(
         auto [cost_tier3_be, phi_t3] = agent3.cost_phi(state_t3_be);
         // Add phi to sum_phi using std::transform
         std::transform(sum_phi_t3.begin(), sum_phi_t3.end(), phi_t3.begin(), sum_phi_t3.begin(), std::plus<double>());
-        // std::cout << "agent3.b1: " << agent3.b1 << " agent3.a1: " << agent3.a1 
-        //           << " agent3.b2: " << agent3.b2 << " agent3.a2: " << agent3.a2 << std::endl;
+        // std::cout << "agent3.b1: " << agent3.b1 << " agent3.a1: " << agent3.a1 << std::endl;
         // std::cout << "state_t3_be: ";
         // for (double state_value : state_t3_be) {
         //     std::cout << state_value << ", ";
@@ -1011,8 +948,12 @@ int main(
             // std::cout << "page " << n_page << " currently in Tier1" << std::endl;
             ++page_hit_Tier1;
 
+            // auto start_time_action = std::chrono::high_resolution_clock::now();
             // Execute action
             tier1_dr.exec(n_page, action);
+            // my_future.wait_for(std::chrono::microseconds(1));
+            //my_future.wait();
+            //std::cout << action << " done.\n"<< std::endl;
 
             // Access the Page object
             Page& page = it1->second;
@@ -1037,8 +978,11 @@ int main(
             // std::cout << "page " << n_page << " currently in Tier2" << std::endl;
             ++page_hit_Tier2;
 
+            // auto start_time_action = std::chrono::high_resolution_clock::now();
             // Execute action
             tier2_dr.exec(n_page, action);
+            //my_future.wait();
+            //std::cout << action << " done.\n"<< std::endl;
 
             // Access the Page object
             Page& page = it2->second;
@@ -1056,7 +1000,6 @@ int main(
             // std::cout << "Action and update temp takes " << duration_action.count() << " microseconds" << std::endl;
 
             // Decide migration by RL
-            auto start_time_RL = std::chrono::high_resolution_clock::now();
 
             // auto start_time_stateaf = std::chrono::high_resolution_clock::now();
             // Calculate state variables after movement
@@ -1132,9 +1075,7 @@ int main(
             // std::cout << "cost_tier1_be = " << cost_tier1_be << ", cost_tier2_be = " << cost_tier2_be << std::endl;
             // std::cout << "cost_tier1_af = " << cost_tier1_af << ", cost_tier2_af = " << cost_tier2_af << std::endl;
             // std::cout << "left = " << left << ", right = " << right << std::endl;
-            // add exploration
-            double rand_num = dist(gen);
-            if (left <= right || rand_num < 0.0){
+            if (left <= right){
                 // auto start_time_migr = std::chrono::high_resolution_clock::now();
                 // std::cout << "Page " << n_page << " should be moved from Tier2 to Tier1\n"<< std::endl;
                 ++num_migr_t2t1;
@@ -1148,6 +1089,12 @@ int main(
                 // if Tier 1 is full
                 while (Tier1.size() > max_capacity_tier1){
                     // Find the page number with lowest temperature
+                    // auto minElement = std::min_element(Tier1.begin(), Tier1.end(),
+                    //     [](const auto& lhs, const auto& rhs) {
+                    //         return lhs.second < rhs.second;
+                    //     }
+                    // );
+                    // int minKey = minElement->first;
                     Page lt_page_t1  = min_heap_T1.top();
                     // std::cout << "lt page id: " << lt_page_t1.id << ", temp: " << lt_page_t1.temperature << std::endl;
                     // auto it = Tier1.find(lt_page_t1.id);
@@ -1180,35 +1127,36 @@ int main(
                     // update avg_temp_T1&2
                     avg_temp_T1 = (avg_temp_T1 * (Tier1.size() + 1) - lt_page_t1.temperature) / Tier1.size();
                     avg_temp_T2 = (avg_temp_T2 * (Tier2.size() - 1) + lt_page_t1.temperature) / Tier2.size();
+
                     // new task should be submitted here to simulate page downgrade
                     // read from Tier1
                     tier1_dr.exec(lt_page_t1.id, "Read");
                     // write to Tier2
                     tier2_dr.exec(lt_page_t1.id, "Write");
                 }
-                // new task for the migration
+                // new task due to the migration
                 // read from Tier2
                 tier2_dr.exec(page.id, "Read");
                 // write to Tier1
                 tier1_dr.exec(page.id, "Write");
-            // check whether Tiers = LC_Ti.cache
+                // auto end_time_migr = std::chrono::high_resolution_clock::now();
+                // auto duration_migr = std::chrono::duration_cast<std::chrono::microseconds>(end_time_migr - start_time_migr);
+                // std::cout << "migration takes " << duration_migr.count() << " microseconds" << std::endl;
             }
             else{
                 // std::cout << "Page " << n_page << " should remain in Tier2.\n"<< std::endl;
             }
-            auto end_time_RL = std::chrono::high_resolution_clock::now();
-            // Calculate the duration
-            auto duration_RL = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_RL - start_time_RL);
-            // std::cout << "Descision by RL takes " << duration_RL.count() << " microseconds\n" << std::endl;
-            total_runtime_RL += duration_RL.count(); // Accumulate duration in microseconds
         }
 
         else if (it3 != Tier3.end()) {
             // std::cout << "page " << n_page << " currently in Tier3" << std::endl;
             ++page_hit_Tier3;
 
+            // auto start_time_action = std::chrono::high_resolution_clock::now();
             // Execute action
             tier3_dr.exec(n_page, action);
+            //my_future.wait();
+            //std::cout << action << " done.\n"<< std::endl;
 
             // Access the Page object
             Page& page = it3->second;
@@ -1228,7 +1176,6 @@ int main(
             // std::cout << "Action and update temp takes " << duration_action.count() << " microseconds" << std::endl;
 
             // Decide migration
-            auto start_time_RL = std::chrono::high_resolution_clock::now();
 
             // auto start_time_stateaf = std::chrono::high_resolution_clock::now();
             // Calculate state variables after movement
@@ -1303,9 +1250,7 @@ int main(
             // std::cout << "cost_tier2_be = " << cost_tier2_be << ", cost_tier3_be = " << cost_tier3_be << std::endl;
             // std::cout << "cost_tier2_af = " << cost_tier2_af << ", cost_tier3_af = " << cost_tier3_af << std::endl;
             // std::cout << "left = " << left << ", right = " << right << std::endl;
-            // add exploration
-            double rand_num = dist(gen);
-            if (left <= right || rand_num < 0.00){
+            if (left <= right){
                 // auto start_time_migr = std::chrono::high_resolution_clock::now();
                 // std::cout << "Page " << n_page << " should be moved from Tier3 to Tier2\n"<< std::endl;
                 ++num_migr_t3t2;
@@ -1356,26 +1301,25 @@ int main(
                     // update avg_temp_T1&2
                     avg_temp_T2 = (avg_temp_T2 * (Tier2.size() + 1) - lt_page_t2.temperature) / Tier2.size();
                     avg_temp_T3 = (avg_temp_T3 * (Tier3.size() - 1) + lt_page_t2.temperature) / Tier3.size();
+
                     // new task should be submitted here to simulate page downgrade
                     // read from Tier2
                     tier2_dr.exec(lt_page_t2.id, "Read");
                     // write to Tier3
                     tier3_dr.exec(lt_page_t2.id, "Write");
                 }
-                // new task for the migration
+                // new task due to the migration (combining upgrade&downgrade as one task right now)
                 // read from Tier3
                 tier3_dr.exec(page.id, "Read");
                 // write to Tier2
                 tier2_dr.exec(page.id, "Write");
+                // auto end_time_migr = std::chrono::high_resolution_clock::now();
+                // auto duration_migr = std::chrono::duration_cast<std::chrono::microseconds>(end_time_migr - start_time_migr);
+                // std::cout << "migration takes " << duration_migr.count() << " microseconds" << std::endl;
             }
             else{
                 // std::cout << "Page " << n_page << " should remain in Tier3.\n"<< std::endl;
             }
-            auto end_time_RL = std::chrono::high_resolution_clock::now();
-            // Calculate the duration
-            auto duration_RL = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time_RL - start_time_RL);
-            // std::cout << "Descision by RL takes " << duration_RL.count() << " microseconds\n" << std::endl;
-            total_runtime_RL += duration_RL.count(); // Accumulate duration in microseconds
         }
         
         else {
@@ -1596,21 +1540,21 @@ int main(
 
             // Update a_i, b_i for RL agents
             // agent1
-            double average_t1 = (max_s1_t1 + s1_t1_last) / 2; //(max_s1_t1 + min_s1_t1) / 2;
+            double average_t1 = (max_s1_t1 + s1_t1_last) / 2;//(max_s1_t1 + min_s1_t1) / 2;
             //double average_t1 = std::round(101*s1_t1)/100;
             // double average_t1 = 1.01*max_s1_t1;
             double range_t1 = max_s1_t1 - min_s1_t1;
             range_t1 = std::max(range_t1, (0.1/total_num_pages)); 
             //double range_t1 = 0.3;
             // double average_t1 = max_s1_t1 + range_t1;
-            // double avg_s2_t1 = cal_s2(tier1_dr.pool.get_tasks_queued(), num_threads_tier1, read_time_tier1, asym_tier1);
+            double avg_s2_t1 = cal_s2(tier1_dr.pool.get_tasks_queued(), num_threads_tier1, read_time_tier1, asym_tier1);
             // delta_s2_t1 = std::max(3, int(0.1*tier1_dr.pool.get_tasks_queued()));
             // double rng_s2_t1 = cal_s2(tier1_dr.pool.get_tasks_queued()+delta_s2_t1, num_threads_tier1, read_time_tier1, asym_tier1) 
             //                    - cal_s2(tier1_dr.pool.get_tasks_queued()-delta_s2_t1, num_threads_tier1, read_time_tier1, asym_tier1);
-            double avg_s2_t1 = (max_s2_t1 + min_s2_t1) / 2;
+            // double avg_s2_t1 = avg_s2;
             double rng_s2_t1 = std::max(max_s2_t1 - min_s2_t1, cal_s2(2, num_threads_tier1, read_time_tier1, asym_tier1));
             std::vector<double> b_i_1 = {5/range_t1, 5/rng_s2_t1};
-            std::vector<double> a_i_1 = {exp(a_scale*average_t1*5/range_t1), exp(a_scale*avg_s2_t1*5/rng_s2_t1)};
+            std::vector<double> a_i_1 = {exp(1e-10*average_t1*5/range_t1), exp(avg_s2_t1*5/rng_s2_t1)};
             agent1.update_a_b(a_i_1, b_i_1);
             // std::cout << "average s1 in Tier1: " << average_t1 << " range: " << range_t1 << std::endl;
             // std::cout << "average s2 in Tier1: " << avg_s2_t1 << " range: " << rng_s2_t1 << std::endl;
@@ -1626,20 +1570,20 @@ int main(
             // std::cout << std::endl;
             
             // agent2
-            double average_t2 =  (max_s1_t2 + min_s1_t2) / 2; //(max_s1_t2 + s1_t2_last) / 2;
+            double average_t2 = (max_s1_t2 + s1_t2_last) / 2;//(max_s1_t2 + min_s1_t2) / 2;
             //double average_t2 = std::round(100*s1_t2)/100;
             //double average_t2 = max_s1_t2;
             double range_t2 = max_s1_t2 - min_s1_t2;
             range_t2 = std::max(range_t2, (0.1/total_num_pages));
             //double range_t2 = 0.2;
-            // double avg_s2_t2 = cal_s2(tier2_dr.pool.get_tasks_queued(), num_threads_tier2, read_time_tier2, asym_tier2);
+            double avg_s2_t2 = cal_s2(tier2_dr.pool.get_tasks_queued(), num_threads_tier2, read_time_tier2, asym_tier2);
             // delta_s2_t2 = std::max(10, int(0.1*tier2_dr.pool.get_tasks_queued()));
             // double rng_s2_t2 = cal_s2(tier2_dr.pool.get_tasks_queued()+delta_s2_t2, num_threads_tier2, read_time_tier2, asym_tier2) 
             //                    - cal_s2(tier2_dr.pool.get_tasks_queued()-delta_s2_t2, num_threads_tier2, read_time_tier2, asym_tier2);
-            double avg_s2_t2 = (max_s2_t2 + min_s2_t2) / 2;
+            // double avg_s2_t2 = avg_s2;
             double rng_s2_t2 = std::max(max_s2_t2 - min_s2_t2, cal_s2(2, num_threads_tier2, read_time_tier2, asym_tier2));
             std::vector<double> b_i_2 = {5/range_t2, 5/rng_s2_t2};
-            std::vector<double> a_i_2 = {exp(a_scale*average_t2*5/range_t2), exp(a_scale*avg_s2_t2*5/rng_s2_t2)};
+            std::vector<double> a_i_2 = {exp(1e-10*average_t2*5/range_t2), exp(avg_s2_t2*5/rng_s2_t2)};
             agent2.update_a_b(a_i_2, b_i_2);
             // std::cout << "average s1 in Tier2: " << average_t2 << " range: " << range_t2 << std::endl;
             // std::cout << "average s2 in Tier2: " << avg_s2_t2 << " range: " << rng_s2_t2 << std::endl;
@@ -1655,21 +1599,21 @@ int main(
             // std::cout << std::endl;
             
             // agent3
-            double average_t3 = (max_s1_t3 + min_s1_t3) / 2; //(max_s1_t3 + s1_t3_last) / 2;
+            double average_t3 = (max_s1_t3 + s1_t3_last) / 2;//(max_s1_t3 + min_s1_t3) / 2;
             //double average_t3 = std::round(99*s1_t3)/100;
             average_t3 = std::max(average_t3, 1e-4);
             //double average_t3 = s1_t3;
             double range_t3 = max_s1_t3 - min_s1_t3;
             range_t3 = std::max(range_t3, (0.1/total_num_pages));
             //double range_t3 = 0.2;
-            // double avg_s2_t3 = cal_s2(tier3_dr.pool.get_tasks_queued(), num_threads_tier3, read_time_tier3, asym_tier3);
+            double avg_s2_t3 = cal_s2(tier3_dr.pool.get_tasks_queued(), num_threads_tier3, read_time_tier3, asym_tier3);
             // delta_s2_t3 = std::max(50, int(0.1*tier3_dr.pool.get_tasks_queued()));
             // double rng_s2_t3 = cal_s2(tier3_dr.pool.get_tasks_queued()+delta_s2_t3, num_threads_tier3, read_time_tier3, asym_tier3) 
             //                    - cal_s2(tier3_dr.pool.get_tasks_queued()-delta_s2_t3, num_threads_tier3, read_time_tier3, asym_tier3);
-            double avg_s2_t3 = (max_s2_t3 + min_s2_t3) / 2;
+            // double avg_s2_t3 = avg_s2;
             double rng_s2_t3 = std::max(max_s2_t3 - min_s2_t3, cal_s2(2, num_threads_tier3, read_time_tier3, asym_tier3));
             std::vector<double> b_i_3 = {5/range_t3, 5/rng_s2_t3};
-            std::vector<double> a_i_3 = {exp(a_scale*average_t3*5/range_t3), exp(a_scale*avg_s2_t3*5/rng_s2_t3)};
+            std::vector<double> a_i_3 = {exp(1e-10*average_t3*5/range_t3), exp(avg_s2_t3*5/rng_s2_t3)};
             agent3.update_a_b(a_i_3, b_i_3);
             // std::cout << "average s1 in Tier3: " << average_t3 << " range: " << range_t3 << std::endl;
             // std::cout << "average s2 in Tier3: " << avg_s2_t3 << " range: " << rng_s2_t3 << std::endl;
@@ -1723,12 +1667,8 @@ int main(
     // End the timer of for loop
     auto end_time_for = std::chrono::high_resolution_clock::now();
 
-    while (tier1_dr.pool.get_tasks_running() > 0 || 
-           tier2_dr.pool.get_tasks_running() > 0 || 
-           tier3_dr.pool.get_tasks_running() > 0 || 
-           tier1_dr.pool.get_tasks_queued() > 0  || 
-           tier2_dr.pool.get_tasks_queued() > 0  || 
-           tier3_dr.pool.get_tasks_queued() > 0) {
+    while (tier1_dr.pool.get_tasks_running() > 0 || tier2_dr.pool.get_tasks_running() > 0 || tier3_dr.pool.get_tasks_running() > 0 || 
+           tier1_dr.pool.get_tasks_queued() > 0  || tier2_dr.pool.get_tasks_queued() > 0  || tier3_dr.pool.get_tasks_queued() > 0) {
     // Check if tasks are still running in pools and if there are queued tasks
     // If tasks are still running/queued, continue to wait
     // If not, proceed to end the timer
@@ -1743,7 +1683,6 @@ int main(
 
     // Output the duration
     std::cout << "For loop time: " << duration_for.count() << " microseconds" << std::endl;
-    std::cout << "Total RL runtime: " << total_runtime_RL << " nanoseconds" << std::endl;
     std::cout << "Total requests time: " << duration.count() << " microseconds\n" << std::endl;
 
     // counter of read/write
@@ -1756,9 +1695,7 @@ int main(
 
     std::cout << "\nNumber of page upgraded from Tier2 to Tier1: " << num_migr_t2t1 << std::endl;
     std::cout << "Number of page upgraded from Tier3 to Tier2: " << num_migr_t3t2 << std::endl;
-
-    std::cout << "\nAverage runtime per call: " << total_runtime_RL/(page_hit_Tier2+page_hit_Tier3) << " nanoseconds" << std::endl;
-    std::cout << "Average runtime per migration: " << total_runtime_RL/(num_migr_t2t1+num_migr_t3t2) << " nanoseconds" << std::endl;
+    
 
     // std::cout << "\nPages in Tier1: " <<std::endl;
     // for(const auto& elem : Tier1){

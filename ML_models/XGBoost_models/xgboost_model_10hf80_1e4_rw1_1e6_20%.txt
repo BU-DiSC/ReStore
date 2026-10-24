@@ -9692,4 +9692,4 @@ booster[99]:
 					60:[f0<5439] yes=111,no=112,missing=112
 						111:leaf=0.0513183884
 						112:leaf=0.000378003868
-base_score=0.5
+base_score=0

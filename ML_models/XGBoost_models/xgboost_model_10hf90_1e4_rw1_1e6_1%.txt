@@ -7454,4 +7454,4 @@ booster[99]:
 					32:[f1<1606] yes=43,no=44,missing=44
 						43:leaf=0.0420733094
 						44:leaf=-0.000265027193
-base_score=0.5
+base_score=0

@@ -49,7 +49,7 @@ trap 'rm -rf "$TMP_DIR"' EXIT
 
 # Policy executables are looked up next to `restore`, then on PATH
 RESTORE_DIR="$(dirname "$RESTORE")"
-for policy in Run_RL Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP Run_static Run_ideal Run_LogiReg; do
+for policy in Run_RL Run_RL_device Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP Run_static Run_ideal Run_LogiReg; do
     check "$policy executable" bash -c "[[ -x \"$RESTORE_DIR/$policy\" ]] || command -v $policy"
 done
 if [[ -x "$RESTORE_DIR/Run_XGBfast" ]] || command -v Run_XGBfast &> /dev/null; then

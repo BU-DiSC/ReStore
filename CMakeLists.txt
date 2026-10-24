@@ -17,6 +17,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
 
 # Find required packages
 find_package(Threads REQUIRED)
+# With GCC 9 (e.g., Ubuntu 20.04), <execution> uses TBB, which then has to be linked; newer GCCs do not need it
+find_library(TBB_LIB tbb)
 
 # Include directories
 include_directories(${CMAKE_SOURCE_DIR}/cpp)
@@ -42,7 +44,7 @@ install(TARGETS restore DESTINATION bin)
 
 # Policy executables
 set(EXECUTABLES
-    Run_RL Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP 
+    Run_RL Run_RL_device Run_LFU Run_LRU Run_LRFU Run_EXD Run_TEMP 
     Run_static Run_ideal Run_LogiReg
 )
 
@@ -90,6 +92,9 @@ foreach(EXEC ${EXECUTABLES})
     add_executable(${EXEC} ${SOURCE_FILE})
     target_include_directories(${EXEC} PRIVATE ${CMAKE_SOURCE_DIR}/cpp)
     target_link_libraries(${EXEC} Threads::Threads ReStore_device)
+    if(TBB_LIB)
+        target_link_libraries(${EXEC} ${TBB_LIB})
+    endif()
     # Find libReStore_device in the build tree before install, and in <prefix>/lib after install
     set_target_properties(${EXEC} PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
     

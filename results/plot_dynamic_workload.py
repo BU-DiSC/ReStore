@@ -211,7 +211,7 @@ def plot_data(*data_list):
 
     plt.tight_layout()
     # plt.savefig('Results_capacity_tests_constant.png',format='png',dpi=320, bbox_inches='tight')
-    plt.savefig('Results_capacity_tests_changings_2x3_newcolor.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
+    plt.savefig('Results_capacity_tests_changings_2x3.pdf',format='pdf',dpi=600, bbox_inches='tight', pad_inches=0)
     plt.show()
 
     # percentage_list = [x/(len(workload_labels)*len(settings)) for x in percentage_list]

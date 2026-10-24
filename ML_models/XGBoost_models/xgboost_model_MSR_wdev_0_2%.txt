@@ -4078,4 +4078,4 @@ booster[99]:
 					26:[f3<3933] yes=31,no=32,missing=32
 						31:leaf=0.0497183912
 						32:leaf=-0.000367991452
-base_score=0.5
+base_score=0
